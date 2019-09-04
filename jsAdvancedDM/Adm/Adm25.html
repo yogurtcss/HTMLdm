@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" >
+        // var b;
+        // console.log( b in window );
+        console.log( b in window );
+        var b;
+
+        if( b in window ){
+
+        }
+        console.log( b );
+        console.log( 'b在script标签内，且在window.onload函数外，b在window中吗？' );
+
+        console.log('------------');
+        window.onload = function(){
+            if( !(c in window) ){
+                var c = 1;
+            }
+            console.log( c );
+            console.log( 'c在script标签内，且在window.onload函数内，c在window中吗？' );
+            console.log( c in window );
+
+            //测试题2，相当于这种写法: 变量声明提升至if语句外，从而使得d in window是真
+            console.log('---------');
+            console.log( 'd在script标签内，且在window.onload函数内，d在window中吗？' );
+            console.log( d in window );
+            var d;
+            if( !(d in window) ){
+            }
+            console.log( d );
+
+
+            console.log('---------');
+            /* 如果这样写：先var e = 1，然后再console.log( e in window )则会报错。
+            *  因为 e声明并赋值后，利用完了，被消灭了，这样e就不在window中了。
+            *  */
+            var e = 1;
+            console.log( 'e声明并赋值后，利用完了，被消灭了，这样e就不在window中看' );
+            console.log( e in window );
+
+            //测试题3
+            console.log('--------');
+            var f;
+            function f(f){
+                console.log(f);
+            };
+            f(2);
+
+
+        };
+
+
+
+
+
+
+    </script>
+</head>
+<body>
+
+</body>
+</html>
