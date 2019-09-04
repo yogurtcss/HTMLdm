@@ -11,14 +11,24 @@
             var btns = document.getElementsByTagName("button");
 
             // 循环绑定事件
-            for( var i=0, length=btns.length; i<length; i++ ){
-                //将自身索引保留在自己身上
-                btns[i].index = i;
-                btns[i].onclick = function(){
-                    alert( '我是第'+(this.index+1)+'个按钮！' );
-                }
-            }
+            // for( var i=0, length=btns.length; i<length; i++ ){
+            //     //将自身索引保留在自己身上
+            //     btns[i].index = i;
+            //     btns[i].onclick = function(){
+            //         alert( '我是第'+(this.index+1)+'个按钮！' );
+            //     }
+            // }
 
+            //利用闭包
+            for( var i=0, length=btns.length; i<length; i++ ){ //这行for语句中的i是 全局变量
+                ( function(i){ //这行的 function中的i 是局部变量，这与上一行中的i不冲突
+                    btns[i].onclick = function(){ //这行，读取的是局部变量i
+                        alert( btns[i].innerHTML );
+                        alert( '第'+(i+1)+'个' );
+                    }
+                  }
+                )(i); //这行的i读取的是 第23行for语句中 全局变量的i！！
+            }
 
 
 
