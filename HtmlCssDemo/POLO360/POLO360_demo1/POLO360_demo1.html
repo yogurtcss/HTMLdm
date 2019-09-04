@@ -1,0 +1,197 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>POLO360_demo1</title>
+        <link rel="stylesheet" type="text/css" href="css/POLO360_demo1.css" />
+    </head>
+    <body>
+        <!-- header开始 -->
+        <div class="header w">
+            
+
+            <!-- 导航条，是一个无序列表 -->
+            <ul class="navigation">
+                <li>
+                    <a href="#">HOME</a>
+                    <p>Back to home</p>
+                </li>
+                <li>
+                    <a href="#">PRODUCTS</a>
+                    <p>What we have for you</p>
+                </li>
+                <li>
+                    <a href="#">SERVIVES</a>
+                    <p>Things we do</p>
+                </li>
+                <li>
+                    <a href="#">BLOG</a>
+                    <p>Follow our updates</p>
+                </li>
+                <li>
+                    <a href="#">CONTACT</a>
+                    <p>Back to home</p>
+                </li>
+            </ul>
+
+            <!--在div中设置logo图片，用img标签-->
+            <div class="logo">
+                <a href="#" alt="POLO360">
+                    <img class="logo"   src="data/img/logo.png" alt="LOGO"/>
+                </a>
+            </div>
+        </div>
+        <!-- header结束 -->
+
+        <!-- banner开始 -->
+        <div class="banner w" >
+            <!-- banner图片 -->
+            <img src="data/img/banner-bg1.png" alt="banner" />
+            <!-- banner图片中的5个小圆圈，以背景图片形式放入 -->
+            <div class="pointDiv">
+                <a href="#"></a><!--
+                --><a href="#" class="active"></a><!--
+                --><a href="#"></a><!--
+                --><a href="#"></a><!--
+                --> <a href="#"></a>
+            </div>
+        </div>
+        <!-- banner结束 -->
+
+        <!-- content开始 -->
+        <!-- content下的3个子栏目全都浮动了,
+        这样content就会高度塌陷,故需要clearfix -->
+        <div class="content w clearfix">
+            <!-- content的大标题 -->
+            <h1> Lorem ipsum dolor sit amet, consectetur adipisicing elit </h1>
+            <!-- 并列放置3栏目:pl,cs,uc -->
+            <!-- 专治pl栏目,其余的cs和uc都是可复制移植过去的的 -->
+            <div class="pl">
+                <h2>Perfect Logic</h2>
+                <p>All you want your website to do.</p>
+                <!-- 存放图片的div -->
+                <div class="imgDiv">
+                    <img src="data/img/smallimg1.png" alt="smallimg1" />
+                </div>
+                <!-- 图片下的小字内容 -->
+                <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt </p>
+                <!-- learn more按钮 -->
+                <a class="lm" href="#">Learn more</a>
+            </div>
+
+            <div class="cs">
+                <h2>Complete Solution</h2>
+                <p>A tool anything and everything you can think</p>
+                <!-- 存放图片的div -->
+                <div class="imgDiv">
+                    <img src="data/img/smallimg2.png" alt="smallimg2" />
+                </div>
+                <!-- 图片下的小字内容 -->
+                <p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciun tdolore magnam aliquam quaerat voluptatem.</p>
+                <!-- learn more按钮 -->
+                <a class="lm" href="#">Learn more</a>
+            </div>
+
+            <div class="uc">
+                <h2>Uber Culture</h2>
+                <p>Fresh. Modern and ready for future</p>
+                <!-- 存放图片的div -->
+                <div class="imgDiv">
+                    <img src="data/img/smallimg3.png" alt="smallimg2" />
+                </div>
+                <!-- 图片下的小字内容 -->
+                <p>Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.</p>
+                <!-- learn more按钮 -->
+                <a class="lm" href="#">Learn more</a>
+            </div>
+
+            <!-- content与contact的分割线
+            在下一个部分contact中才设置。
+            将此设置为background:url(..) no-repeat top center -->
+            <!-- <div class="conline"></div> -->
+
+        </div>
+        <!-- content结束 -->
+
+        <!-- contact开始 -->
+        <!-- 注意，contact也会高度塌陷！ -->
+        <div class="contact w clearfix">
+            <!-- 设置3个并列的分栏 -->
+            <div class="sc">
+                <!-- 标题h2 -->
+                <h2>Social Connection</h2>  
+                <p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium</p>
+                <!-- 小图标icon -->
+                <div class="icon">
+                    <a href="#"><img src="data/img/rss.png" /></a>
+                    <a href="#"><img src="data/img/fb.png" /></a>
+                    <a href="#"><img src="data/img/ins.png" /></a>
+                    <a href="#"><img src="data/img/yt.png" /></a>
+                    <a href="#"><img src="data/img/tw.png" /></a>
+                </div>
+                <!-- Newsletter -->
+                <h2 class="nl" >Newsletter</h2>
+                <p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium</p>
+                <!-- 一个表单email -->
+                <form action="#">
+                    <input class="txt" type="text" placeholder="your email address" />
+                    <button class="btn">Subscribe</button>
+                </form>
+            </div>
+
+            <div class="co">
+                <!-- 标题h2 -->
+                <h2>Contact</h2>
+                <!-- 一个表单，包含：2个文本框，1个文本域，1个按钮 -->
+                <form action="#">
+                    <!-- 在文本框和文本域中，placeholder设置提示文字
+                    在IE8及以下浏览器不支持 -->
+                    <!-- 表单项 -->
+                    <input class="txt" type="text" placeholder="your name" />
+                    <input class="txt" type="text" placeholder="your email address" />
+                    <!-- 文本域textarea -->
+                    <textarea class="tarea" placeholder="message"></textarea>
+                    <!-- 按钮 -->
+                    <button class="btn">Send it</button>
+                </form>
+            </div>
+
+            <div class="nu">
+                <h2>News Updates</h2>
+                <p><!-- 这个p里面的img标签向左浮动即可 -->
+                    <img src="data/img/NUimg1.png" />
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.  
+                </p>
+                <p>
+                    <img src="data/img/NUimg2.png" />
+                    Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.
+                </p>
+                <p>
+                    <img src="data/img/NUimg3.png" />
+                    At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium.
+                </p>
+                <form action="#">
+                    <button class="btn" >Visit our Blog</button>
+                </form>
+            </div>
+        </div>
+        <!-- contact结束 -->
+
+        <!-- footer开始 -->
+        <div class="footer w clearfix">
+            <!-- cp向右浮动，要保证浮动的它不受阻挡，故把cp放在最上面 -->
+            <p class="cp">Copyright 2010. Studio VIVROCKS. All Rights Reserved.</p>
+            <p>Site Powered by Wordpress. Design and Developed by VIVROCKS.</p>
+            <p> <a href="#" >Home</a>|
+                <a href="#" >About</a>|
+                <a href="#" >Services</a>|
+                <a href="#" >Contact</a>|  
+            </p>
+            <p>
+                <a href="#" >Privacy Policy</a>|
+                <a href="#" >Terms of use</a> 
+            </p>
+        </div>
+        <!-- footer结束 -->
+    </body>
+</html>

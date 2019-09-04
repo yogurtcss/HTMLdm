@@ -1,0 +1,49 @@
+.frame{
+    width:400px;
+    height:300px;
+    /* background-color:deeppink; */
+    box-sizing:border-box;
+    border:1px solid;
+}
+
+.one{
+    width:60%;
+    height:60%;
+    box-sizing:border-box;
+    border:1px solid;
+    margin:10px;
+    /* 设置椭圆框 */
+    border-radius:60% 60%;
+    /* 文本垂直居中 */
+    text-align:center;
+    line-height:180px;
+    
+    
+}
+
+.two{
+    width:60px;
+    height:60px;
+    position:absolute;
+    left:250px;
+    right:auto;
+    top:200px;
+    bottom:auto;
+    border-radius:50px;
+    box-sizing:border-box;
+    border:1px solid;
+
+}
+
+.three{
+    width:20px;
+    height:20px;
+    position:absolute;
+    left:350px;
+    right:auto;
+    top:280px;
+    bottom:auto;
+    border-radius:50px;
+    box-sizing:border-box;
+    border:1px solid;
+}

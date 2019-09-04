@@ -1,0 +1,46 @@
+*{
+    margin:0;
+    padding:0;
+}
+
+.outer{
+    width:300px;
+    height:475px;
+    background-color:#bfa;
+    margin:50px auto;
+    padding:0 22px 9px 18px
+}
+
+.right{
+    float:right;
+}
+
+.red{
+    color:red;
+}
+
+.content ul{
+    list-style:none;
+    border-bottom:1px dashed ;
+}
+
+.content h3,li{
+    margin-top:14px;
+    margin-bottom:14px
+}
+
+
+
+.content a{
+    text-decoration:none;
+}
+
+
+
+.title{
+    height:36px;
+    border-top:2px #019e8b solid;
+    /* 行高line height */ 
+    line-height:36px;
+}
+

@@ -1,0 +1,22 @@
+.Btn{
+    display:block;
+    /* width和height的确切参数，可在图片的
+    详细信息中看到 */
+    width:93px;
+    height:29px;
+    background-image:url(btn.png);
+    /* 去除重复 */
+    background-repeat:no-repeat;
+}
+/* 解决闪烁问题：使用雪碧图，然后移动 */
+.Btn:hover{
+    background-image:url(btn.png);
+    /* background-position设置图片初始位置 */
+    background-position:-93px 0px;
+    /* background-repeat:no-repeat; */
+}
+.Btn:active{
+    background-image:url(btn.png);
+    /* 向左移2个按钮 */
+    background-position:-186px 0px;
+}

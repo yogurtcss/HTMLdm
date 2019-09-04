@@ -1,0 +1,53 @@
+*{
+    margin:0;
+    padding:0;
+}
+
+.box{
+    width:300px;
+    height:300px;
+    /* background-color:deeppink; */
+    /* 水平居中 */
+    position:absolute;
+    top:0;
+    right:0;
+    bottom:0;
+    left:0;
+    margin:auto;
+    /* border:1px solid; */
+    transition:2s;
+}
+
+.box > div{
+    margin:10px;
+    /* 给定外边距10px，
+    则width=(300-10-10-10*2)/2=130px */
+    width:130px;
+    height:130px;
+    background-color:deeppink;
+    /* 全都向左或右浮动 */
+    float:left;
+    /* 设置框线，需要设置box-sizing的怪异模式 */
+    box-sizing:border-box;
+    border:1px solid;
+}
+
+/* 设置圆角形式 */
+.box div:nth-child(1),.box div:nth-child(4){
+    border-radius:0 60% 0 60%;
+}
+.box div:nth-child(2),.box div:nth-child(3){
+    border-radius:60% 0 60% 0;
+}
+
+/* 设置鼠标移入时的伪类 */
+.box:hover{
+    transform:rotate( 360deg );
+}
+
+/* 禁止使用滚动条 */
+html,body{
+    /* 高度与元素内容区一致 */
+    height:100%;
+    overflow:hidden;
+}

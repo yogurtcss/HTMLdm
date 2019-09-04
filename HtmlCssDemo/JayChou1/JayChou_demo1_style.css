@@ -1,0 +1,25 @@
+/* 清楚浏览器默认样式 */
+/* *{
+    margin: 0;
+    padding: 0;
+} */
+
+/* 选择器分组（并集选择器）,逗号 */
+.header, .content, .bottom{
+    width: 300px;
+    margin: 0 auto;
+    text-align: center;
+}
+/* 伪类选择器：lvha */
+a:link{
+    color:red;
+}
+a:visited{
+    color:black
+}
+a:hover{ /* 鼠标移入 */
+    color:skyblue;
+}
+a:active{ /* 鼠标点击 */
+    color:black;
+}

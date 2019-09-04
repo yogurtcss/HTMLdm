@@ -1,0 +1,104 @@
+/* 清楚默认样式 */
+*{
+    margin:0;
+    padding:0;
+}
+
+/* 统一页面中的字体 */
+body{
+    font:12px/1 宋体;
+}
+
+/* outer样式 */
+.outer{
+    width:300px;
+    height:475px;
+    /* background-color:#bfa; */
+    /* 居中效果 */
+    margin:50px auto;
+}
+
+/* title样式 */
+.title{
+    height:36px;
+    /* 上边框 */
+    border-top:2px #019e8b solid;
+    /* 背景颜色原本是渐变的，但这里暂时不能实现 */
+    background-color:#f5f5f5;
+    /* 文字默认在行高是垂直居中的；
+    将行高line-height设置为和父元素的高度height一致，
+    这也就使得单行文本在父元素中垂直居中 */
+    line-height:36px;
+    /* 设置内边距，上0px，右22px，下0px，左16px */
+    padding:0px 22px 0px 16px;
+}
+
+/* 对a标签向右浮动 */
+.title a{
+    float:right;
+    color:red;
+}
+/* a的伪类 */
+a:visited{
+    color:blueviolet;
+}
+a:hover{
+    color:skyblue;
+}
+a:active{
+    color:black
+}
+
+
+/* 这时候，近期开班和a标签没有处在同一水平线上。
+原因：近期开班是一个 没有浮动的块元素，
+浮动的a标签不可能超过此块元素。
+解决：1.保持“近期开班”在上，将它开启浮动；
+2.在body中，将“近期开班”放在a标签下面，因为这样浮动的a上面
+就没有 “不浮动”的块元素了。
+在这里，采用法一即可 */
+
+/* 对h3 近期开发 向左浮动 */
+.title h3{
+    font: red 14px/36px "微软雅黑";
+}
+
+/* 设置content */
+.content{
+    border:1px solid #deddd9;
+    /* 上右下左，上边的内边距不要 */
+    padding:0px 24px 12px 16px;
+}
+
+/* 去除a中的下划线 */
+.content a{
+    text-decoration:none;
+}
+
+/* 相关的间距 */
+h3,li{
+    margin-bottom:14px;
+}
+/* h3的头顶 */
+.content h3{
+    margin-top:14px;
+}
+
+.red{
+    color:red;
+}
+
+/* 去除项目符号 */
+.content ul{
+    list-style:none;
+    border-bottom:1px dashed #deddd9
+}
+/* 项目符号向右浮动 */
+.content .right{
+    float:right;
+}
+
+/* 去掉最后一个ul的边框 */
+.content .no-border{
+    border:none
+}

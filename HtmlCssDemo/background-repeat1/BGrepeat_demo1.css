@@ -1,0 +1,13 @@
+/* width:990px，height:32px */
+.bar1{
+    width:990px;
+    height:32px;
+    background-color:#bfa;
+    /* 切图 */
+    background-image:url(BGsmall.gif);
+    /* 水平重复 */
+    background-repeat:x;
+    margin:50px auto;
+    
+
+}

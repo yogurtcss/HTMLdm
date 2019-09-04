@@ -1,0 +1,389 @@
+*{
+    margin:0;
+    padding:0;
+}
+
+/* 固定宽度w */
+.w{
+    width:940px;
+    margin:0 auto;
+}
+
+/* 为body设置背景 */
+body{
+    background:url(../data/img/bg1.png) repeat-x;
+    /* body的高度由内容撑开 */
+    /* 先设置高度,一会删掉 */
+    /* height:3000px; */
+    /* background-color:#bfa; */
+}
+
+.header{
+    /* 下内边距46px，
+    提前把空隙的边距也算进来了，
+    这样下一个元素可以“贴着”放进来 */
+    padding:37px 0px 46px 0px;
+    /* 背景色，一会删掉 */
+    /* background:#bfa; */
+}
+
+.logo{
+    margin-left:15px;
+}
+
+/* 设置导航条，其中
+整个列表ul向右浮动，表格项li向左浮动 */
+.navigation{
+    float:right;
+    /* 去除项目前符号 */
+    list-style:none;
+    /* 为列表ul设置上外边距 */
+    margin-top:21px;
+
+}
+/* 导航条-列表中的表格项 */
+.navigation li{
+    float:left;
+    padding:0px 10px 10px 8px;
+
+}
+/* 设置导航条中的a标签 */
+.navigation a{
+    text-decoration:none;
+    /* 佛了，font简写属性中不能设置字体颜色！
+    需单独用color单独设置！ */
+    color:#666666;  
+    font: bold 14px Georgia;
+}
+/* 导航条中的a标签的伪类，
+鼠标移入时高亮，且显示下划线 */
+.navigation a:hover{
+    color:#cecece;
+    text-decoration:underline;
+}
+/* 导航条的p标签 */
+.navigation p{
+    color:#c1c1c1;
+    font:11px Tahoma;
+}
+
+
+/* 设置banner */
+.banner{
+    /* 此height包含了：banner图片+banner阴影 */
+    height:356px;
+    background:url(../data/img/banner-shadow1.png) no-repeat bottom center;
+    /* 父元素开启相对定位,为开启绝对定位的子元素作为包含块 */
+    position:relative; 
+}
+/* 设置banner中5个小圆圈 */
+.pointDiv a{
+    /* 行内元素a没有宽高，需要转换成 
+    inline-block或block */
+    
+    /* 为这5个小圆圈去除默认的空隙，
+    法一：不开浮动，设display为inline-block，
+    然后在html文件中注释掉a标签相邻的空格 */
+    /* display:inline-block; */
+
+    /* 开启浮动 */
+    float:left;
+    width:17px;
+    height:17px;
+    background:url(../data/img/point1.png);
+    /* 为每个小圆圈统一设置左外边距 */
+    margin-left:6px;
+}
+ /* 激活状态,鼠标移入时激活 */
+.pointDiv .active , .pointDiv a:hover{
+    background:url(../data/img/point2-active.png);
+}
+/* 对整个圈圈的div进行定位 */
+.pointDiv{
+     /* 开启定位, 以banner为包含块进行定位 ,
+    则需要对banner开启相对定位 */
+    position:absolute;
+    left:20px;
+    top:315px;
+}
+
+/* 设置content */
+.content{
+    /* 设置背景色,查看有无高度塌陷 */
+    /* background:red; */
+
+}
+/* content中的h1 */
+.content h1{
+    /* 设置height让背景阴影生效 */
+    height:37px;
+    color:#000000;
+    font:bold 24px Georgia;
+    /* 水平居中 */
+    text-align:center;
+
+    /* 设置背景阴影 h1-break */
+    /* 这个bottom center用得极好，
+    接下来设置content与contact的分割线，也用到了类似的招数：
+    background:url(..) top center */
+    background:url(../data/img/h1-break.png) no-repeat bottom center;
+    
+    /* 上外边距 */
+    margin-top:25px;
+    /* h1文字与横线阴影的空隙:下内边距 */
+    padding-bottom:15px;
+    
+}
+/* content中的pl栏目:设置h2和p的字体
+注意 p1 和 pl ,1和l很像,不要写错了! */
+.content h2{
+    color:#11719e;
+    font:21px Georgia;
+}
+.content p{
+    color:#8c8c8c;
+    font:12px Helvetica;
+}
+/* 首先设置pl栏目 */
+.contact .sc, .contact .co, .contact .nu,
+.content .pl, .content .cs, .content .uc{
+    /* 向左浮动 */
+    float:left;
+}
+/* 修复高度塌陷,通用格式 */
+.clearfix:before,
+.clearfix:after{
+    content:"";
+    display:table;
+    clear:both;
+}
+/* 修复高度塌陷,IE6专版 */
+.clearfix{
+    zoom:1;
+}
+
+/* 设置小图片的背景
+url(../data/img/smallimg-bg.png) */
+.imgDiv{
+    /* 背景颜色设成red,查看小图片有无居中于背景阴影中,
+    由此设置padding */
+    /* background: red no-repeat; */
+    background:url(../data/img/smallimg-bg.png) no-repeat;
+    /* 水平居中 */
+    text-align:center;
+    /* 微调:小图片的位置 */
+    padding-top:7px; /* 这7px是用PS标尺量出来的 */
+    /* 小字距离图片的空隙,对img小图片设置上下外边距即可 */
+    margin-top:19px;
+    margin-bottom:17px;
+}
+/* 设置pl的上外边距 */
+.pl, .cs, .uc{
+    margin-top:37px;
+}
+/* 小字距离图片的空隙,对img小图片设置上下外边距即可 */
+
+/* 设置小图片下的p文字 */
+.content .pl p, .content .cs p, .content .uc p{
+    width:291px;
+}
+
+/* 设置learn more按钮 */
+.lm{
+    /* lm原本是一个行内元素,要设置宽高,
+    则要先转为inline-block或者block元素 */
+    display:inline-block;
+    /* 设置learn more的背景图片 */
+    width:163px;
+    height:32px;
+    color:#016999;
+    font:12px/32px Helvetica;
+    /* background:red; */
+    background:url(../data/img/lm-bg1.png) no-repeat;
+    /* 去除learn more的下划线 */
+    text-decoration: none;
+    /* 设置learn more的首行缩进:1字符=1em */
+    text-indent:13px;
+    /* learn的上外边距 */
+    margin-top:17px;
+    /* 下外边距 */
+    margin-bottom:35px;
+}
+
+/* 设置中间的cs的左右边距（产生空隙） */
+.cs{
+    margin-left:25px;
+    margin-right:25px;
+}
+
+/* 设置content与contact的分割线
+这部分是我的做法，这做法虽然能实现效果，但是有点笨。
+正确的做法：在下一部分contact中设置background，
+然后使之top center即可。
+如同给 banner、h1文字设置的 background: bottom center同理。 */
+.content .conline{
+    /* 宽高可由conline1.png查看可知 */
+    width:929px;
+    height:8px;
+    background:url(../data/img/conline1.png) no-repeat;
+    /* 开启绝对定位 */
+    position:absolute;
+    left:290px;
+    top:1035px;
+}
+/* 设置content与contact的分割线：正确做法 */
+.contact{
+    background:url(../data/img/conline1.png) no-repeat top center;
+    /* 查看contact有无高度塌陷 */
+    /* background:red; */
+}
+
+/* contact下的3栏全都向左浮动，在上面设置了 */
+
+/* 给contact下的3个分栏都设置宽度297px，
+这样行内块元素（表单项，同样设置宽297px）会
+因占满一行而换行 */
+.contact .sc, .contact .co, .contact .nu{
+    /* background:yellow; */
+    width:297px;
+}
+
+/* 设置contact的h2，
+包含了.nl也是h2，也套用了这个属性 */
+.contact h2{
+    color:#444444;
+    font:18px/1 Georgia;
+    margin-top:44px;
+    padding-bottom:10px;
+    border-bottom:1px dashed #d3d3d3;
+}
+
+/* 设置contact中的p，
+包含了此contact内的所有p标签 */
+.contact p{
+    color:#444444;
+    font:12px Helvetica;
+    margin-top:14px;
+}
+
+
+/* 设置文本框
+表单项（文本框、文本域和按钮等）都是行内块元素，
+可以设置宽高 */
+.contact .txt{
+    /* 宽高以txt-bg1.png的尺寸为准 */
+    width:296px;
+    height:33px;
+    /* 开启盒子的怪异模式 */
+    box-sizing:border-box;
+    /* 去除默认线框 */
+    border:none;
+    background:url(../data/img/txt-bg1.png) no-repeat;
+    /* 设置文本框的左内边距，可使placeholder的文字向右缩进！ */
+    padding-left:10px;
+    margin-top:14px;
+}
+
+/* 设置文本域 */
+.contact .tarea{
+    /* 宽高以txtarea-bg1.png的尺寸为准 */
+    width:296px;
+    height:134px;
+    /* 盒子的怪异模式 */
+    box-sizing:border-box;
+    /* 不准文本域缩放 */
+    resize:none;
+    /* 去除滚动条 */
+    overflow:auto;
+    /* 去除默认线框 */
+    border:none;
+    background:url(../data/img/txtarea-bg1.png) no-repeat;
+    /* 设置文本域的左内边距，使得placeholder里的文字向右缩进 */
+    padding-left:10px;
+    margin-top:17px;
+}
+
+/* 设置按钮 */
+.contact .btn{
+    width:161px;
+    height:31px;
+    /* 去除默认框线 */
+    border:none;
+    /* 去除框线后，添加btn的背景 */
+    background:url(../data/img/btn-bg1.png) no-repeat;
+    font:13px Georgia;
+    color:#f7fafb;
+    text-align:left;
+    text-indent:12px;
+    margin-top:12px;
+    /* 鼠标移入btn时，光标显示为手 */
+    cursor:pointer;
+}
+
+/* 给contact中的 中间的co添加左外边距、右外边距
+注：contact是最外面的大栏目，co是居中的小栏目！ */
+.contact .co{
+    margin-left:25px;
+    margin-right:24px;
+}
+/* 设置小图标 */
+.contact .sc .icon{
+    /* 去除默认空隙 */
+    font-size:0;
+    margin-top:7px;
+    
+}
+.sc .icon a{
+    /* 去除下划线 */
+    text-decoration:none;
+    /* 设置右外边距 */
+    margin-right:5px;
+}
+/* 设置newsletter */
+.sc .nl{
+    color:#444444;
+    font:bold 18px/1 Gill Sans MT;
+    margin-top:30px;
+}
+
+/* 设置nu */
+.nu img{
+    float:left;
+    width:48px;
+    height:47px;
+    /* 切图时，直接把img连同背景图片也切进来 */
+    margin-right:9px;
+}
+.nu p{
+    height:58px;
+    color:#444444;
+    font:12px/1 Helvetica;
+    padding-bottom:9px;
+    border-bottom:1px dashed #d3d3d3;
+}
+
+/* 设置footer */
+.footer{
+    height:173px;
+    background-color:#333333;
+    border-top:10px solid #4c4c4c;
+    margin-top:24px;
+    padding:17px 20px 0px 20px;
+}
+
+
+.footer p{
+    color:#999999;
+    font:11px Helvetica;
+}
+.footer p a{
+    color:#929292;
+    text-decoration:none;
+}
+.footer p a:hover{
+    text-decoration:underline;
+    color:#ebebeb;
+}
+.footer .cp{
+    float:right;
+}
