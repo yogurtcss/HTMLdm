@@ -1,0 +1,24 @@
+<!doctype html>
+<html>
+    <head>
+        <title>demo3-dm3，JS的编写位置</title>
+        <meta charset="UTF-8" />
+        <!-- 法2，直接在html中写js -->
+        <!-- <script type="text/javascript">
+
+        </script> -->
+        
+        <!-- 法3，外部引入js文件 -->
+        <script type="text/javascript" src="dm3_jsLocate.js" ></script>
+    </head>
+
+    <body>
+        <!-- 法1，在各标签中加JS代码，注意是添加一句完整的JS代码，末尾要加分号 -->
+        <!-- 如在button中 -->
+        <button onclick="alert('我是button中的onclick！');" >哈哈</button>
+        <!-- 如在a标签中 -->
+        <a href="javascript:alert('我是a中的js代码！');">我是aaa</a>
+    </body>
+
+
+</html>
