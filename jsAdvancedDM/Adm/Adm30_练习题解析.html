@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+        <script type="text/javascript">
+            //**Simulated processing sequence for Question 1**
+            function foo(){
+                //define bar once
+                function bar() {
+                    return 3;
+                }
+                //redefine it
+                function bar() {
+                    return 8;
+                }
+                //return its invocation
+                return bar(); //8
+            }
+            alert(foo());
+
+            //**Simulated processing sequence for Question 2**
+            function foo(){
+                //a declaration for each function expression
+                var bar = undefined;
+                var bar = undefined;
+                //first Function Expression is executed
+                bar = function() {
+                    return 3;
+                };
+                // Function created by first Function Expression is invoked
+                return bar();
+                // second Function Expression unreachable
+            }
+            alert(foo()); //3
+
+            //Question 3 和 Question 1 的逻辑相似。这次是 foo 函数被提升了。
+
+            /* Question 4，我的理解：
+            * 变量提升2次：
+            * var bar = undefined;
+            * var bar = undefined;
+            * 注意，然后这时按原代码书写顺序执行！就到了return bar()！
+            * 如此就会报错了  [Type Error: bar is not a function]
+            * */
+            //**Simulated processing sequence for Question 4**
+            function foo(){
+                //a declaration for each function expression
+                var bar = undefined;
+                var bar = undefined;
+                return bar(); //TypeError: "bar not defined"
+                //neither Function Expression is reached
+            }
+            alert(foo());
+
+
+
+
+
+
+
+
+
+
+        </script>
+
+
+
+    </head>
+    <body>
+        
+    </body>
+</html>

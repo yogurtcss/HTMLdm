@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+        <script type="text/javascript">
+            /* 常见的闭包
+            * 将函数作为另一个函数的返回值
+            * 将函数作为实参传递给另一个函数调用
+            *  */
+
+            /* 务必注意：在 函数作用域中 寻找某自由变量的值时：
+            * 函数的作用域在函数定义时就已经确定了，而不是在函数调用时；
+            * 所以，在寻找自由变量的值时，需要返回到 “按函数书写顺序”的
+            *   原始作用域中寻找！！
+            *  */
+
+            //将函数作为另一个函数的返回值
+            function fn1(){
+                var a = 2;
+                return function fn2(){
+                    a++;
+                    console.log( a );
+                }
+            }
+            var f = fn1();
+
+            f();//3，从这个f开始，都是在调用 fn2，而不是调用 外部函数fn1！
+            f();//4，
+
+            //将函数作为实参传递给另一个函数调用
+            //内部函数引用了外部函数的实参
+            function showdelay( msg,time ){
+                setTimeout( function(){
+                    alert(msg);
+                }, time );
+            };
+            showdelay( '闭包闭包！',2000 );
+
+
+
+
+
+        </script>
+    </head>
+    <body>
+        
+    </body>
+</html>

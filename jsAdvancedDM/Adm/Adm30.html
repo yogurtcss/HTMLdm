@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+        <script type="text/javascript" >
+            function fn1(){
+                var a = 2;
+                function fn2(){
+                    console.log(a); //输出了undefined，预编译阶段，函数>变量
+                };
+
+            }
+            fn1();
+
+            /*
+            * 用函数声明创建的函数funDeclaration可以在funDeclaration定义之前就进行调用；
+            * 而用函数表达式创建的funExpression函数不能在funExpression被赋值之前进行调用。
+            *
+            * */
+            /* 如果把 fn2的函数声明，改为以 函数表达式 的形式声明：
+            注意，以函数表达式的声明方式，要考虑到 “变量”的存活机制：
+            不使用，结束后将会被回收。
+            */
+            // function fn1(){
+            //     var a = 2;
+            //     var fn2 = function(){
+            //         console.log( a );
+            //     };
+            // };
+            // fn1();
+            //
+            /* 预编译顺序：
+            *
+            *
+            *  */
+            // function fn1(){
+            //     var a = undefined;
+            //     var fn2 = undefined;
+            //     a = 2;
+            //     fn2 = function(){
+            //          console.log(a);
+            //     };
+            //     注，fn2只声明了，但没有在fn1中被调用！
+            //     fn2是变量，没被调用，即被消灭！
+            // };
+            // fn1();
+
+        </script>
+    </head>
+    <body>
+        
+    </body>
+</html>
