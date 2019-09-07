@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+        <script type="text/javascript">
+            //Object构造函数模式
+            var p1 = new Object();
+            p1.name = '老王';
+            p1.age = 23;
+            p1.setName = function( name ){
+                this.name = name;
+            };
+
+            //字面量
+            var p2 = {
+                name:'老王王',
+                age:23,
+                setName:function( name ){
+                    this.name = name;
+                }
+            };
+
+            console.log( p1,p2 );
+
+            //工厂函数模式
+            function createP( name,age ){
+                //动态创建对象P，嵌用字面量模式
+                //这里的创建的P，是Object类的
+                var P = {
+                    name: name,
+                    age: age,
+                    setName: function( name ){
+                        this.name = name;
+                    }
+                };
+                //返回此对象
+                return P;
+            };
+            var p3 = createP( '小明',22 );
+            console.log( p3 );
+            console.log( p3 instanceof Object );
+
+            //自定义构造函数
+            function P( name,age ){
+                this.name = name;
+                this.age = age;
+                this.setName = function( name ){
+                    this.name = name;
+                };
+            };
+            p4 = new P( '小明明',11 );
+            console.log( p4 instanceof P );
+
+            //自定义构造函数（放属性）+原型（放方法）
+            function P1( name,age ){
+                this.name = name;
+                this.age = age;
+                P1.prototype.setName = function( name ){
+                    this.name = name;
+                };
+            }
+            p5 = new P1( 'haha',100 );
+            p5.setName('啦啦啦');
+            console.log( p5 );
+
+        </script>
+    </head>
+    <body>
+        
+    </body>
+</html>
