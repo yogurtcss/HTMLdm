@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+        <script type="text/javascript">
+            //代码片段1
+            var name = "The window";
+            var object = {
+                name:"My Object",
+                getNameFunc:function(){
+                    return function(){
+                        return this.name; //谁的this?
+                    }
+                }
+            };
+            alert( object.getNameFunc()() ); //The window
+
+            //代码片段2
+            var name2 = "The window";
+            var object = {
+                name2:"My Object",
+                getNameFunc:function(){
+                    that = this; //这个that存了谁的this？
+                    return function(){
+                        return that.name2;
+                    }
+                }
+            };
+            alert( object.getNameFunc()() ); //My Object
+
+
+
+
+
+        </script>
+    </head>
+    <body>
+        
+    </body>
+</html>
