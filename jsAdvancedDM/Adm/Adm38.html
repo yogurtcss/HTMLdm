@@ -18,7 +18,7 @@
             };
             //在构造函数外，将父类型的实例 赋值给 子类型的原型
             son.prototype = new parent();
-            //让子类型实例的构造函数constructor重新指回子类型
+            //让子类型的原型中的构造函数constructor重新指回子类型
             son.prototype.constructor = son;
             //在构造函数外，为子类型的原型添加方法
             son.prototype.sonfun = function(){
@@ -32,7 +32,6 @@
             //若没有给 子类型的实例的构造函数constructor重新指回子类型本身 ，
             //这里则会显示 父类型parent
             console.log( s.constructor );
-
 
 
         </script>
