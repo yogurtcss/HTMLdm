@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+        <script type="text/javascript">
+            //创建父类型构造函数
+            function parent(){
+
+            };
+            //在构造函数外，为父类型的原型添加方法
+            parent.prototype.parentfun = function(){
+                console.log('我是parent.protoype.parentfun')
+            };
+            //创建子类型的构造函数
+            function son(){
+
+            };
+            //在构造函数外，将父类型的实例 赋值给 子类型的原型
+            son.prototype = new parent();
+            //在构造函数外，为子类型的原型添加方法
+            son.prototype.sonfun = function(){
+                console.log('我是son.prototype.sonfun');
+            };
+
+            //创建子类实例
+            var s = new son();
+            s.parentfun();
+            s.sonfun();
+
+
+
+        </script>
+    </head>
+    <body>
+        
+    </body>
+</html>
