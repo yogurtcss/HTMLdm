@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<!-- Adm47_multi -->
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>多线程计算Fibonacci值嗷</title>
+        <script type="text/javascript">
+            window.onload = function(){
+                //获取输入框
+                var getnum = document.getElementById('getnum');
+                //获取按钮，绑定监听
+                document.getElementById('btn').onclick = function(){
+                    //这个num是要发送给分线程的
+                    var num = getnum.value;
+
+                    /* 多线程：开始
+                    * 1 创建一个Worker对象
+                    * 2 绑定接收消息的监听
+                    * 3 向分线程发送消息
+                    *  */
+
+                    /*  创建一个Worker对象，
+                    * 加载 在分线程执行的 worker.js
+                    * 要注意worker.js的路径
+                    * 在这里worker.js命名为Adm47_worker.js
+                    *  */
+                    var worker = new Worker( 'Adm47_worker1.js' );
+
+                    /* 绑定接收消息的监听
+                    * 这是回调代码，可以写在初始化代码的前面或后面
+                    * 但这总是会被JS解释为：先执行初始化代码后执行回调代码
+                    * 传入参数event，这event中有个data，即：
+                    * even.data是主线程、分线程相互传输的数据
+                    * 这是写好的，直接用即可
+                    *  */
+                    worker.onmessage = function( event ){
+                        console.log( '主线程接收分线程返回的数据：'+event.data );
+                        alert( event.data );
+                    };
+                    //向分线程发送消息——传输数据让它处理
+                    worker.postMessage( num );
+                    console.log( '主线程向分线程发送的数据：'+num );
+
+                }
+
+            }
+
+
+        </script>
+    </head>
+    <body>
+        <input type="text" placeholder="请输入数值嗷" id="getnum" />
+        <button id="btn" >计算嗷</button>
+    </body>
+</html>

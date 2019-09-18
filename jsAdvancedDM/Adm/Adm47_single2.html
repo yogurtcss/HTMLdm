@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<!-- 这是Adm47_single1.html的复刻版-默写版
+看看我有没有记住 -->
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+        <script type="text/javascript">
+            window.onload = function(){
+                function fib( n ){
+                    if( n>2 ){
+                        return fib(n-1)+fib(n-2);
+                    }
+                    else{
+                        return 1;
+                    }
+                };
+
+                //获取文本输入框
+                var getnum = document.getElementById('getnum');
+                //获取按钮
+                document.getElementById('btn').onclick = function(){
+                    //获取文本输入框的值
+                    var num = getnum.value;
+                    //计算Fibonacci值
+                    var rst = fib( num );
+                    alert( rst );
+                };
+
+            }
+        </script>
+
+
+    </head>
+    <body>
+        <!-- 输入框，自结束标签 -->
+        <input type="text" placeholder="请输入数值嗷" id="getnum"/>
+        <!-- 按钮 -->
+        <button id="btn">计算嗷</button>
+    </body>
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<!-- 多线程计算Fibonacci值嗷 -->
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+        <script type="text/javascript">
+            window.onload = function(){
+
+                var getnum = document.getElementById('getnum');
+
+
+                document.getElementById( 'btn' ).onclick = function(){
+                    var num = getnum.value;
+                    //创建多线程对象
+                    var worker = new Worker( 'Adm47_worker2.js' );
+                    //接收从分线程处理的数据
+                    worker.onmessage = function( event ){
+                        console.log('分线程传回主线程的数据为：'+event.data);
+                    };
+                    //传数据给多线程对象
+                    worker.postMessage( num );
+                };
+
+
+
+
+
+
+            }
+
+        </script>
+    </head>
+    <body>
+        <input type="text" placeholder="请输入数值" id="getnum" />
+        <button id="btn">计算嗷</button>
+    </body>
+</html>

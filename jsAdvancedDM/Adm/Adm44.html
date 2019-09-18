@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+        <script type="text/javascript">
+            window.onload = function(){
+              document.getElementById('btn').onclick = function(){
+                  var start = Date.now();
+                  setTimeout( function(){
+                      console.log( '定时器执行了：', Date.now()-start );
+                  },200 );
+                  console.log('定时器结束了。')
+              }
+            };
+        </script>
+    </head>
+    <body>
+        <button id="btn">启动定时器啦</button>
+    </body>
+</html>

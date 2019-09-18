@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>单线程计算Fibonacci值嗷</title>
+        <script type="text/javascript">
+            window.onload = function(){
+                //0, 1, 1, 2, 3, 5, 8,...,
+                function fib( n ){
+                    if( n>2 ){
+                        return fib(n-2)+fib(n-1);
+                    }
+                    else{
+                        return 1;
+                    }
+                }
+                // console.log( fib(3) )
+                //为输入框绑定监听：获取输入内容
+                var getnum = document.getElementById('getnum');
+                //为按钮绑定监听：计算Fibonacci值
+                document.getElementById('btn').onclick = function(){
+                    //获取输入框的输入内容
+                    var num = getnum.value;
+                    var rst = fib( num );
+                    alert( rst );
+                }
+                //单线程下，执行f(42)时：主线程在计算时，
+                // 输入框的光标完全不能动，仿佛卡住了
+            }
+        </script>
+    </head>
+    <body>
+        <!-- 接下来是我不会的环节了：我忘了
+        1.输入框；
+        2.计算按钮
+         -->
+        <!-- 输入左边简短的<! 后，按tab键即可自动补全 -->
+        <!-- 计算输入框，input标签是一个自结束标签 -->
+        <input type="text" placeholder="请输入数值" id="getnum" />
+        <!-- 按钮 -->
+        <button id="btn">计算啦</button>
+    </body>
+</html>
