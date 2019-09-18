@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+        <script type="text/javascript">
+            /* 组合继承——这不是真正的继承啊啊啊啊
+            * 这只是用来：子类要看到父类的方法而已
+            * 1.定义父类构造函数
+            * 2.定义子类构造函数
+            * 3.关键：在子类构造函数中，使用 父类构造函数.call()调用父类构造函数
+            *  */
+            function parent( name,age ){
+                this.name = name;
+                this.age = age;
+
+            }
+            function son( name,age,price ){
+                /* parent.call( this, name, age );
+                * 这句话相当于 this.name = name;
+                * this.age = age;
+                * 只是借用了父类构造函数的语句，减少代码量而已
+                *  */
+                parent.call( this, name, age );
+                this.price = price;
+            }
+
+            var s = new son( '哈哈',23, 14000 );
+            console.log( s.name, s.age, s.price );
+        </script>
+    </head>
+    <body>
+        
+    </body>
+</html>
