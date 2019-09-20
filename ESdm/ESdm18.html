@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+        <script type="text/javascript">
+            //模拟指针对象
+            window.onload = function(){
+                function myIterator( arr ){ //iterator接口
+                    let nextIndex = 0;
+                    return{
+                        next:function(){
+                            if( nextIndex<arr.length ){
+                                return { value:arr[ nextIndex++ ], done:false }
+                            }
+                            else{
+                                return { value:undefined, done:true }
+                            }
+                        }
+                    }
+                };
+
+                let arr = [ 8,2,0,'aa' ];
+                let iterObj = myIterator( arr );
+                console.log( iterObj.next() );
+                console.log( iterObj.next() );
+                console.log( iterObj.next() );
+            }
+
+
+        </script>
+
+    </head>
+    <body>
+        
+    </body>
+</html>
