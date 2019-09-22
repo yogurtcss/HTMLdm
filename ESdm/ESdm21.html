@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+        <script type="text/javascript">
+            window.onload = function(){
+                function* myGen(){
+                    console.log( '开始执行' );
+                    let rst = yield 'hello1';
+                    /*  yield语句的返回值，
+                    * 1 若在调用next()时未传参，通常是undefined
+                    * 2 若在调用next()时传参，则传参内容会作为启动时当前暂停处yield语句的返回值
+                    *  */
+                    // let rst = yield 'hello1';
+                    console.log( '输出yield语句的返回值为：' + rst ); //undefined
+                    // console.log( '----' );
+                    console.log( '再次执行' );
+                    yield 'hello2';
+                    console.log( '遍历完毕' );
+                    return '返回的结果';
+                }
+
+                let MG = myGen();
+                console.log( MG.next() );
+                console.log( MG.next('hello1') ); //调用next时传参，value为hello1
+                // console.log( MG.next() );
+
+                // console.log( MG );
+            }
+
+        </script>
+    </head>
+    <body>
+        
+    </body>
+</html>
