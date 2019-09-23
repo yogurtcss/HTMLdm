@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+        <script type="text/javascript">
+            //使用之前的、传统的构造函数
+            // function Person( name,age ){
+            //     this.name = name;
+            //     this.age = age;
+            // };
+            // let p1 = new Person( 'haha',23 );
+            // console.log( p1 );
+
+            //使用class
+            class Person{
+                //首先必整一个构造方法
+                constructor( name,age ){
+                    this.name = name;
+                    this.age = age;
+                };
+                //类的一般方法：省略function关键字
+                showName(){
+                    console.log( this.name );
+                }
+                showAge(){
+                    console.log( this.age );
+                }
+
+
+            };
+            let p2 = new Person( 'hhh', 10 );
+            console.log( p2 );
+            p2.showAge();
+            p2.showName();
+
+            //子类继承Person
+            class child1 extends Person{
+                //子类的构造方法
+                constructor( name,age,salary ){
+                    super( name,age ); //在这里，子类调用父类的构造方法
+                    this.salary = salary; //子类新增自己的属性
+                }
+                //子类也继承了父类的一般方法
+                //子类重写父类方法
+                showName(){
+                    console.log( '我是子类的构造方法哈' );
+                    console.log( this.name, this.age, this.salary );
+                }
+            }
+            let c1 = new child1( 'lala',22,100000 );
+            console.log( c1 );
+            c1.showName();
+
+
+
+
+
+        </script>
+    </head>
+    <body>
+        
+    </body>
+</html>

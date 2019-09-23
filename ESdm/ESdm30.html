@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+        <script type="text/javascript">
+            //开始写 执行深度克隆的函数
+            function checkType( target ){
+                //直接返回判断结果
+                return Object.prototype.toString.call( target ).slice( 8,-1 );
+            }
+            //实现深度克隆
+            function DeepClone( target ){
+                //最终深度克隆的结果rst，声明了但未赋值
+                let rst;
+                //接收判断类型的结果 target Type
+                let tType = checkType( target );
+
+                /* 判断传入的target 是对象/数组？
+                * 对象 -- rst初始化为空对象{}
+                * 数组 -- rst初始化为空数组[]
+                *  */
+                if( tType === 'Object' ){
+                    rst = {};
+                }
+                else if( tType === 'Array' ){
+                    rst = [];
+                }
+                else{ //既不是对象，也不是数组，则target是基本数据类型，直接可以深拷贝了
+                    return target;
+                }
+                /* 注意，循环取值时，可能遇到嵌套 对象或数组的情况
+                * 分为 对象 数组 两类讨论
+                *  */
+                for( let i in target ){
+                    //循环取值，i是属性名/下标
+                    //此时的value有可能是 嵌套对象/数组
+                    let value = target[i];
+                    //判断是否仍有嵌套对象/数组
+                    if (checkType(value) === 'Object' || checkType(value) === 'Array') {
+                        //继续递归，深入遍历
+                        rst[i] = DeepClone(value);
+                    }
+                    else { //到了这里，获取到的value就是基本数据类型 或 函数
+                        rst[i] = value;
+                    };
+                };
+                return rst;
+            }
+
+            //测试
+            let a = [ 1, 2, {name:'haha',age:23}, 3, {sex:'man',id:'11'} ];
+            let a1 = DeepClone( a );
+            // console.log( a, a1 );
+            a[2].name= 'lll';
+            console.log( a,a1 );
+
+            console.log( '-------------' );
+            let b = {
+                obj1:{ name:'aa',age:18 },
+                salary:1000,
+                obj3:{ sex:'man', id:'1' }
+
+            };
+            let b1 = DeepClone( b );
+            b.obj1.name = 'cxk';
+            console.log( b,b1 );
+
+        </script>
+
+    </head>
+    <body>
+        
+    </body>
+</html>

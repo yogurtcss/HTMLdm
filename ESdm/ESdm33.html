@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+        <script type="text/javascript">
+            //for of，数组去重
+            let arr = [ 1,1,1,2,2,2,3,3,3 ];
+            //将原数组arr的值临时存放在arr1中
+            let arr1 = arr;
+            //将原数组arr赋值为空，等待将去重后的数据被push回来
+            arr = [];
+            //核心操作：去重
+            let set = new Set( arr1 );
+            //arr.push()方法可向数组的末尾添加一个或多个元素，并返回新的长度
+            //通过for of循环，将去重后的数据逐一push回原数组arr
+            for( let i of set ){
+                arr.push( i )
+            }
+            console.log( arr );
+        </script>
+    </head>
+    <body>
+        
+    </body>
+</html>

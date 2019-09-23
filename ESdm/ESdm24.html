@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+        <script type="text/javascript">
+            //async函数
+            async function foo(){
+                return new Promise( resolve =>  {
+                   // setTimeout( function(){
+                   //     resolve();
+                   // },2000 );
+                   //以上这3行是低级写法
+
+                    //高级写法：
+                    setTimeout( resolve,2000 );
+
+                } )
+            }
+
+            // async function atest(){
+            //     //toTimeString() 方法以人类易读形式返回一个日期对象时间部分的字符串
+            //     console.log( '开始执行辣', new Date().toTimeString() );
+            //     await foo();
+            //     console.log( '执行完毕', new Date().toTimeString() );
+            //
+            // }
+            // //还要调用这个aync函数：atest
+            // atest();
+
+            console.log( '----------------------' );
+            //async中，await的返回值
+            //1 普通函数
+            function test2(){
+                return 'xxx';
+            };
+            async function aoutput1(){
+                let rst = await test2(); //await返回值就是这个普通函数的返回值
+                console.log( rst );
+            };
+            //还要调用这个aync函数
+            aoutput1();
+            console.log( '------' );
+            //2 Promise对象
+            async function aoutput2(){
+                //静态方法 Promise.resolve(value)
+                // 可以认为是 new Promise() 方法的快捷方式。
+                let rst1 = await Promise.resolve();
+                //Promise的成功态，await返回的是undefined
+                console.log( rst1 ); //undefined
+
+                //可从Promise.resolve()中传参数，更改返回值
+                let rst2 = await Promise.resolve('aaa');
+                //redundant 额外的，多余的
+                console.log( rst2 );
+                let rst3 = await Promise.reject( '失败辣' );
+                console.log( 'rst3' ); //飘红了…
+            };
+            //还要调用这个async函数
+            aoutput2();
+
+
+
+
+        </script>
+    </head>
+    <body>
+        
+    </body>
+</html>

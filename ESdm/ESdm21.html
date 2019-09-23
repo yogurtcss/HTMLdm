@@ -27,6 +27,26 @@
                 // console.log( MG.next() );
 
                 // console.log( MG );
+
+                //对象的symbol.iterator属性，指向遍历器对象
+                obj1 = {
+                    name:'haha',
+                    age:32
+                };
+                //人为添加迭代器
+                obj1[ Symbol.iterator ] = function* myGN(){
+                    yield 1;
+                    yield 2;
+                    yield 3;
+                };
+
+
+                for( let i of obj1 ){
+                    console.log(i);
+                }
+
+
+
             }
 
         </script>

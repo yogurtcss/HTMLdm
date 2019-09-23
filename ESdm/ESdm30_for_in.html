@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+        <script type="text/javascript">
+            window.onload = function(){
+                //测试for in
+                function checkType( target ){
+                    //直接返回判断结果
+                    return Object.prototype.toString.call( target ).slice( 8,-1 );
+                }
+
+
+
+                let a = {
+                    obj1:{ name:'aa',age:18 },
+                    salary:1000,
+                    obj3:{ sex:'man', id:'1' }
+
+                };
+                for( let i in a ){ //i是属性名
+                    let value = a[i]; //而value有可能是 属性值（基本数据类型），也可能是一个嵌套对象
+                    console.log( value );
+                    if( checkType(value) === 'Object' ){
+                        console.log( '输出嵌套对象' );
+
+                    }
+                }
+                // console.log( a[2]==='Object' );
+
+            }
+
+        </script>
+    </head>
+    <body>
+        
+    </body>
+</html>
