@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+//ESdm30_clone2，纯默写版
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+        <script type="text/javascript">
+            window.onload = function(){
+                //判断数据类型
+                function checkType( target ){
+                    //这个函数有点长，难记
+                    return Object.prototype.toString.call( target ).slice( 8,-1 );
+                }
+                //实现深度克隆
+                function DeepClone( target ){
+                    //最终克隆的结果rst，只声明，不赋值
+                    let rst;
+                    //数据类型的检查结果 target type
+                    let tType = checkType( target );
+
+                    /* 对target分类讨论，以对rst进行初始化
+                    * 是对象？ -- rst初始化为空对象
+                    * 是数组？-- rst初始化为空数组
+                    * 是基本数据类型？-- 直接return原来的target出去
+                    *  */
+                    if( tType === 'Object' ){
+                        rst = {};
+                    }
+                    else if( tType === 'Array' ){
+                        rst = [];
+                    }
+                    else{ //target是基本数据类型
+                        return target;
+                    }
+
+                    //循环取值
+                    for( let i in target ){
+                        // i是属性名
+                        let value = target[i]; //value可能是嵌套对象或数组
+                        if( checkType(value)==='Object' || checkType(value)==='Array' ){
+                            rst[i] = DeepClone( value );
+                        }
+                        else{ //到了这里，value就是基本数据类型或是函数
+                            rst[i] = value;
+                        }
+                    }
+                    return rst;
+                }
+
+                //测试
+                let a = [ 1, 2, {name:'haha',age:23}, 3, {sex:'man',id:'11'} ];
+                let a1 = DeepClone( a );
+                // console.log( a, a1 );
+                a[2].name= 'lll';
+                console.log( a,a1 );
+
+
+
+            }
+
+        </script>
+
+
+    </head>
+    <body>
+        
+    </body>
+</html>
