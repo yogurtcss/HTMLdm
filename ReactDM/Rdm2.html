@@ -8,12 +8,57 @@
         <div id="test1"></div>
         <div id="test2"></div>
 
+        <script type="text/javascript" src="js/react.development.js"></script>
+        <script type="text/javascript" src="js/react-dom.development.js"></script>
+        <script type="text/javascript" src="js/babel.min.js"></script>
+
         <script type="text/javascript">
+            const msg ='I like you!';
+            const myId = 'aa';
+
+            //法一
+            //1.创建虚拟DOM，格式如下：
+            /* var reactElement = ReactElement.createElement(
+  	                                        ... // 标签名称字符串/ReactClass,
+  	                                        ... // [元素的属性值对 - 对象],
+  	                                        ... // [元素的子节点]   )
+            *
+            *
+            *  */
+
+            /*  < h2 id="A" > I love you !   </h2>
+            * 语法对应如下：
+            * const vDom1 = React.createElement( '标签名A' ——在这里是'h2',
+                在这里是 id="A",即 { id:"A" }    ——此标签A对应的标签属性：对象( 名:值 ) - {  },
+                在这里是 I love you !            ——'标签A中的文本内容'               );
+            * */
+            //参照语法，写语句如下
+            const vDom1 = React.createElement( 'h2',{id:myId.toLowerCase()}, msg.toUpperCase() );
+
+            //2 渲染虚拟DOM
+            /* ReactDOM.render( 虚拟Dom元素,
+                                真实Dom容器——往往需要用document.getElementById('..')   )
+            *  */
+            ReactDOM.render( vDom1, document.getElementById('test1') );
+        </script>
 
 
-
+        <script type="text/babel">
+            //法二
+            //1 创建虚拟DOM对象
+            /* const vDom2 =
+                < h3 id={动态的、可变的值，用大括号括住！} >
+                    { 文本内容也是动态的可变的值，也用大括号括住！ }
+                < /h3 >
+            *
+            *  */
+            const vDom2 = <h3 id={ myId.toUpperCase() }> {msg.toLowerCase()} </h3>;
+            //2 渲染虚拟DOM
+            ReactDOM.render( vDom2, document.getElementById('test2') );
         </script>
 
 
     </body>
 </html>
+
+
