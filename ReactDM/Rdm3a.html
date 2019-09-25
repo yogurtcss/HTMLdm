@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+
+
+    </head>
+    <body>
+        <div id="test"></div>
+
+        <script type="text/javascript" src="js/react.development.js" ></script>
+        <script type="text/javascript" src="js/react-dom.development.js"></script>
+        <script type="text/javascript" src="js/babel.min.js"></script>
+        <script type="text/babel">
+            const names = [ 'jQuery', 'zeptoo', 'angular', 'react', 'vue' ];
+
+            /*  => 箭头右边，函数体，花括号{  }
+     				- 只有一条语句（或表达式）时：花括号可以省略，默认返回结果（默认 return结果）
+    				- 多于一条语句（或表达式）时：花括号不能省略，需手动return结果(建议自己手动return结果！！)
+			*/
+
+            // 箭头函数右边，若加了{ }，则里面需要自己手动return出结果！！
+            //1 创建虚拟对象
+            const ul = (
+                names.map(
+                    (name,index) => { return <li key={index}> {name} </li>  }
+                )
+            );
+            //2 渲染虚拟对象到真实DOM
+            ReactDOM.render( ul, document.getElementById('test') );
+
+        </script>
+
+
+    </body>
+</html>

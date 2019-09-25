@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+
+
+    </head>
+    <body>
+        <div id="test"> </div>
+
+        <script type="text/javascript" src="js/react.development.js"></script>
+        <script type="text/javascript" src="js/react-dom.development.js"></script>
+        <script type="text/javascript" src="js/babel.min.js"></script>
+
+        <script type="text/babel">
+            //使用方法二创建虚拟DOM对象
+            const names = [ 'jQuery', 'zeptoo', 'angular', 'react', 'vue' ];
+
+
+            //1 创建虚拟DOM对象
+            /* <ul>
+            *       <li> name </li>
+            * </ul>
+            *
+            *
+            *  */
+
+            /* 有嵌套的结构，要用括号括住
+            * 动态的变量用 { } 括住
+            *
+            * 数组的map() 方法返回一个新数组，
+            * 这里的 map 不是 “地图” 的意思，而是指 “映射”
+            * 原数组被 “映射” 成对应新数组
+            * 数组中的元素为原始数组元素调用函数处理后的值。
+            * 回调函数中，function传入的参数为：( currentValue, [index, array] )
+            *   必选：currentValue 数组中 正在处理的当前元素
+            *   可选index：数组中 正在处理的当前元素的索引
+            *   可选array：在map方法中被调用的数组
+            *   回调函数使用箭头函数 () => {}
+            *
+            * 如果回调函数中不传入index，不报错，但会弹出警告
+            *
+            *  */
+            const ul = (
+                <ul>
+                    {
+                        names.map(
+                            (name,index) => <li key={index}>{name}</li>
+                        )
+                    }
+                </ul>
+
+            );
+
+            //渲染虚拟DOM对象到真实DOM容器中
+            ReactDOM.render( ul,document.getElementById('test') );
+
+        </script>
+
+    </body>
+</html>
