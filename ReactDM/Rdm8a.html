@@ -24,6 +24,23 @@
                     </ul>
                 )
             };
+
+            //法2: ES6 类标签
+            class Person2 extends React.Component{
+                constructor(){
+                    super();
+                };
+                render(){
+                    return(
+                        <ul>
+                            <li>姓名:{this.props.name}</li>
+                            <li>年龄:{this.props.age}</li>
+                            <li>性别:{this.props.sex}</li>
+                        </ul>
+                    )
+                }
+            }
+
             //指定默认值 Person.defaultProps
             Person.defaultProps = {
                 age: 18,
