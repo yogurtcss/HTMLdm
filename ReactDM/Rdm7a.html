@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+    </head>
+    <body>
+        <div id="example"></div>
+
+        <script type="text/javascript" src="js/react.development.js"></script>
+        <script type="text/javascript" src="js/react-dom.development.js"></script>
+        <script type="text/javascript" src="js/babel.min.js"></script>
+        <script type="text/babel">
+            //1 创建虚拟DOM标签，采用ES6类标签 复杂标签
+            class Like extends React.Component{
+                //构造函数
+                constructor( props ){
+                    super( props );
+                    // 整活
+                    // 1 初始化阶段
+                    this.state = {
+                        isLikeMe: false
+                    };
+                    //为子类的一般方法改绑this为组件标签
+                    this.handleClick = this.handleClick.bind( this );
+                }
+                //子类的一般方法handleCilck
+                handleClick(){
+                    //获取当前对象，并作更新
+                    //这里的更新是取反操作嗷
+                    const newFlag = !this.state.isLikeMe;
+                    //修改新状态
+                    this.state.isLikeMe = newFlag;
+                    //应用 修改后的新状态
+                    //设置 新的状态对象
+                    this.setState( this.state );
+                }
+
+                render(){
+                    //2 读取状态
+                    const isLikeMe1 = this.state.isLikeMe;
+                    const {isLikeMe} = this.state; //对象的解构赋值
+
+                    //react中的onClick，有个回调函数，记住要加花括号！！
+                    return(
+                        /* this.handleClick不能加括号：
+                        * 不能写成this.handleClick()，加了括号就是我们人为立即调用的意思
+                        * 在这里，不是我们人为调用这个函数，而是告诉onClick，让你去调用这个函数！
+                        *  */
+                        <h2 onClick={this.handleClick} > { isLikeMe? '你喜欢我':'我喜欢你！' } </h2>
+                    );
+                }
+            }
+            //2 渲染真实标签
+            ReactDOM.render( <Like />, document.getElementById('example') );
+
+
+        </script>
+
+    </body>
+</html>

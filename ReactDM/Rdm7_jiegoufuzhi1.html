@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+        <script type="text/javascript">
+            /* P8 解构赋值法：在react更新组件state中常用得着！！
+            * 在读取state状态中，常用 解构赋值 法
+            * let {  a1,a2,a3,…,an  } = obj，
+            * 按照obj的属性值的个数，按  先后顺序、一一对应地 赋值给a1,a2,a3,…an，
+            * 注意！ a1,a2,a3,…,an 是obj中已有的属性名！！
+            *  */
+            let obj = {
+                name: 'hahah',
+                age: 23,
+                sex: 'nan',
+                salary: 1000
+            };
+            //错误的解构赋值：左边花括号中是 对象obj中不存在的属性名
+            let { n } = obj;
+            console.log( n ); //undefined
+
+            //正确的解构赋值：左边花括号中是 对象obj中 存在的属性名
+            // let { name } = obj;
+            // console.log( name ); //hahah
+
+            let { name,age,sex,salary } = obj;
+            console.log( name,age,sex,salary );
+      </script>
+
+    </head>
+    <body>
+        
+    </body>
+</html>

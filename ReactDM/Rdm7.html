@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+    </head>
+    <body>
+        <div id="example"></div>
+
+        <script type="text/javascript" src="js/react.development.js"></script>
+        <script type="text/javascript" src="js/react-dom.development.js"></script>
+        <script type="text/javascript" src="js/babel.min.js"></script>
+        <script type="text/babel">
+            /* 需求：自定义组件，功能说明如下
+            * 1.显示h2标题，初始文本为 你喜欢我
+            * 2. 点击标题后，自动更新为：我喜欢你
+            *  */
+
+            //1 定义组件(为什么要用ES6类组件？)
+            /* 解答：只要你的组件中含有状态 state，你就不能用工厂函数的模式创建组件
+            *
+            *  */
+            class Like extends React.Component{
+
+                /* 构造函数
+                * 注意，继承于父类的子类，构造函数中必须用super()来调用父类构造函数，不然报错！！
+                *  */
+                constructor( props ){  //这里的构造函数中，默认固定传入props！！
+                    /* props是 组件三大属性之一
+                    *
+                    *  */
+                    super( props ); //将prop传到父类构造函数中
+                    //以上是固定的结构
+
+                    //以下是整活阶段
+                    //1 初始化状态
+                    this.state= {
+                        isLikeMe : false, // “是否喜欢我”的状态
+                    };
+
+                    //将子类中新增的一般方法中的this，强制指回组件对象
+                    /* 用到了bind函数，但bind函数
+                    * /bind()不会立即调用当前函数，
+                    * 而是 返回一个新的函数，不影响原来的函数
+                    * 要想修改原函数的this，则把 bind修改的结果，重新赋值给原函数
+                    * 这样就修改了 原函数的this
+                    *  */
+                    this.handleClick = this.handleClick.bind( this ); //最难的一步
+
+                };
+
+                //子类中的一般方法：不加function关键字！！
+                //handleClick方法，用于onClick中的回调函数
+
+                /* 子类中新增的一般方法，内部的this默认不是组件对象，而是undefined
+                * 在此，我们将 子类中新增的一般方法 的this，修改为 指向组件对象
+                * 用到了bind
+                *  */
+
+                handleClick(){
+                    //得到之前的状态，进行新的操作
+                    //在这里，我们取的是取反操作
+                    const newflag = !this.state.isLikeMe;
+
+                    //3 更新状态
+                    this.state.isLikeMe = newflag;
+                    /* setState()中，必须传入一个对象 */
+                    this.setState( this.state );
+                }
+
+                //render()是父类中已有的方法，子类中 重写之
+                render(){
+                    // 2 读取状态
+                    /* state是组件对象最重要的属性，
+                    * 值是对象（可以包含多个数据）
+                    *  */
+
+                    const isLikeMe1 = this.state.isLikeMe; //常规写法，但一般推荐使用ES6的解构赋值法！！
+                    /* 在读取状态中，常用 解构赋值 法
+                    * let {  a1,a2,a3,…,an  } = obj，
+                    * 按照obj的属性值的个数，按  先后顺序、一一对应地 赋值给a1,a2,a3,…an，
+                    * 注意！ a1,a2,a3,…,an 是obj中已有的属性名！！
+                    *  */
+                    const { isLikeMe } = this.state;
+                    /* 复习：条件运算符( 三目运算符 )，if语句的简短形式
+                    * condition ? expr1 : expr2
+                    *   如果 condition 为 true，运算符就会返回 expr1 的值；
+                    *   否则， 就会返回 expr2 的值。
+                    *  */
+
+                    /* 所有的用户交互操作：绑定事件监听
+                    * 给h2标签绑定监听
+                    * 注意：在react中绑定事件监听，与原生DOM绑定事件监听 的过程很像，
+                    * 但是，在react中，相应绑定事件监听的 方法名 不一样：
+                    * react中绑定事件监听的 方法名，遵循驼峰命名法，驼峰处首字母大写
+                    * 如原生DOM中是 onclick，在react中则是 onClick（C是大写）
+                    * 这是因为：react不是用了原生DOM的事件，这些诸如onClick是react自己封装的事件
+                    * 以此与原生DOM的事件监听 作出区别
+                    *
+                    * 注意，onClick = 回调函数。
+                    * 往onClick中传一个回调函数
+                    *  */
+                    return (
+                        //注意，this.handleClick中的this是组件对象，不是h2！！
+                        /* this.handleClick不能加括号：
+                        * 不能写成this.handleClick()，加了括号就是我们人为立即调用的意思
+                        * 在这里，不是我们人为调用这个函数，而是告诉onClick，让你去调用这个函数！
+                        *  */
+                        <h2 onClick={ this.handleClick } >
+                            { isLikeMe ? '你喜欢我' : '我喜欢你！' }
+                        </h2>
+                    );
+                }
+            }
+
+            //2 渲染组件标签
+            /* 标签为<Like></Like>，或单标签结尾<Like />
+            * 一般建议单标签，能少写就少写
+            *  */
+            ReactDOM.render( <Like />, document.getElementById('example') );
+
+
+        </script>
+
+
+    </body>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+    </head>
+    <body>
+        <div id="example1"></div>
+        <div id="example2"></div>
+
+        <script type="text/javascript" src="js/react.development.js"></script>
+        <script type="text/javascript" src="js/react-dom.development.js"></script>
+        <script type="text/javascript" src="js/prop-types.js"></script>
+        <script type="text/javascript" src="js/babel.min.js"></script>
+        <script type="text/babel">
+            //1 定义组件对象
+            //法1:工厂函数标签
+            function Person( props ){
+                return (
+                    <ul>
+                        <li>姓名:{props.name}</li>
+                        <li>年龄:{props.age}</li>
+                        <li>性别:{props.sex}</li>
+                    </ul>
+                )
+            };
+            //指定默认值 Person.defaultProps
+            Person.defaultProps = {
+                age: 18,
+                sex: '👵'
+            };
+            //指定约束 Person.propTypes,而在属性值中 PropTypes打头,首字母P是大写的!
+            Person.propTypes = {
+                name: PropTypes.string.isRequired, //指定为string型,且为必需项
+                age:  PropTypes.number,
+                sex:  PropTypes.string
+            };
+
+
+            //2 渲染组件对象
+            //创建一个实例
+            const p1 = {
+                name: '哈哈',
+                age:  10,
+                sex: '男'
+            };
+            //法一, 传统的为标签赋值
+            ReactDOM.render(
+                <Person name={p1.name} age={p1.age} sex={p1.sex} />,
+                document.getElementById( 'example1' )
+            );
+
+            const p2 = {
+                name:'lala',
+                age: 100,
+                sex: '👵'
+            };
+            //法二, 使用...运算符,解包赋值
+            ReactDOM.render(
+                <Person {...p2} />,
+                document.getElementById( 'example2' )
+            );
+
+
+
+        </script>
+
+
+        
+    </body>
+</html>

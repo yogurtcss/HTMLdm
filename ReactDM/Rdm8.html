@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+    </head>
+    <body>
+
+        <div id="example"></div>
+        <div id="example2"></div>
+
+        <script type="text/javascript" src="js/react.development.js"></script>
+        <script type="text/javascript" src="js/react-dom.development.js"></script>
+        <script type="text/javascript" src="js/prop-types.js"></script>   <!-- 新工具 -->
+        <script type="text/javascript" src="js/babel.min.js"></script>
+        <script type="text/babel">
+            /* 需求：自定义用来显示某人信息的组件
+            * 1 性名必须指定
+            * 2 若性别没有指定，则默认为男
+            * 3 若年龄没有指定，则默认为18
+            *
+            *  */
+
+            //1 定义组件，在这里，这个组件没有状态state，可以用简单的
+            // 工厂函数模式创建组件
+            function Person( props ){
+                /* 传入的props对象中，有3个自定义的属性：name、age、sex
+                * 则在后面传入props的3个属性相应的值时，属性名必须一致！！
+                * 在后面有说明
+                *  */
+                return (
+                    <ul>
+                        <li>姓名：{ props.name }</li>
+                        <li>年龄：{ props.age }</li>
+                        <li>性别：{ props.sex }</li>
+                    </ul>
+                )
+            };
+
+            //法2: ES6 组件
+            // class Person extends React.Component{
+            //     constructor(){
+            //         super();
+            //     };
+            //
+            //     /* 组件对象自带有3大属性:state, props和refs
+            //     * 通过 this. xxx 来调用这些自带的属性(对象)
+            //     *  */
+            //     render(){
+            //         return(
+            //             <ul>
+            //                 <li>姓名：{ this.props.name }</li>
+            //                 <li>年龄：{ this.props.age }</li>
+            //                 <li>性别：{ this.props.sex }</li>
+            //             </ul>
+            //         )
+            //     }
+            // }
+
+            /* 关于 指定默认值defaultProps
+            * 和 指定数据类型 约束时 propTypes的记忆问题
+            * 1 打头处,首字母必大写(如 属性值中的PropTypes,属性值就它打头的), 而其余情况首字母小写, 且驼峰命名法
+            * 2 结尾处必为复数形式: 结尾 + s, 如 属性名defaultProps, 属性名propTypes, 属性名PropTypes
+            * 这规律, 👴也是佛了
+            *  */
+
+
+            //指定属性的默认值
+            Person.defaultProps = {
+                sex: '男',
+                age: 18
+            };
+            //指定属性值的类型和必要性
+            Person.propTypes = {
+                name: PropTypes.string.isRequired, //指定name为string，且必须传入 .isRequired
+                age:  PropTypes.number, //指定age为number型
+                sex:  PropTypes.string //指定sex为string型
+            };
+
+
+            //2 渲染组件标签
+            /* JavaScript 表达式作为 Props
+            * 把包裹在 {} 中的 JavaScript 表达式
+            * 作为一个 prop 传递给 JSX 元素
+            *  */
+            const p1 = {
+                name: 'Tom',
+                age: 8,
+                sex: '女'
+            };
+            /* <Person /> 标签里的属性名 (如name，age，sex)可以随便写的
+            * 但在这里，传入 工厂函数Person的props对象中的三个属性分别为 name、age、sex，
+            * (而不是 name1、age1、sex1)， 所以在这里 <Person />标签里的属性名
+            * 必须得和 工厂函数props的三个属性名一致！！
+            *
+            * 可以尝试改为 name1、age1、sex1，看看是否有输出
+            *  */
+            // 赋值: 法一
+            ReactDOM.render( <Person name={p1.name} age={200} sex={p1.sex} />,
+                             document.getElementById('example') );
+            //更简单的传值方法
+            /* 使用 三点运算符, 扩展运算符...
+            * ...的作用:
+            *   1.打包: 把许多数据搞到一个"包"里, 这个"包"可能是对象,也可能是数组
+            *          function fn( ...as ) { ... }
+            *          fn( 1,2,3 ) //将1,2,3 打包成数组传进函数里
+            *
+            *   2.解包: 把一个对象/数组中的全部数据一一取出来
+            *          const arr1 = [ 1,2,3 ]
+            *          const arr2 = [ 6, ...arr1,  9 ] //将arr1解包至arr2数组中
+            *  */
+            ReactDOM.render(
+                // { ...p1 } 三点运算符,解包操作
+                // 这句相当于 赋值:法一
+                <Person { ...p1 } />,
+                document.getElementById("example")
+            );
+
+            const p2 = {
+                name: 'abstract丶meta川',
+                age: 22,
+                sex: '👴'
+            };
+
+
+            ReactDOM.render(
+                // { ...p1 } 三点运算符,解包操作
+                // 这句相当于 赋值:法一
+                <Person { ...p2 } />,
+                document.getElementById("example2")
+            );
+        </script>
+
+    </body>
+</html>
