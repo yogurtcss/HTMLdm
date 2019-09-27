@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+    <!-- 纯手动实现 -->
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+    </head>
+    <body>
+        <div id="example"></div>
+
+        <script type="text/javascript" src="js/react.development.js"></script>
+        <script type="text/javascript" src="js/react-dom.development.js"></script>
+        <script type="text/javascript" src="js/prop-types.js"></script>
+        <script type="text/javascript" src="js/babel.min.js"></script>
+
+        <script type="text/babel">
+            //1 创建虚拟DOM对象
+            /* 当不确定有没有state状态时，用class */
+
+            /* 数据保存到哪里？
+            * 在这里，Add和List都用到了数据，所以把数据放在
+            * 它俩公共的父亲App上
+            *  */
+            class App extends React.Component{
+                constructor( props ){
+                    super( props );
+
+                    /* 构造函数中，初始化状态，是一个对象
+                    * 对象里面的属性值是数组
+                    * 这个初始化状态，交给 List去显示
+                    *  */
+                    this.state = {
+                        todos: [ '吃饭', '睡觉', '打豆豆' ]
+                    };
+
+                };
+                /* 向类List中传入了todos的参数，这时类List的props集合中
+                * 就有了todos的属性了；
+                * 注意，传入的是todos，而不是todos1！！
+                * 已经指定了是传入todos，后面再操作时就是todos了
+                *
+                * 组件对象自带有3大属性:state, props和refs
+                * 通过 this. xxx 来调用这些自带的属性(对象)
+                *  */
+
+                render(){
+                    /* 注意，这里面的this全是组件对象App
+                    *
+                    * 往<Add />、<List />标签中传数据辣！
+                    *
+                    * 传入的数据 将会放入 相应类的props中，
+                    *   在相应类的中调用this.props就能取到所需数据了
+                    *
+                    * <List todos={this.state.todos} 中的this就是App
+                    *  */
+                    return(
+                        <div>
+                            <h1>Simple TODO List</h1>
+                            <Add todos={this.state.todos} />
+                            <List todos={this.state.todos} />
+                        </div>
+
+                    );
+                };
+            };
+
+            class Add extends React.Component{
+
+                render(){
+                    /* 注意，render方法必须、只能返回return一个JSX元素；
+                    * 若要返回多个JSX元素，则需要用一个JSX元素(如最外层的div)
+                    * 包裹住这一堆JSX元素，然后一并return出来！！
+                    *
+                    * Add的props对象中，已经传入了todos的属性值：数组了
+                    * 取它的length，然后 +1 表示：指示下一个要填入的值
+                    *
+                    *  */
+                    return(
+                        <div>
+                            <input type="text" />&nbsp;&nbsp;
+                            <button>Add #{this.props.todos.length+1}</button>
+                        </div>
+                    );
+                };
+            };
+            //Add传入数据的约束
+            Add.propTypes = {
+                todos: PropTypes.array.isRequired
+            };
+
+            class List extends React.Component{
+
+                /* 注意，render方法必须、只能返回一个JSX元素
+                * 如果要返回多个JSX元素，则必须用一个最外部的JSX元素
+                * 包住这一堆JSX元素，然后一并return出来 */
+                render(){
+                    /* 在App中，已经向类List传入了todos参数，
+                    * 这todos参数将被放入 props集合中，
+                    * 可以通过this.props.todos来调用之
+                    *
+                    * map函数这里有点忘了…
+                    *  */
+                    return(
+                        <ul>
+                            {
+                                this.props.todos.map(
+                                    (onevalue,index) => {
+                                        return ( <li key={index}> {onevalue} </li> )
+                                    }
+                                )
+                            }
+                        </ul>
+                    );
+                };
+            };
+            //List接收来自父亲的数据，有约束
+            List.propTypes = {
+                /* 首先：要求传入的 属性名为 todos，
+                * 然后再到 App的<List>标签处，往里传todos
+                * 如果在App的标签处，给todos传入的是todos1，会怎样？
+                *  */
+                todos: PropTypes.array.isRequired
+            };
+
+
+            //2 渲染DOM标签
+            ReactDOM.render( <App />, document.getElementById('example') );
+
+
+        </script>
+        
+    </body>
+</html>
