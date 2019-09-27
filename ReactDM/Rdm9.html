@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+    </head>
+    <body>
+        <div id="example"></div>
+
+        <script type="text/javascript" src="js/react.development.js"></script>
+        <script type="text/javascript" src="js/react-dom.development.js"></script>
+        <script type="text/javascript" src="js/prop-types.js"></script>
+        <script type="text/javascript" src="js/babel.min.js"></script>
+        <script type="text/babel">
+            /* 需求: 自定义组件, 功能说明说明如下
+            * 1 界面如图所示
+            * 2 点击按钮,提升第一一个输入框中的值
+            * 3 当第2各输入框社区焦点时, 提示这个输入框中的值
+            *
+            * */
+
+            //1 定义组件
+            /* 当不能确定组件中是否有状态state时,
+            * 用 ES6 类标签 来创建组件就没错了
+            *
+            *  */
+            class MyComponent extends React.Component{
+                constructor(){
+                    super();
+                    //对子类的一般方法更改this指向
+                    this.showInput = this.showInput.bind( this );
+                    this.handleBlur = this.handleBlur.bind( this );
+                };
+                //子类的一般方法
+                showInput(  ){
+                    //获取文本框对象input
+                    const input = this.refs.content;
+                    //获取文本框中的值：文本框对象.value
+                    // alert( input.value );
+                    //获取文本框中的值，法二：ref = 回调函数
+                    alert( this.input.value );
+                }
+
+                /* 获取文本框中的值
+                * 法一：标识id，然后getElementById
+                * 思路是这样，但在react中：
+                * 1) id 换成 ref，
+                * 2) getElementById 换成 this.refs.xxx(标识名)
+                * 这种方法在react官方中不被推荐，但此法未被抛弃，仍可用
+                *
+                *  */
+
+                /* 获取文本框中的值
+                * 法二：官方推荐 ref = 回调函数
+                * < input type="text" ref = { input => this.input=input } />
+                *   =>左边的 input：是当前的input DOM元素，其实这左边、右边的input不一定是这个名字，
+                * 可以任意取名；变量名任意，但= >左边的变量 必定是 指代当前的这个(input)元素
+                *   =>右边 this.input=input：
+                *      this 是组件对象
+                *     把 当前的DOM元素input保存到组件对象(this)中了
+                *     即 给当前组件对象 新增了一个属性input(这个文本框对象)
+                *     要获取这个文本框的值：this.input.value
+                *
+                * 代码模板：
+                * < input type="text" ref = { theElement => this.theElement=theElement } />
+                *  */
+
+                /* onblur 事件会在对象失去焦点时发生
+                * handleBlur 回调函数，
+                * on_xxx 当处于xxx的时候
+                * handle_yyy 处理yyy事件
+                *  */
+
+                /* 对于handleBlur获取文本框的值：
+                * 可以继续用 ref = 回调函数 的做法
+                *
+                * 但这次比较特殊：
+                * 文本框B 获取 框内的值，失去焦点后，     (---发生事件 )
+                * 框B 会 alert框内的值                    ( ---处理事件)
+                *
+                * 我要操作的DOM元素恰好是 发生事件 的元素：
+                *
+                * 当发生事件和处理事件都是同一个DOM元素，且要 获取处理事件的元素 的值时
+                * 可考虑用 event.target，用来 获取 触发事件的 DOM 元素
+                *
+                * 所有的 事件回调函数都默认有一个传入的形参 event
+                * event.target，用来 获取 触发事件的 DOM 元素
+                * 既然 发生事件和处理事件是同一个元素，那么event.target获取的也将是同一个元素：处理事件的元素
+                *
+                * event.target 获取我自己：文本框B
+                * event.target.value 获取我自己：文本框B 的值
+                *
+                *  */
+                handleBlur( event ){
+                    console.log(  '我获取我自己，event.target是：', event.target );
+                    alert( event.target.value );
+                }
+
+                render(){
+                    return(
+                        <div>
+
+                            <input type="text" ref="content" />&nbsp;&nbsp;
+
+                            <input type="text" ref={
+                                (input) => { return this.input = input }
+                            }      />&nbsp;&nbsp;
+
+                            <button onClick={this.showInput} >提示输入</button>&nbsp;&nbsp;
+                            <input type="text" placeholder="失去焦点提示内容" onBlur={this.handleBlur} />
+                        </div>
+                    )
+                }
+
+            }
+
+            //2 渲染组件标签
+            ReactDOM.render( <MyComponent />, document.getElementById('example') );
+
+        </script>
+
+    </body>
+</html>
