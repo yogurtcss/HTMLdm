@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+    </head>
+    <body>
+        <div id="example"></div>
+
+        <script type="text/javascript" src="js/react.development.js"></script>
+        <script type="text/javascript" src="js/react-dom.development.js"></script>
+        <script type="text/javascript" src="js/prop-types.js"></script>
+        <script type="text/javascript" src="js/babel.min.js"></script>
+        <script type="text/babel">
+            //1 定义组件对象，当不知道是否有状态state时，只管用class就完事了
+            class MyComponent extends React.Component{
+                constructor(){
+                    super();
+
+                    //为子类的一般对象更改this指向，重新指回组件对象MyComponent
+                    this.showInput = this.showInput.bind( this );
+                    this.handleBlur = this.handleBlur.bind( this );
+                };
+                //子类的一般方法
+                showInput(){
+                    const msg = this.refs.content; //获取文本框对象A
+                    // alert( msg.value ); //获取 文本框对象A 中的值
+
+                    /* //通过方法2：ref=回调函数
+                    * 读取组件对象this的新属性 InputA 获取文本框对象A
+                    * 然后继续 this.InputA.value 获取文本框对象A 的值
+                    *  */
+                    alert( this.InputA.value );
+                };
+                //子类的一般方法
+
+                /* 继续用ref=回调函数的方法获取文本框对象B */
+                // handleBlur(){
+                //     alert( this.InputB.value );
+                // }
+
+                /* 既然 发生事件和处理事件的是同一个元素，
+                * 而当我要获取 处理事件的元素 的值时，可用event.target
+                * event.target 获取发生事件的元素，在这里也是处理事件的元素
+                * 所有的事件回调函数都有一个默认的形参 event
+                *  */
+                handleBlur( event ){
+                    console.log( '处理事件的对象是：', event.target );
+                    alert( event.target.value );
+                };
+
+                render(){
+                    return(
+                        <div>
+                            <input type="text" ref="content" />&nbsp;&nbsp;
+                            <input type="text" ref={
+                                (currInput) => { //箭头函数
+                                    /* 将当前对象<input />，暂存在变量currInput中，
+                                    * 并为当前组件添加新属性 newInput，其属性值为currInput
+                                    *  */
+                                    return this.InputA = currInput; }
+                            }
+                              />&nbsp;&nbsp;
+
+                            <button onClick={this.showInput} >提示文字</button>&nbsp;&nbsp;
+
+                            <input type="text" placeholder="失去焦点时提示文字" onBlur={this.handleBlur} ref={
+                                (currInput) => { return this.InputB = currInput; }
+                            }
+                              />
+                        </div>
+
+                    )
+                }
+
+            };
+
+            //2 渲染组件标签
+            ReactDOM.render( <MyComponent />, document.getElementById('example') );
+
+        </script>
+
+
+    </body>
+</html>
