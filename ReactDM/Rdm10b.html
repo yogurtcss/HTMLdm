@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+    <!-- 纯手动实现Rdm10！！ -->
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+    </head>
+    <body>
+        <div id="example"></div>
+
+        <script type="text/javascript" src="js/react.development.js"></script>
+        <script type="text/javascript" src="js/react-dom.development.js"></script>
+        <script type="text/javascript" src="js/prop-types.js"></script>
+        <script type="text/javascript" src="js/babel.min.js"></script>
+        <script type="text/babel">
+            //1 定义组件标签
+            class App extends React.Component{
+                constructor(props){
+                    super(props);
+
+                    //初始状态
+                    this.state = {
+                        todos: [ '吃饭','睡觉','打豆豆' ]
+                    };
+                    //改绑this
+                    this.UpdateState = this.UpdateState.bind( this );
+                };
+                //更新造作的权限函数
+                UpdateState( oneState ){
+                    this.state.todos.unshift( oneState ); //直接对原数组操作：在原数组首部插入新状态
+                    this.setState( this.state ); //直接提交更新操作
+                }
+
+                render(){
+                    return(
+                        <div>
+                            <h1>Simple TODO List</h1>
+                            <Add todos={this.state.todos} UpdateState={this.UpdateState} />
+                            <List todos={this.state.todos} />
+                        </div>
+                    );
+                };
+            };
+
+            class Add extends React.Component{
+                constructor(props){
+                    super(props);
+                    //改绑this
+                    this.addsth = this.addsth.bind( this );
+                };
+                /* 具体更新状态的函数
+                * 使用父组件暴露(传递)出来的 更新操作权限 函数
+                *  */
+                addsth(){
+                    const newState = this.addInput.value.trim(); //获取当前输入框中的新状态，trim()去除文本首尾的空白字符
+                    if( !newState ){ //检查合法性
+                        console.log('您输入的是空串！请检查后重新输入！')
+                    }
+                    else{
+                        //从父组件中传进来的UpdateState操作权限函数在 props中
+                        this.props.UpdateState( newState ); //在子组件中，执行更新操作
+                    }
+                    this.addInput.value = ''; //清除当前输入框的文本内容
+                }
+
+                render(){
+                    return(
+                        <div>
+                            <input type="text" ref={
+                                ( currInput ) => { return this.addInput = currInput }
+                            }  />&nbsp;&nbsp;
+                            <button onClick={this.addsth} >Add #{this.props.todos.length+1}</button>
+                        </div>
+                    )
+                };
+            };
+            //Add传入数据的声明、约束
+            Add.propTypes = {
+                todos: PropTypes.array.isRequired,
+                UpdateState: PropTypes.func.isRequired
+            };
+
+            class List extends React.Component{
+                constructor(props){
+                    super(props);
+                };
+                render(){
+                    // map()方法老是记不住，👴佛了
+                    return(
+                        <ul>
+                            { this.props.todos.map(
+                                ( onevalue,index ) => { return <li key={index} > {onevalue} </li> }
+                            ) }
+                        </ul>
+                    )
+                };
+            };
+            //List内接收数据的声明、约束
+            List.propTypes = {
+                todos: PropTypes.array.isRequired
+            };
+
+            //2 渲染组件标签
+            ReactDOM.render( <App />, document.getElementById('example') );
+        </script>
+    </body>
+</html>
