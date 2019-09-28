@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+    <!-- 纯手动实现Rdm10a，然后添加一个删除按钮
+     允许用户自定义删除哪几项 -->
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+    </head>
+    <body>
+        <div id="example"></div>
+
+        <script type="text/javascript" src="js/react.development.js"></script>
+        <script type="text/javascript" src="js/react-dom.development.js"></script>
+        <script type="text/javascript" src="js/prop-types.js"></script>
+        <script type="text/javascript" src="js/babel.min.js"></script>
+
+        <script type="text/babel">
+            //1 创建虚拟DOM对象
+
+            class App extends React.Component{
+                //当有用到属性的时候，必须传入props
+                constructor( props ){ //这里的构造函数中，默认固定传入props！！
+                    super( props );
+
+                    this.state = {
+                        todos: [ '吃饭', '睡觉', '打豆豆' ]
+                    };
+                    //改绑this
+                    this.UpdateState = this.UpdateState.bind( this );
+
+                };
+
+                UpdateState( oneState ){
+                    //1 读取状态数组
+                    const currTodos = this.state.todos;
+                    //2 将新状态塞入原数组首位，
+                    currTodos.unshift( oneState );
+                    //2.1 将新状态放回原对象
+                    this.state.todos = currTodos;
+                    //3 确认、提交更新操作,传入对象
+                    this.setState( this.state );
+                };
+
+
+                render(){
+
+                    return(
+                        <div>
+                            <h1>Simple TODO List</h1>
+                            <Add todos={this.state.todos} UpdateState={this.UpdateState} />
+                            <Delete todos={this.state.todos} UpdateState={this.UpdateState} />
+                            <List todos={this.state.todos} />
+                        </div>
+
+                    );
+                };
+            };
+
+            class Add extends React.Component{
+                constructor(props){
+                    super(props);
+
+                    //改绑this
+                    this.add = this.add.bind( this );
+                };
+
+                add(){
+                    //获得文本框新的输入的数据
+                    const newValue = this.newInput.value.trim();
+                    //检查数据合法性
+                    if( !newValue ){
+                        console.log('您输入的是空串，请检查后重新输入');
+                    }
+                    else{ //数据合法后，才添加
+                        this.props.UpdateState( newValue );
+                    };
+                    //清除输入框的输入内容
+                    this.newInput.value = '';
+
+                };
+
+                render(){
+                    return(
+                        <div>
+                            <input type="text" ref={
+                                currInput => { return this.newInput=currInput }
+                            }
+                            />&nbsp;&nbsp;
+                            <button onClick={this.add} >Add #{this.props.todos.length+1}</button>
+                        </div>
+                    );
+                };
+            };
+            //Add传入数据的约束
+            Add.propTypes = {
+                //声明传入数组
+                todos: PropTypes.array.isRequired,
+                //声明 传入 更新操作的函数
+                UpdateState: PropTypes.func.isRequired
+            };
+
+            class List extends React.Component{
+
+                render(){
+                    return(
+                        <ul>
+                            {
+                                this.props.todos.map(
+                                    (onevalue,index) => {
+                                        if( typeof(onevalue)!=null ){
+                                            return ( <li key={index}> {onevalue} </li> )
+                                        }
+                                    }
+                                )
+                            }
+                        </ul>
+                    );
+                };
+            };
+            //List接收来自父亲的数据，有约束
+            List.propTypes = {
+                todos: PropTypes.array.isRequired
+            };
+
+            //删除操作
+            class Delete extends React.Component{
+                constructor(props){
+                    super(props);
+                    //改绑this
+                    this.deleteSth = this.deleteSth.bind( this );
+                };
+                /* 删除的数组的某一项
+                * splice (index,len,[item])    注释：该方法会改变原始数组。
+                * splice 有 3 个参数，它也可以用来替换 / 删除 / 添加数组内某一个或者几个值
+                *    index: 数组开始下标        
+                *    len: 替换 / 删除的长度      
+                *    item: 替换的值，删除操作的话 item 为空
+                *
+                *  */
+
+                //删除的函数
+                deleteSth(){
+                    //获取要删除的序号index，已规定序号从0开始了
+                    const index = this.deleteInput.value;
+                    /* 通过数组下标来删除该元素
+                    * 直接操作原数组todos，然后提交更新操作UpdateState
+                    *  */
+                    this.props.todos.splice( index, 1 );
+                    // 更新操作
+                    this.props.UpdateState( this.state );
+                }
+
+                render(){
+                    return(
+                        <div>
+                            <input type="text" placeholder="请输入您要删除的序号，序号从0开始嗷" ref={
+                                (currInput) => { return this.deleteInput=currInput }
+                            } />&nbsp;&nbsp;
+                            <button onClick={this.deleteSth} >Delete #onevalue</button>
+                        </div>
+                    )
+                }
+            }
+
+
+
+
+
+
+            //2 渲染DOM标签
+            ReactDOM.render( <App />, document.getElementById('example') );
+
+
+        </script>
+
+    </body>
+</html>
