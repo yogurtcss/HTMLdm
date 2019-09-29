@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+    </head>
+    <body>
+        <div id="example"></div>
+
+        <script type="text/javascript" src="js/react.development.js"></script>
+        <script type="text/javascript" src="js/react-dom.development.js"></script>
+        <script type="text/javascript" src="js/prop-types.js"></script>
+        <script type="text/javascript" src="js/babel.min.js"></script>
+        <script type="text/babel">
+            /* 需求：自定义包含表单的组件
+            * 1) 界面如下所示
+            * 2) 输入用户名密码后，点击登陆，alert提示输入信息
+            * 3) 不提交表单：阻止事件的默认行为(在这里是 提交)
+            * event.preventDeafult()
+            *
+            *  */
+            class LoginForm extends React.Component{
+                constructor( props ){
+                    super( props );
+                    this.handleSubmit = this.handleSubmit.bind( this ); //改绑this
+                    this.handleChange = this.handleChange.bind( this );
+                    this.state = { //初始状态
+                        pwd: ''
+                    }
+                };
+                handleSubmit( event ){ //触发事件与响应事件的都是它自己
+                    const Uinput = this.UserInput.value; //获取用户名
+                    const Pinput = this.state.pwd; //获取密码
+                    alert( `准备提交的用户名为：${Uinput}, 密码为${Pinput}` );
+
+                    event.preventDefault(); //阻止事件的默认发生(在这里是提交)
+                };
+                handleChange( event ){ //更新状态的操作。初始状态与更新状态在同一个父亲中
+                    const Pinput = event.target.value; //获取密码
+                    this.state.pwd = Pinput;
+                    this.setState( this.state );
+                };
+
+                render(){
+                    /* 在React中，表单的form有事件: onSubmit
+                    * onSunbmit在提交表单时调用
+                    *
+                    * 使用受控组件，为input密码框添加状态，
+                    * 通过输入密码，然后自动地把密码加入状态state中
+                    *
+                    * 输入密码时，文本框中的value发生改变，触发input的onChange事件
+                    *  */
+                    return(
+                        <form action="test"  onSubmit={this.handleSubmit} >
+                            用户名<input type="text" ref={
+                            (currInput) => { return this.UserInput=currInput }
+                        } />
+                            密码<input type="password" value={this.state.pwd} onChange={this.handleChange} />
+                            <input type="submit" value="提交辣" />
+                        </form>
+                    )
+                }
+
+            }
+            ReactDOM.render( <LoginForm />, document.getElementById('example') );
+
+
+        </script>
+        
+    </body>
+</html>
