@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+    <!-- 手动实现Rdm11 -->
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+    </head>
+    <body>
+        <div id="example" ></div>
+
+        <script type="text/javascript" src="js/react.development.js"></script>
+        <script type="text/javascript" src="js/react-dom.development.js"></script>
+        <script type="text/javascript" src="js/prop-types.js"></script>
+        <script type="text/javascript" src="js/babel.min.js"></script>
+        <script type="text/babel">
+            class LoginForm extends React.Component{
+                constructor( props ){
+                    super( props );
+
+                    this.handleSubmit = this.handleSubmit.bind( this );
+                    this.handleChange = this.handleChange.bind( this );
+
+                    this.state = { //初始状态
+                        pwd: ''
+                    }
+                };
+                handleSubmit( event ){
+                    const Uinput = this.UserInput.value; //通过ref获取 用户名输入框的值
+                    const Pinput = this.state.pwd; //通过状态state获取 密码输入框的值(注意，此时新状态已经加入state中了)
+                    alert( `用户名为：${Uinput}，密码为：${Pinput}` ); //模板字符串 ` ...${变量} `
+                    event.preventDefault(); //阻止默认事件发生(在这里，阻止提交)
+                };
+                handleChange( event ){ //触发事件和处理事件的人，都是它自己嗷
+                    const Pinput = event.target.value; //获取密码输入框的值
+                    this.state.pwd = Pinput; //修改原状态中的原pwd
+                    this.setState( this.state ); //提交修改状态的操作
+                }
+
+                render(){
+                    /* action=... 提交表单哪里去
+                    * 1 用户名输入框是 非受控组件：使用ref
+                    * 2 密码输入框是 受控组件：使用状态state和onChange事件
+                    *  */
+                    return(
+                        <form action="http://www.baidu.com" onSubmit={this.handleSubmit} >
+                            用户名：<input type="text" ref={
+                            (currInput) => {this.UserInput = currInput}  } />
+
+                            密码：<input type="password" value={this.state.pwd} onChange={this.handleChange} />
+                            <input type="submit" />
+                        </form>
+                    )
+                }
+            }
+
+            ReactDOM.render( <LoginForm />, document.getElementById('example') );
+        </script>
+    </body>
+</html>
