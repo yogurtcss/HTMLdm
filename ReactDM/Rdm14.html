@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+    </head>
+    <body>
+        <div id="example" ></div>
+        <script type="text/javascript" src="js/react.development.js"></script>
+        <script type="text/javascript" src="js/react-dom.development.js"></script>
+        <script type="text/javascript" src="js/prop-types.js"></script>
+        <script type="text/javascript" src="js/babel.min.js"></script>
+        <script type="text/babel">
+            /* 需求：自定义组件
+            * 1 让指定的文本做显示/隐藏的动画
+            * 2 切换事件为2s
+            * 3 点击按钮，从界面中移除组件界面
+            *  */
+            class Life extends React.Component{
+                constructor( props ){
+                    super( props );
+
+                    this.state = { //初始化状态
+                        opacity: 1
+                    };
+                    this.killCmpnent = this.killCmpnent.bind( this ); //改绑this
+                };
+                componentDidMount(){ //这是类中自带的方法，this指向组件对象
+                    /* 循环定时器，每间隔200ms，opc减少0.1
+                    * 当opc减到0时，将其置为1，重新进行减少操作
+                    *
+                    * 注意，在componentWillUnmount移除组件时，
+                    * 需要清理此定时器！！将此定时器放在 类中方法都共同可见的地方——父亲，同一类中的属性
+                    * 为类中添加MyInterval属性，这样类中各个方法都可见此定时器了！！妙啊啊！！
+                    *  */
+                    console.log( '定时器正在执行嗷...' );
+                    this.MyInterval = setInterval(
+                        /* 注意，setInterval的this是 window，
+                        * 而不是组件对象！！需要在回调函数末尾.bind( this )
+                        * 改绑为 组件对象的this！！
+                        *  */
+                        function(){
+                            /* 先取出初始状态的值，
+                            * 直接使用 对象的解构赋值法 { A }
+                            * 然后才对 此变量A 进行操作，
+                            *  */
+                            let {opacity} = this.state; //解构赋值，取对象中的值，浅度克隆
+                            opacity -= 0.1;
+                            if( opacity<=0 ){ //小数的加减法有些误差，改为小于等于号
+                                opacity = 1;
+                            };
+                            this.setState( {opacity} ); //提交操作：里面传入的参数一步到位赋值进对象中
+                            // this.setState( {opacity} );
+                        }.bind(this), //在回调函数的末尾改绑为组件对象的this
+                        200,
+                    );
+                };
+                componentWillUnmount(){ //将要移除时的操作
+                    clearInterval( this.MyInterval )
+                };
+                killCmpnent(){ //移除真实DOM组件
+                    ReactDOM.unmountComponentAtNode( document.getElementById('example') );
+                    console.log( '我不活辣！' );
+                };
+                render(){
+                    /* 复习 - 内联样式，直接在某个标签中，格式：
+                    * style = " 样式名-值对1; 样式名-值对2; .... ; "
+                    * 以多个名值对的形式传入样式
+                    *
+                    * 注意，在React这里的写法：
+                    * 先定义 样式的对象 const divStyle = { color:'blue', ... }
+                    * 然后用内联样式，赋值过去 style = { divStyle }
+                    *  */
+                    return( //将初始状态中的opacity=1赋给h2标签
+                        <div>
+                            <h2 style={this.state} > {this.props.msg} </h2>
+                            <button onClick={this.killCmpnent} >不活辣！</button>
+                        </div>
+                    )
+                }
+            }
+            //声明Life传入参数的约束
+            Life.propTypes = {
+                msg: PropTypes.string
+            };
+            ReactDOM.render( <Life msg="React太难学了，怎么办？" />, document.getElementById('example') );
+
+        </script>
+
+
+
+    </body>
+</html>
