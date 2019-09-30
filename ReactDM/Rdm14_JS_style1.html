@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+    </head>
+    <body>
+        <div id="example" ></div>
+        <script type="text/javascript" src="js/react.development.js"></script>
+        <script type="text/javascript" src="js/react-dom.development.js"></script>
+        <script type="text/javascript" src="js/prop-types.js"></script>
+        <script type="text/javascript" src="js/babel.min.js"></script>
+        <script type="text/babel">
+            class StyleTest extends React.Component{
+                render(){
+                    const divStyle = {
+                        weight: 20,
+                        height: 100,
+                        backgroundColor: 'blue',
+                    };
+
+                    return (
+                        <div style={ divStyle } >lala</div>
+                    )
+                }
+            }
+            ReactDOM.render( <StyleTest />, document.getElementById('example') )
+
+
+        </script>
+
+
+
+    </body>
+</html>
