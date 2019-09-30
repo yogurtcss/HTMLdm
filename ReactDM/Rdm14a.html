@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+    <!-- 手动实现Rdm14：React太难之我不活辣 -->
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+    </head>
+    <body>
+        <div id="example"></div>
+
+        <script type="text/javascript" src="js/react.development.js"></script>
+        <script type="text/javascript" src="js/react-dom.development.js"></script>
+        <script type="text/javascript" src="js/prop-types.js"></script>
+        <script type="text/javascript" src="js/babel.min.js"></script>
+        <script type="text/babel">
+            class Life extends React.Component{
+                constructor( props ){
+                    super( props );
+
+                    this.state = { //初始状态
+                        opacity: 1
+                    };
+                    this.killLife = this.killLife.bind( this ); //改绑this
+                };
+
+                componentDidMount(){ //当组件被挂载后，启动循环定时器
+                    //componentDidMount是组件对象自带的方法，this指向当前组件对象
+                    console.log( '定时器启动辣~' );
+                    this.MyInterval = setInterval( //为组件对象添加新属性：定时器
+                        // 这样组件对象里的其他方法也能看见它——可以清理掉它
+                        function(){
+                            let {opacity} = this.state; //对象的解构赋值法
+                            opacity -= 0.1;
+                            if( opacity<=0 ){ //用 小于等于号，因为===0会有问题
+                                opacity = 1;
+                            };
+                            this.setState( {opacity} ); //提交更新操作：一步到位将新状态赋值进去即可
+                        }.bind(this), //定时器的this默认指向window，
+                        //需用bind改绑this为组件对象
+                        200 //每隔200ms启动一次
+                    );
+                };
+
+                killLife(){ //杀掉Life组件
+                    ReactDOM.unmountComponentAtNode( document.getElementById('example') );
+                };
+
+                componentWillUnmount(){ //组件将要移除时，清理定时器嗷
+                    console.log( '我不活辣！' );
+                    clearInterval( this.MyInterval );
+                };
+
+                render(){
+                    return(
+                        <div>
+                            <h1 style={this.state} > {this.props.msgH1} </h1>
+                            <button onClick={this.killLife} > {this.props.msgBtn} </button>
+                        </div>
+                    );
+                }
+            }
+            Life.propTypes = { //Life标签传入参数的约束
+                msgH1: PropTypes.string.isRequired,
+                msgBtn:PropTypes.string.isRequired
+            };
+
+            ReactDOM.render( <Life msgH1="React太难辣，怎模办？" msgBtn="不活辣！" />, document.getElementById('example') );
+
+        </script>
+
+
+    </body>
+</html>
