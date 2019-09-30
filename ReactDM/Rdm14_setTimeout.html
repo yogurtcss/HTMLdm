@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+        <script type="text/javascript">
+            //延迟定时器的测试
+            let Tnum = setTimeout(
+                () => console.log( `setTimeout的this是：${this}` ),
+                0
+            );
+
+            //循环定时器
+            let Inum = setInterval(
+                () => console.log( `setInterval的this是：${this}` ),
+                0
+            );
+            // clearTimeout( Tnum );
+            // clearInterval( Inum );
+
+        </script>
+
+    </head>
+    <body>
+        
+    </body>
+</html>
