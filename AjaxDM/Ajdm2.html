@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+        <script type="text/javascript">
+            window.onload = function(){
+                let a = document.getElementsByTagName('a')[0]; //取第一个元素嗷
+                a.onclick = function(){
+                    let req = new XMLHttpRequest(); //创建XMLHttpRequest实例 req
+                    let url1 = a.href; //获取请求的url
+                    let method = 'POST'; //请求方式
+                    req.open( method, url1 ); //规定请求的细节
+                    //这句话的application/x-www-form-urlencoded，太长了记不住
+                    req.setRequestHeader( 'ContentType', 'application/x-www-form-urlencoded' );
+                    // req.send( null ); //GET请求时，不发送数据
+                    req.send('我是post🌶！');
+
+                    req.onreadystatechange = function(){ //为实例req添加onreadystatechange响应函数
+                        if( req.readyState===4 ){ //判断响应是否完成
+                            if( req.status===200 || req.status===304 ){ //判断响应是否有效
+                                alert('宁的请求发送成功辣！');
+                            }
+                        }
+                    }
+                }
+            };
+        </script>
+
+
+    </head>
+    <body>
+        <a href="./AjaxData/Ajdm1.txt">Hello Ajax!!</a>
+    </body>
+</html>
