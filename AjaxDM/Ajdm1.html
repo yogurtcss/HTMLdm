@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+        <script type="text/javascript">
+            window.onload = function(){
+                //复习一哈 document.getElementByTagName是神马
+                // let a1 = document.getElementsByTagName('a');
+                // console.log( a1 ); //获取的是数组 HTMLCollection[a]
+                // console.log( a1[0] ); //取数组中的元素嗷
+
+                //1 获取a节点，添加onclick
+                let a = document.getElementsByTagName('a')[0];
+                a.onclick = function(){
+                    //3 创建 XMLHttpRequest实例对象
+                    let xhr = new XMLHttpRequest();
+
+                    //4 准备发送的数据 url
+                    let url = a.href; //a标签的href属性
+                    // let url1 = 'https://www.baidu.com';
+
+                    //5 调用实例xhr的open方法，规定请求的类型
+                    // xhr.open( 'GET', url );
+                    xhr.open( 'POST', url );
+
+                    //6 调用实例xhr的send方法，发送过去
+                    xhr.setRequestHeader( 'ContentType', 'application/x-www-form-urlencoded' );
+                    // xhr.send( null );
+                    xhr.send('我是post请求辣！');
+
+                    //7 为实例xhr添加onreadystatechange响应函数
+                    xhr.onreadystatechange = function(){
+                        //8 判断响应是否完成 xhr实例的readyState属性值===4
+                        if( xhr.readyState===4 ){
+                            //9 再判断响应是否可用 xhr实例的状态码status属性值===200或304
+                            if( xhr.status===200 || xhr.status===304 ){
+                                //10 打印响应结果 responseText
+                                alert( xhr.responseText );
+                            }
+                        }
+                    };
+                    //2 取消a节点的默认行为
+                    return false;
+                }
+            }
+        </script>
+    </head>
+    <body>
+        <a href="./AjaxData/Ajdm1.txt">Hello Ajax！</a>
+    </body>
+</html>
