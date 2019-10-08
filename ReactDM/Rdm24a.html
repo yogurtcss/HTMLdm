@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+    </head>
+    <body>
+        <div id="example"></div>
+
+        <script type="text/javascript" src="js/react.development.js"></script>
+        <script type="text/javascript" src="js/react-dom.development.js"></script>
+        <script type="text/javascript" src="js/prop-types.js"></script>
+        <script type="text/javascript" src="js/axios.js"></script>
+        <script type="text/javascript" src="js/babel.min.js"></script>
+        <script type="text/babel">
+            class MostStars extends React.Component{
+                constructor( props ){
+                    super(props);
+
+                    this.state = {
+                        repName: '',
+                        repURL: ''
+                    }
+                }
+                componentDidMount(){
+                    const keyName = 'react';
+                    const url = `https://api.github.com/search/repositories?q=${keyName}&sort=star`;
+                    // 法一嗷
+                    // axios.get(url).then(
+                    //     response => {
+                    //         const data = response.data;
+                    //         // console.log( data );
+                    //         //整一个对象的解构赋值哈
+                    //         const { name, html_url } = data.items[0];
+                    //         this.state.repName = name;
+                    //         this.state.repURL = html_url;
+                    //         this.setState( this.state );
+                    //     }
+                    // )
+
+                    //法二
+                    fetch(url)
+                        .then(
+                            response => { return response.json(); }
+                        )
+                        .then(
+                            responseData => {
+                                const { name,html_url } = responseData.items[0];
+                                this.state.repName = name;
+                                this.state.repURL = html_url;
+                                this.setState( this.state );
+                            }
+                        )
+                }
+
+                render(){
+                    if( this.state.repName==='' ){ //或者 !this.state.repName，前面加个感叹号
+                        return <h2>Loading...</h2>;
+                    }
+                    else{
+                        return(
+                            <h2>Most stars repo is <a href={this.state.repURL} >{this.state.repName}</a> </h2>
+                        )
+                    }
+                }
+            }
+            ReactDOM.render( <MostStars/>, document.getElementById('example') );
+
+        </script>
+
+    </body>
+</html>
