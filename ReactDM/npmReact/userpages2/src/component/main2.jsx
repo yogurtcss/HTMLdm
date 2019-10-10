@@ -1,3 +1,4 @@
+//main.jsx 原版备份
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
@@ -17,36 +18,46 @@ export default class Main extends Component{
         inputValue: PropTypes.string.isRequired
     };
 
-    componentWillReceiveProps( newProps ){ //组件将要接收到新的props属性时
-        console.log( newProps ); //可知newProps是一个对象，属性名为inputValue，属性值为我们输入的值
-        const {inputValue} = newProps;
+    componentWillReceiveProps( newProps ) { //此组件 将要被传入新的props时：
+        console.log( newProps );
+        ////可知传入的newProps为一个对象，属性名为inputValue，属性值是我们输入的内容嗷
+        const {inputValue} = newProps; //对象的解构赋值法
+        this.setState( { //传入新状态时，更改此时的显示状态：读条中
+            initial: false,
+            loading: true
+        } );
         const url = `https://api.github.com/search/users?q=${inputValue}`;
-        //发请求，注意catch错误信息，注意更新状态嗷
+        //发get请求辣
         axios.get(url)
             .then(
-                (response) => {
+                (response)=>{
+                    //得到响应数据
                     const responseData = response.data;
                     console.log( responseData );
                     //取得users数据
                     const users = responseData.items.map(
-                        (oneUser) => { //将这个对象返回给 users
-                            return { login:oneUser.login, avatar_url:oneUser.avatar_url, html_url:oneUser.html_url }
+                        (oneUser) => { //这是一个包裹的花括号
+                            return { login: oneUser.login,
+                                avatar_url: oneUser.avatar_url,
+                                html_url: oneUser.html_url
+                            } //返回的是一个对象嗷
                         }
                     );
-                    //更新状态辣
-                    this.setState( {initial:false, loading:false, users:users} );
+                    //更新状态
+                    this.setState( { initial:false, loading:false, users:users } );
                 }
             )
-            .catch(
-                (err) => { //箭头函数右边的花括号内，务必要加上return关键字呀！(即时这里不加，但还是都加上吧)
-                    return this.setState( {initial:false, loading:false, errMsg:err.message} )
+            .catch( //更新状态(失败)
+                (err)=>{
+                    /* 传入一个对象的时候，这个对象表示该组件的新状态。
+                    * 但你只需要传入需要更新的部分就可以了，而不需要传入整个对象。
+                    *  */
+                    //箭头函数右边的花括号内，务必要加上return关键字呀！(即时这里不加，但还是都加上吧)
+                    return this.setState( {loading:false, errMsg:err.message} );
                 }
             )
 
-    };
-
-
-
+    }
 
     render(){
         const { initial, loading, users, errMsg } = this.state;
