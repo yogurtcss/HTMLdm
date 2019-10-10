@@ -39,7 +39,8 @@ export default class Main extends Component{
             )
             .catch(
                 (err) => { //箭头函数右边的花括号内，务必要加上return关键字呀！(即时这里不加，但还是都加上吧)
-                    return this.setState( {initial:false, loading:false, errMsg:err.message} )
+                    //在这里直接更新状态即可！！
+                    this.setState( {initial:false, loading:false, errMsg:err.message} )
                 }
             )
 
