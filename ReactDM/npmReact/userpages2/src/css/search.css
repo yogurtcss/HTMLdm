@@ -1,0 +1,22 @@
+*{
+    margin: 0;
+    padding: 0
+}
+/* 块级元素水平居中：只需给需要居中的块级元素加 margin:0 auto 即可，
+但这里需要注意的是，这里块状元素的宽度 width 值一定要有
+
+行内元素水平居中
+这里行内元素是指文本 text、图像 img、按钮超链接等，
+只需给父元素设置 text-align:center 即可实现。
+
+ */
+.search{
+    width: 1000px;
+    height: 120px;
+    box-sizing: border-box;
+    margin: 0 auto;
+    background-color: #eeeeee;
+    padding-left: 70px;
+    padding-top: 30px;
+    margin-bottom: 30px;
+}

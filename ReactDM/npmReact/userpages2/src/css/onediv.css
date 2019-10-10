@@ -1,0 +1,6 @@
+.onediv{
+    width: 300px;
+    float: left;
+    border: 1px solid #eeeeee;  /* 边框线 */
+    text-align: center; /* 内联元素居中显示 */
+}
