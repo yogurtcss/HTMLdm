@@ -10,11 +10,10 @@ const allMsgs = [
 *
 *  */
 export default function MessageDetail(props){
-    const {one_id} = props.match.params; //得到请求参数中的 one id，注意到，取出来的one_id是字符串型
+    const {one_id} = props.match.params;
 
-
-    const onemsg = allMsgs.find( // (one_id)*1将字符型转为 数值型；find中写一个 查id的回调函数
-        (m) =>  (m.id === (one_id)*1) //返回第一个结果为true的 数组元素
+    const onemsg = allMsgs.find(
+        (m) => m.id===one_id*1
     );
 
     return(
@@ -26,3 +25,12 @@ export default function MessageDetail(props){
     )
 
 }
+
+/* const {one_id} = props.match.params; //得到请求参数中的 one id，注意到，取出来的one_id是字符串型
+
+
+    const onemsg = allMsgs.find( // (one_id)*1将字符型转为 数值型；find中写一个 查id的回调函数
+        (m) =>  (m.id === (one_id)*1) //返回第一个结果为true的 数组元素
+    );
+*
+*  */
