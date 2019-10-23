@@ -13,7 +13,9 @@ export default class Counter extends Component{
         count: PropTypes.number.isRequired,
         //两个行为action
         increment: PropTypes.func.isRequired,
-        decrement: PropTypes.func.isRequired
+        decrement: PropTypes.func.isRequired,
+        //P42 redux异步编程
+        incrementAsync: PropTypes.func.isRequired
     };
 
     add=() => {
@@ -32,12 +34,8 @@ export default class Counter extends Component{
         }
     };
     addAsync=() => {
-        setTimeout(
-            () => {
-                const number = this.select.value*1;
-                this.props.increment( number );
-            },1000
-        )
+        const number = this.select.value*1;
+        this.props.incrementAsync( number );
     };
 
     render(){
