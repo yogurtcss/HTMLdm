@@ -1,10 +1,19 @@
 
-import {ADD,DELETE} from "./action-types";
+import {ADD,DELETE,RECEIVE} from "./action-types";
+import {combineReducers} from 'redux'; //将多个reducer函数合在一起 并暴露之
 
-const initCmts = [
-        { Uname:'Tom', Ucmt:'lala' },
-        { Uname:'Jack', Ucmt:'ahaha' }
-];
+//当有多个reducer函数时：
+// function otherReducer( state=0, action ){
+//         return '123';
+// };
+
+// const initCmts = [
+//         { Uname:'Tom', Ucmt:'lala' },
+//         { Uname:'Jack', Ucmt:'ahaha' }
+// ];
+
+/* -----P45 异步获取initCmts----- */
+const initCmts = [];
 
 export function cmts( state=initCmts, action ){
         switch( action.type ){
@@ -30,7 +39,15 @@ export function cmts( state=initCmts, action ){
                         return( state.filter( //过滤条件(函数)：不是 被指定删除的下标(action.data)，可以留下来嗷
                             (currCmt,currIndex) => ( currIndex!==action.data )
                         ) );
+                case RECEIVE: //返回一个 接收的数组
+                        return( action.data );
                 default:
                         return state;
         }
 }
+
+/* 当有多个reducer函数时，需用到
+* combineReducers( {reducer1, reducer2, ...} )，
+* 其中reducer1、2最好与上面定义的reducer同名
+*
+*  */

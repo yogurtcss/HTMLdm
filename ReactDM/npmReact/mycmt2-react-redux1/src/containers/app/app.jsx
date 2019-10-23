@@ -4,28 +4,20 @@ import {connect} from 'react-redux';
 
 import CmtAdd from "../../components/cmt-add/cmt-add";
 import CmtList from "../../components/cmt-list/cmt-list";
-import { addCmt, deleteCmt } from '../../redux/actions';
+import { addCmt, deleteCmt, getCmtAsync } from '../../redux/actions';
 
 class App extends Component{
     static propTypes = {
         cmts: PropTypes.array.isRequired,
         addCmt: PropTypes.func.isRequired,
-        deleteCmt: PropTypes.func.isRequired
+        deleteCmt: PropTypes.func.isRequired,
+        getCmtAsync: PropTypes.func.isRequired
     };
 
 
-    componentDidMount(){
-        setTimeout(
-            () => {
-                const cmts = [
-                    { Uname:'Tom', Ucmt:'lala' },
-                    { Uname:'Jack', Ucmt:'ahaha' }
-                ];
-                this.setState( {cmts} );
-            }, 1000
-        )
+    componentDidMount(){ //异步获取cmt——在这里只是显示数组而已
+        this.props.getCmtAsync();
     }
-
 
     render(){
         return(
@@ -53,5 +45,5 @@ export default connect(
         return { cmts:state } //state就是一个cmts数组
     },
 
-    { addCmt, deleteCmt }
+    { addCmt, deleteCmt, getCmtAsync } //注入至App中！！
 )( App );
