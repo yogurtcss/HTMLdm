@@ -1,5 +1,3 @@
-// addLessLoader 自定义主题的关键字
-
 /* config-overrides.js中，要复制进来的代码
 *
 * 主要参考了 antd-mobile中，自定义主题的代码，网址如下：
@@ -9,6 +7,7 @@
 *
 * */
 
+// addLessLoader 自定义主题的关键字
 const {override, fixBabelImports,addLessLoader} = require('customize-cra');
 
 module.exports = override(
