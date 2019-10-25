@@ -12,6 +12,12 @@ import {HashRouter,Route,Switch} from 'react-router-dom';
 *
 *  */
 
+/* -----引入redux----- */
+import {Provider} from 'react-redux';
+
+import store from './redux/store.js';
+
+
 //引入3个 一级路由组件
 import Register from "./containers/register/register.jsx";
 import Login from "./containers/login/login.jsx";
@@ -19,16 +25,20 @@ import Main from "./containers/main/main.jsx";
 
 
 ReactDOM.render(
-    /* 注意：路由Main没有指定路径 path
+    /* P11：新增 Provider标签
+    * 注意：路由Main没有指定路径 path
     * 问：什么时候 去请求Main组件呢？
     * 答：当需要加载 Main下的二级路由组件(如 老板界面、大神界面……)时，
     * 需要这样做：先请求(加载)Main组件，然后再加载 Main下的二级路由组件
     *  */
-    ( <HashRouter>
-        <Switch>
-            <Route path='/register' component={Register}/>
-            <Route path='/login' component={Login} />
-            <Route component={Main} /> {/*默认组件*/}
-        </Switch>
-    </HashRouter> ),
+    (<Provider store={store} >
+        <HashRouter>
+            <Switch>
+                <Route path='/register' component={Register}/>
+                <Route path='/login' component={Login} />
+                <Route component={Main} /> {/*默认组件*/}
+            </Switch>
+        </HashRouter>
+    </Provider>  ),
+
     document.getElementById('root') );
