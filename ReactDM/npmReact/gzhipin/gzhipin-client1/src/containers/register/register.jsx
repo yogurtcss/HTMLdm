@@ -63,16 +63,16 @@ export default class Register extends Component{
                 <WingBlank>
                     <List>
                         <WhiteSpace />   {/* 上下留白 */}
-                        <InputItem onChange={
+                        <InputItem placeholder='请输入用户名' onChange={
                             val => { this.handleChange('username',val)} } >用户名：</InputItem>
                         <WhiteSpace />
 
-                        <InputItem onChange={
+                        <InputItem placeholder='请输入密码' onChange={
                             val => { this.handleChange('password',val) } }
                                    type='password' >密&nbsp;&nbsp;&nbsp;码：</InputItem>
                         <WhiteSpace />
 
-                        <InputItem onChange={
+                        <InputItem placeholder='请输入确认密码' onChange={
                             val => { this.handleChange('password2',val) } }
                                    type='password'>确认密码：</InputItem>
                         <WhiteSpace />
@@ -82,7 +82,7 @@ export default class Register extends Component{
                             <span>用户类型：</span>
                             &nbsp;&nbsp;&nbsp;
 
-                            {/*antd-mobile中的Radio单选框也有onChange事件，*/}
+                            {/*antd-mobile中的Radio单选框也有onChange事件——在点击时触发，*/}
                             {/*但它没有“自动传返回值”的功能！！切记！！*/}
 
                             {/*  在一开头就读取 单选框中的type值  */}
