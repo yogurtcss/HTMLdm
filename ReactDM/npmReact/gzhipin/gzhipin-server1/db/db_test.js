@@ -33,7 +33,7 @@ const userSchema = mongoose.Schema({
 * 而定义结构中：mongoose.首字母大写Schema！！
 *  */
 const UserModel = mongoose.model( 'user', userSchema ); //集合名 users
-// 返回的 UserModel 是一个 构造函数，以生成 实例 document
+// 返回的 UserModel 是一个 构造函数(所以首字母是大写的)，以生成 实例 document
 
 /* 实现 Model的 CRUD 增查改删
 *
