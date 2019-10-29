@@ -24,10 +24,11 @@ var router = express.Router();
 * 后台应用：ECMAScript6(ES6)
 *  */
 router.post( '/register', function(req,res){
+  console.log('热更新嗷');
   //1.获取请求的参数 req.body
   const {username,password} = req.body;
   //2.处理
-  console.log( 'register', username, password );
+  // console.log( 'register', username, password );
   if( username==='admin' ){ //admin 是已注册用户
     //3.返回响应数据 res.send(...响应数据)
     res.send( {code:1, msg:'此用户已存在'} ); // 注册失败返回: {code: 1, msg: '此用户已存在'}
