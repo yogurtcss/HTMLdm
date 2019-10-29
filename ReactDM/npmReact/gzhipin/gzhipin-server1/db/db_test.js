@@ -63,6 +63,22 @@ UserModel.find( {username:'u1'}, function(err,docs){
     console.log( 'find()',docs );
 } );
 
-UserModel.findOne( {_id:'5db80211132c433d5c0865c3'},function(err,doc){
-    console.log( 'findOne()', doc );
-} );
+function testFindById(){ //把查询代码包进函数中，并在外面调用之
+    UserModel.findOne( {_id:'5db80211132c433d5c0865c3'},function(err,doc){
+        console.log( 'findOne()', doc );
+    } );
+};
+
+testFindById(); //调用喽
+
+function testUpdate(){ //更新操作
+    UserModel.findByIdAndUpdate(
+        {_id:'5db80211132c433d5c0865c3'}, //参数1：根据此id，找到待修改的文档
+        { username:'NewU1嗷' },  //参数2：修改、更新后的结果new ( --将原数据old 更新为此数据new)
+        function( err,oldValue ){ //参数3：回调函数其中的doc参数是有意义的：oldValue
+            console.log( err, '我是老的数据嗷：' ,oldValue ) //此时默认返回的doc 是修改、更新前的对象
+        }
+    )
+}
+
+testUpdate();
