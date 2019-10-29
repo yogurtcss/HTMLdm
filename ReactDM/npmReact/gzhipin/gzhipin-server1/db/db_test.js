@@ -69,7 +69,7 @@ function testFindById(){ //把查询代码包进函数中，并在外面调用�
     } );
 };
 
-testFindById(); //调用喽
+// testFindById(); //调用喽
 
 function testUpdate(){ //更新操作
     UserModel.findByIdAndUpdate(
@@ -80,5 +80,13 @@ function testUpdate(){ //更新操作
         }
     )
 }
+// testUpdate();
 
-testUpdate();
+function testDelete(){
+    UserModel.remove( {username:'NewU1嗷'}, function(err){
+        if( !err ){
+            console.log('删除成功喽！')
+        }
+    } )
+}
+// testDelete();
