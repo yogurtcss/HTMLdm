@@ -9,6 +9,7 @@ const mongoose = require( 'mongoose' );
 
 /* mongodb 中不需要建立数据库，
 * 当你需要连接的数据库不存在时，会自动创建一个出来。
+* 目前我已建有的数据库：gzhipin_test
 *  */
 mongoose.connect( 'mongodb://127.0.0.1/mongoose_test' );
 //获取连接对象，并监听之：是否连接成功
@@ -59,5 +60,9 @@ const user1 = new UserModel({
 *  */
 
 UserModel.find( {username:'u1'}, function(err,docs){
-    console.log(docs);
+    console.log( 'find()',docs );
+} );
+
+UserModel.findOne( {_id:'5db80211132c433d5c0865c3'},function(err,doc){
+    console.log( 'findOne()', doc );
 } );
