@@ -23,7 +23,7 @@ const userSchema = mongoose.Schema({
     //指定文档的结构：属性名、属性值的类型，是否为 必须
     username: { type:String, required:true },
     password: { type:String, required:true },
-    type: { type:String, required:true },
+    type: { type:String, required:true }, //用户类型 dashen或laoban
     header: { type:String }
 });
 
@@ -34,8 +34,30 @@ const userSchema = mongoose.Schema({
 const UserModel = mongoose.model( 'user', userSchema ); //集合名 users
 // 返回的 UserModel 是一个 构造函数，以生成 实例 document
 
+/* 实现 Model的 CRUD 增查改删
+*
+*  */
+const user1 = new UserModel({
+    username: 'u1',
+    password: '123',
+    type: 'dashen',
+});
 
+// user1.save( function(err){
+//     if(!err){
+//         console.log( '保存成功咯！' )
+//     }
+// } );
 
+/* 当执行了一次的 实例user1.save后(此时，此条数据已经进入了数据库)，
+* 就要注释掉这一堆的 user1.save代码，然后 再执行 UserModel.find(...)查询
+*
+*
+* 若不注释这一堆的 user1.save代码，接着执行UserModel.find(...)查询，
+* 则：数据照样会(多次)进入数据库，但是会查询出多个重复的结果
+* 这显然不是我们想要的
+*  */
 
-
-
+UserModel.find( {username:'u1'}, function(err,docs){
+    console.log(docs);
+} );
