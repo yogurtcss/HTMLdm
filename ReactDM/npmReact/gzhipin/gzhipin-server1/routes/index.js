@@ -59,7 +59,7 @@ router.post( '/register', function(req,res){
     if(user){ //如果此用户存在，则返回一个提示响应数据(JSON格式)：此用户已存在
       res.send( {code:1, msg:'此用户已存在'} );//code 数据是否为正常数据的标识，1、0的含义根据后端API文档而定
     }
-    else{ //不存在，则此post数据进入数据库中
+    else{ //不存在，则此post数据进入数据库中，并返回响应数据
       UserModel.create( {
         username, //可以用ES6的对象简写语法，这里暂不用
         password:md5(password), //将用户密码使用md5加密后，再存入数据库中
@@ -80,7 +80,41 @@ router.post( '/register', function(req,res){
   //返回响应数据
 } );
 
+/* ----------关于post请求中的注册信息，在postman中测试用的
+* 用户名：dashen1，密码：123
+* 用户名：dashen2，密码：123
+*  */
+
+
 //登陆路由
+router.post( '/login', function(req,res){
+    /* 获取请求参数的数据：注意，是req.body！！
+    * 而不是req.data！！
+    *
+    * 一开始我记错了，写成了req.data，
+    * 然后post请求不成功！！
+    *  */
+    const {username, password} = req.body; //注意，获得请求数据，这里是req.body！！
+    /* 处理
+    * 根据username和password，查询数据库中的users集合
+    * 若无，则返回提示错误的信息；
+    * 若有，则返回登陆成功的信息
+    *  */
+
+    //查询中：投影 {password:0, __v:0}，取值为0表示 不查询此列(属性)
+    UserModel.findOne( {username, password:md5(password)}, {password:0, __v:0} ,function(err,user){ //查询结果为user
+        if(user){ //若存在此user，则：保存cookie至本地，同时自动登录
+            res.cookie( 'userid', user._id, {maxAge:1000*60*60*24} );
+            res.send( {code:0, data:user} );
+        }
+        else{ //登陆失败
+            res.send( {code:1, msg:'用户名或密码错误啦啦'} );
+        }
+    } )
+    //返回响应数据
+} );
+
+
 
 
 
