@@ -14,7 +14,7 @@
 *  */
 
 const mongoose = require('mongoose'); //引入mongoose
-mongoose.connect('mongoose://127.0.0.1/gzhipin_test'); //连接指定数据库
+mongoose.connect('mongodb://127.0.0.1/gzhipin_test'); //连接指定数据库，前缀是 mongodb！！！
 const conn = mongoose.connection; //获取连接对象
 conn.on( 'connected',function(){ //绑定 连接成功的监听事件
     console.log('数据库连接成功喽！');
@@ -24,7 +24,7 @@ const userSchema = mongoose.Schema( { //创建数据库结构 Schema
     username: { type:String, required:true }, //用户名
     password: { type:String, required:true }, //密码
     type: { type:String, required:true }, //用户类型 dashen或者laoban
-    header: { type:String, required:true }, //头像名称
+    header: { type:String }, //头像名称
     post: { type:String }, //职位
     info: { type:String }, // 个人或职位简介
     company: { type:String }, //公司名称
