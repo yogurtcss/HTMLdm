@@ -61,10 +61,14 @@ router.post( '/register', function(req,res){
     }
     else{ //不存在，则此post数据进入数据库中
       UserModel.create( {
-        username:username, //可以用ES6的对象简写语法，这里暂不用
+        username, //可以用ES6的对象简写语法，这里暂不用
         password:md5(password), //将用户密码使用md5加密后，再存入数据库中
-        type:type
+        type
       },
+          /* MongoDB 默认会为每个 document 生成一个 _id 属性，作为默认主键，
+          * 且默认值为 ObjectId, 可以更改 _id 的值 (可为空字符串)，
+          * 但每个 document 必须拥有 _id 属性。
+          *  */
           function(err,user){ //后端API文档要求返回的数据带上_id
             res.cookie( 'userid', user._id, {MaxAge:1000*60*60*24} ); //持久化cookie，一天内免登录
 
@@ -73,8 +77,6 @@ router.post( '/register', function(req,res){
           })
     }
   } )
-
-
   //返回响应数据
 } );
 
