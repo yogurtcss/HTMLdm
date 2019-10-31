@@ -74,10 +74,10 @@ export default function ajax( url='', data={}, type='GET' ){
             *  */
             url = url + '?' + dataStr; //最终拼接成 GET请求中可用的url
         }
-        return( axios.get(url) ) //最终发送GET请求
+        return ( axios.get(url) ) //最终发送GET请求
     }
     else{ //如果发送post请求，
         //则url和data是已给定的，无需其他操作，直接axios.post(url,data)即可
-        return( axios.post(url,data) )
+        return ( axios.post(url,data) )
     }
 }
