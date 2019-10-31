@@ -12,11 +12,18 @@ import { //引入UI库中的东西
     Button          //按钮
 } from "antd-mobile";
 
+import {connect} from 'react-redux';
+import {Redirect} from 'react-router-dom';
+
+
 import Logo from '../../components/logo/logo.jsx';  //引入Logo组件
+import {register} from '../../redux/actions.js'; //注册的异步action
 
 
+
+/* ----------Register组件开始---------- */
 const ListItem = List.Item; //List列表中的一个列表项
-export default class Register extends Component{
+class Register extends Component{
     state = { //弄一个状态state保存表单收集的数据
         /* 通过 antd-mobile中 <Button>中的 onChange监听来收集数据
         *   - antd-mobile中 <Button>中的 onChange：能自动传值出来，能直接使用此值
@@ -31,8 +38,13 @@ export default class Register extends Component{
     };
 
     register=() => {
+        // console.log( this.state );
+        //使用action.js中传来的异步操作register，发送注册的异步请求
+        this.props.register( this.state );
+        console.log('aa');
         console.log( this.state );
     };
+
 
     //处理输入数据的改变：更新对应的状态
     handleChange=(name,val) => { //欲更新的属性名name，更新的属性值
@@ -64,16 +76,18 @@ export default class Register extends Component{
                     <List>
                         <WhiteSpace />   {/* 上下留白 */}
                         <InputItem placeholder='请输入用户名' onChange={
-                            val => { this.handleChange('username',val)} } >用户名：</InputItem>
+                            // 注意，箭头函数右端这里，不要写花括号！！不然没有返回值！！点击注册按钮没反应！
+                            val => ( this.handleChange('username',val) )     } >用户名：</InputItem>
                         <WhiteSpace />
 
                         <InputItem placeholder='请输入密码' onChange={
-                            val => { this.handleChange('password',val) } }
+                            // 注意，箭头函数右端这里，不要写花括号！！不然没有返回值！！点击注册按钮没反应！
+                            val =>  this.handleChange('password',val)       }
                                    type='password' >密&nbsp;&nbsp;&nbsp;码：</InputItem>
                         <WhiteSpace />
 
                         <InputItem placeholder='请输入确认密码' onChange={
-                            val => { this.handleChange('password2',val) } }
+                            val =>  this.handleChange('password2',val)      }
                                    type='password'>确认密码：</InputItem>
                         <WhiteSpace />
 
@@ -95,13 +109,13 @@ export default class Register extends Component{
                             {/*  当 读取状态state中的type==='dashen'结果为true时，选中此dashen单选框  */}
 
                             <Radio checked={ type==='dashen' } onChange={
-                                () => this.handleChange('type','dashen') } >大神</Radio>
+                                () => {this.handleChange('type','dashen')} } >大神</Radio>
 
                             {/*<Radio >大神</Radio>*/}
                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
                             <Radio checked={ type==='laoban' } onChange={
-                                () => this.handleChange( 'type','laoban' ) } >老板</Radio>
+                                () => {this.handleChange( 'type','laoban' )} } >老板</Radio>
                         </ListItem>
                         <WhiteSpace/>
 
@@ -120,3 +134,13 @@ export default class Register extends Component{
         )
     }
 }
+/* ----------Register组件结束---------- */
+
+export default connect(
+    state => ({}),
+    /* register(从action.js引入)，注册的异步操作，
+    * 给Register组件中的"注册按钮" 淡季响应函数使用的
+    *
+    *  */
+    {register}
+)(Register);
