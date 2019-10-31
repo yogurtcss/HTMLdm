@@ -20,7 +20,7 @@ const initUser = {
 function user( state=initUser, action ){
     switch ( action.type ){
         case AUTH_SUCCESS: //data是user
-            return { ...(action.data), redirectTo:'/' };
+            return { ...action.data, redirectTo:'/' };
         case ERROR_MSG: //data是msg
             return { ...state, msg: action.data };
         default:
