@@ -2,21 +2,39 @@
 
 import {combineReducers} from 'redux';
 
-function xxx( state=0, action ){
+const initUser = {
+    username: '',
+    type: '', //用户类型 dashen或laoban
+    msg: '', //错误提示信息
+    redirectTo: '' //需要自动跳转的路由path
+};
 
-    return state;
-}
+/*  产生user状态的 reducer函数：
+* 函数名为user
+*
+*  */
+function user( state=initUser, action ){
+    switch ( action.type ){
 
-function yyy( state=0, action ){
+        default:
+            return state;
+    }
+};
 
-    return state;
-}
+
+// function xxx( state=0, action ){
+//     return state;
+// }
+//
+// function yyy( state=0, action ){
+//     return state;
+// }
 
 //向combineReducers传入：以多个不同 reducer函数作为value的对象object
-export default combineReducers({
-    xxx,
-    yyy
-} )
+// export default combineReducers({
+//     xxx,
+//     yyy
+// } )
 /*
 * combineReducers返回值(即 向外暴露的状态的结构：)：
 * 返回一个state对象：
@@ -30,3 +48,6 @@ export default combineReducers({
 *   yyy:0  }
 *
 *  */
+export default combineReducers({
+    user
+});
