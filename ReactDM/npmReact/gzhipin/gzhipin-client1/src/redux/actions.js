@@ -96,10 +96,10 @@ export const login = ( (userInfo)=>{
         const response = await promise; //等待，至promise获得结果，并赋给变量response
         const rst = response.data; //取出响应中的数据
         if( rst.code===0 ){ //成功状态
-            dispatch( authSuccess(rst.data) );
+            dispatch( authSuccess(rst.data) ); //分发一个成功的同步action
         }
         else{ //失败状态
-            dispatch( errorMsg(rst.msg) );
+            dispatch( errorMsg(rst.msg) ); //分发一个失败的同步action
         }
     } );
 } );
