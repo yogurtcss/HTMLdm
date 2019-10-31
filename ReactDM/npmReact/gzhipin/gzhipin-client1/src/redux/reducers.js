@@ -2,6 +2,10 @@
 
 import {combineReducers} from 'redux';
 
+import {AUTH_SUCCESS,ERROR_MSG} from "./action-type";
+
+
+
 const initUser = {
     username: '',
     type: '', //用户类型 dashen或laoban
@@ -15,7 +19,10 @@ const initUser = {
 *  */
 function user( state=initUser, action ){
     switch ( action.type ){
-
+        case AUTH_SUCCESS: //data是user
+            return { ...(action.data), redirectTo:'/' };
+        case ERROR_MSG: //data是msg
+            return { ...state, msg: action.data };
         default:
             return state;
     }
