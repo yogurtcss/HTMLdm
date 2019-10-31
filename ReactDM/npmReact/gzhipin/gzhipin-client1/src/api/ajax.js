@@ -1,6 +1,6 @@
-/* 使用axios封装的ajax请求函数，
-* 此函数返回的是promise对象
-*  */
+
+//自定义ajax请求函数：GET、POST
+
 import axios from 'axios';
 
 //形参默认值：url为空字符串，data为空对象
