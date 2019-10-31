@@ -1,6 +1,34 @@
-//包含n个action creator：同步action、异步action
+/* 包含n个action creator：同步action、异步action
+* 同步的action，都返回一个对象
+* 异步的action，都返回一个（回调）函数：在回调函数中就可以执行异步的代码
+*/
 
-import {reqRegister,reqLogin} from '../api/index.js';
+import {reqRegister, reqLogin} from '../api/index.js';
+import {AUTH_SUCCESS, ERROR_MSG} from "./action-type";
+
+/* 为什么ERROR_MSG 不写成：AUTH_Failure或AUTH_ERROR (授权失败)呢？
+* 理由：前端验证(后面补充)
+*  */
+
+
+/* 授权成功的同步action；
+* 1.使用函数表达式(也叫 函数字面量)写法；
+*    - 函数表达式创建的函数是在运行时进行赋值，且要等到表达式赋值完成后才能调用
+*   - 语法
+*     var/let/const 变量名XXX = function(参数){ //没有函数表示标识符
+*       要执行的代码...
+*     }
+*   - 调用： 变量名XXX(参数)
+*
+* 2.使用箭头函数：没有花括号{}，箭头自动return
+*
+*  */
+const authSuccess =    (userInfo)=>( {type:AUTH_SUCCESS, data:userInfo} );
+//错误提示信息的同步action
+const errorMsg    =    (msg)=>( {type:ERROR_MSG, data:msg} );
+
+
+
 
 //注册的异步action
 export const register = ( (userInfo)=>{
@@ -37,14 +65,24 @@ export const register = ( (userInfo)=>{
         const response = await promise; //等待，至promise获得结果，并赋给变量response
         const rst = response.data; //取出响应中的数据 rst
         if( rst.code===0 ){ //标记码code为0时，成功状态
-            //分发一个同步的、成功状态的action
-
+            /* 分发一个同步的、成功状态的action
+            *   - 向成功态中的同步action传入rst.data，
+            *   - 并分发 此成功态的同步action
+            *
+            * 函数表达式创建的函数是在运行时进行赋值，且要等到表达式赋值完成后才能调用
+            * 调用：变量名XXX(参数)
+            *  */
+            dispatch( authSuccess(rst.data) );
         }
         else{ //标记码code为1时，失败状态
-            //分发一个同步的、失败状态的action
-
-        };
-
+            /* 分发一个同步的、失败状态的action
+            *   - 向失败态中的同步action传入rst.msg，
+            *   - 并分发 此失败态的同步action
+            *
+            * 函数表达式创建的函数是在运行时进行赋值，且要等到表达式赋值完成后才能调用
+            *  */
+            dispatch( errorMsg(rst.msg) );
+        }
 
     } );
 } );
@@ -58,10 +96,10 @@ export const login = ( (userInfo)=>{
         const response = await promise; //等待，至promise获得结果，并赋给变量response
         const rst = response.data; //取出响应中的数据
         if( rst.code===0 ){ //成功状态
-
+            dispatch( authSuccess(rst.data) );
         }
         else{ //失败状态
-
+            dispatch( errorMsg(rst.msg) );
         }
     } );
 } );
