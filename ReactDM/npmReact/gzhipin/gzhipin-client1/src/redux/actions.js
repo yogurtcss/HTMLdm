@@ -3,11 +3,11 @@
 * 异步的action，都返回一个（回调）函数：在回调函数中就可以执行异步的代码
 */
 
-import {reqRegister, reqLogin} from '../api/index.js';
+import {reqRegister,reqLogin} from "../api/index.js";
 import {AUTH_SUCCESS, ERROR_MSG} from "./action-type";
 
 /* 为什么ERROR_MSG 不写成：AUTH_Failure或AUTH_ERROR (授权失败)呢？
-* 理由：前端验证(后面补充)
+* 理由：前台验证(后面补充)
 *  */
 
 
@@ -28,11 +28,38 @@ const authSuccess =    (userInfo)=>( {type:AUTH_SUCCESS, data:userInfo} );
 const errorMsg    =    (msg)=>( {type:ERROR_MSG, data:msg} );
 
 
-
-
 //注册的异步action
-export const register = ( (userInfo)=>{
+/* 之前我写的是 export const register ！！！
+*
+*  */
+export const register =  (userInfo)=>{
+    /* ----------同步action：前台验证，开始---------- */
+    const {username, password, password2, type} = userInfo;
+    /* 做表单的前台检查，
+    * 若检查不通过，返回一个errorMsg的同步action
+    *  */
+    if(!username){
+        return errorMsg('请指定您的用户名！');
+    }
+    else if( password!==password2 ){
+        return errorMsg('2次输入的密码必须一致嗷！！')
+    };
+    /* ----------同步action：前台验证，结束---------- */
+
     return ( async dispatch=>{ //发送注册的异步请求，使用async-await写法
+
+        /* ----------异步action：前台验证----------
+        * 不能用return，而是用dispatch！！
+        *   if(...) {
+        *     dispatch errorMsg(...)
+        *   }
+        *
+        * 就因为这个BUG，排了一个多小时！
+        *  */
+
+
+
+
         /* 法一：promise写法
         * promise对象.then( 成功的回调函数response=>{...里面取response.data} )
         * 太长了，不想写，直接用 async-await写法
@@ -41,6 +68,7 @@ export const register = ( (userInfo)=>{
         // promise.then( response=>{
         //     const rst = response.data; //{ code:0/1, data:user }
         // } )
+
 
         /* 法二：async-await写法
         *  (1)async必须声明的是一个function
@@ -59,9 +87,10 @@ export const register = ( (userInfo)=>{
         *
         *  */
 
+        //到了这里，表单数据合法，进行异步请求
         /* 我已在此函数的外部，使用了async声明
         *  */
-        const promise = reqRegister(userInfo); //从某处返回出来的promise对象
+        const promise = reqRegister({username, password, type});
         const response = await promise; //等待，至promise获得结果，并赋给变量response
         const rst = response.data; //取出响应中的数据 rst
         if( rst.code===0 ){ //标记码code为0时，成功状态
@@ -84,13 +113,23 @@ export const register = ( (userInfo)=>{
             dispatch( errorMsg(rst.msg) );
         }
 
-    } );
-} );
+    } )
+} ;
 
 /* 登陆的异步action ，与注册的异步action是同理写法的
 * 尝试默写之
 *  */
 export const login = ( (userInfo)=>{
+    //前台检查
+    const {username, password} = userInfo;
+    if( !username ){
+        return errorMsg('请指定您的用户名！');
+    }
+    else if( !password ){
+        return errorMsg( '请输入密码！' );
+    };
+
+
     return( async dispatch=>{
         const promise = reqLogin( userInfo ); //从某处得到的promise对象
         const response = await promise; //等待，至promise获得结果，并赋给变量response
