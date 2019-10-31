@@ -10,18 +10,18 @@ import ajax from './ajax';
 * 传入数据为 userInfo对象 { username: ..., password: ... }
 * 函数表达式的写法：const reqRegister = 某个箭头函数
 *  */
-export const reqRegister = (  (userInfo)=>{ //函数表达式的写法
-    ajax( '/register', userInfo, 'POST' ) ; //后端API文档说明是POST请求
-} );
+export const reqRegister = (  (userInfo)=> //函数表达式的写法
+    ajax('/register', userInfo, 'POST') //后端API文档说明是POST请求
+);
 
 /* 请求登陆 req-Login
 * 传入数据为 userInfo对象 { username: ..., password: ... }
 *  */
-export const reqLogin = (  (userInfo)=>{
-    ajax( '/login', userInfo, 'POST' ); //后端API文档说明是POST请求
-} );
+export const reqLogin = (  (userInfo)=>
+    ajax('/login', userInfo, 'POST') //后端API文档说明是POST请求
+);
 
 //更新用户 的接口
-export const reqUpdateUser = ( (userInfo)=>{
-    ajax( '/update', userInfo, 'POST' );
-} );
+export const reqUpdateUser = ( (userInfo)=>
+    ajax( '/update', userInfo, 'POST' )
+);
