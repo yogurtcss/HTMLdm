@@ -70,6 +70,8 @@ export default function ajax( url='', data={}, type='GET' ){
         *  */
         if( dataStr !== '' ){ //遍历到最后一个元素时，显然最后一个元素的末尾也加上了 &号
             dataStr = dataStr.substring( 0, dataStr.lastIndexOf('&') ); //提取有效部分
+            /* 或者：dataStr = dataStr.substring( 0, (dataStr.length-1) )也是可以的
+            *  */
             url = url + '?' + dataStr; //最终拼接成 GET请求中可用的url
         }
         return( axios.get(url) ) //最终发送GET请求
