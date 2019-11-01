@@ -13,17 +13,22 @@ import { //引入UI库中的东西
 
 import Logo from '../../components/logo/logo.jsx';  //引入Logo组件
 
+import {connect} from 'react-redux';
+import {Redirect} from 'react-router-dom';
+
+import {login} from '../../redux/actions.js';
+
+
 
 const ListItem = List.Item; //List列表中的一个列表项
-
-export default class Login extends Component{ //结构与Register类似
+class Login extends Component{ //结构与Register类似
     state = { //弄一个状态state保存表单收集的数据
         username: '', //用户名
         password: '', //密码
     };
 
     login=() => {
-        console.log( this.state );
+        this.props.login( this.state ); //进行登陆的异步操作
     };
 
     //处理输入数据的改变：更新对应的状态
@@ -44,6 +49,15 @@ export default class Login extends Component{ //结构与Register类似
     };
 
     render(){
+        /* 此处与 <Register />组件的 render() 类似
+        *  */
+        const {msg, redirectTo} = this.props.user;
+        if( redirectTo ){ //如果 跳转的页面 有着落了，那我就直接跳到该页面去，不渲染接下来的东西了
+            return <Redirect to={redirectTo} />
+        }
+
+
+        /* ----------如果我上面 跳转的页面 有着落了，那我就直接跳到该页面去，不渲染接下来的东西了---------- */
         return(
             <div>
                 <NavBar>硅&nbsp;谷&nbsp;直&nbsp;聘</NavBar>
@@ -52,6 +66,9 @@ export default class Login extends Component{ //结构与Register类似
                 {/* -----两翼留白开始----- */}
                 <WingBlank>
                     <List>
+                        {/* 登陆的提示框，也与<Register />组件中的写法类似 */}
+                        {/*  <div>{...JS代码...}</div> 注意，这两个div中间放的是JS代码：变量msg！ */}
+                        { (msg) ? <div className='error-msg' >{msg}</div> : null }
                         <WhiteSpace />   {/* 上下留白 */}
                         <InputItem placeholder='请输入用户名' onChange={
                             val => { this.handleChange('username',val)} } >用户名：</InputItem>
@@ -78,3 +95,8 @@ export default class Login extends Component{ //结构与Register类似
         )
     }
 }
+
+export default connect(
+    state => ( {user: state.user} ), //store中的获取的newState
+    {login} //从外部引入的 login 的dispatch操作函数
+)(Login)
