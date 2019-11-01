@@ -11,6 +11,10 @@ import ajax from './ajax';
 * 函数表达式的写法：const reqRegister = 某个箭头函数
 *  */
 export const reqRegister = (  (userInfo)=> //函数表达式的写法
+    /* 发送此POST请求 至 localhost:/register
+    * 后端应用根据此path (/register)，处理数据
+    * 然后将数据返回至 redux 的 action中
+    *  */
     ajax('/register', userInfo, 'POST') //后端API文档说明是POST请求
 );
 
