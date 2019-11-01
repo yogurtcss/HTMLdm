@@ -13,7 +13,7 @@ import { //引入UI库中的东西
 } from "antd-mobile";
 
 import {connect} from 'react-redux';
-import {Redirect} from 'react-router-dom';
+import {Redirect} from 'react-router-dom'; //登陆成功后，跳转至某页面
 
 
 import Logo from '../../components/logo/logo.jsx';  //引入Logo组件
@@ -64,10 +64,14 @@ class Register extends Component{
     render(){
         const {type} = this.state; //在一开头就读取 单选框中的type值
         /* 失败的响应: 对象为 { code:1, msg:'XXX错误提示' }
-        *
         *  */
+        const {msg,redirectTo} = this.props.user; //取出：响应数据user中的msg提示信息
 
-        // console.log(msg);
+        if( redirectTo ){ //如果 跳转的页面 有着落了，那我就直接跳到该页面去，不渲染接下来的东西了
+            return <Redirect to={redirectTo} />
+        };
+
+        /* ----------如果我上面 跳转的页面 有着落了，那我就直接跳到该页面去，不渲染接下来的东西了---------- */
         return(
             <div>
                 <NavBar>硅&nbsp;谷&nbsp;直&nbsp;聘</NavBar>
@@ -76,7 +80,13 @@ class Register extends Component{
                 {/* -----两翼留白开始----- */}
                 <WingBlank>
                     <List>
-                        {/* 将错误提示在前台中展示 */}
+                        {/* 将错误提示在前台中展示
+                         巧妙地使用了三目运算符：
+                         msg存在吗？有就出现div，没有则null
+                         */}
+
+                        { (msg)? <div className='error-msg'>{msg}</div> : null } {/* ← 此花括号内，表示JS代码嗷 */}
+
                         <WhiteSpace />   {/* 上下留白 */}
                         <InputItem placeholder='请输入用户名' onChange={
                             // 注意，箭头函数右端这里，不要写花括号！！不然没有返回值！！点击注册按钮没反应！
