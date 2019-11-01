@@ -56,7 +56,7 @@ router.post( '/register', function(req,res){
   * 若不存在，则注册成功，此post的数据进入数据库中
   *  */
   UserModel.findOne( {username:username},function(err,user){
-    if(user){ //如果此用户存在，则返回一个提示响应数据(JSON格式)：此用户已存在
+    if(user){ //如果此用户存在，则(向action.js中)返回一个提示响应数据(JSON格式)：此用户已存在
       res.send( {code:1, msg:'此用户已存在'} );//code 数据是否为正常数据的标识，1、0的含义根据后端API文档而定
     }
     else{ //不存在，则此post数据进入数据库中，并返回响应数据
