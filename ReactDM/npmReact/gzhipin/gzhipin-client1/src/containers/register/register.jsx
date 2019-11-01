@@ -84,7 +84,7 @@ class Register extends Component{
                          巧妙地使用了三目运算符：
                          msg存在吗？有就出现div，没有则null
                          */}
-
+                        {/*  <div>{...JS代码...}</div> 注意，这两个div中间放的是JS代码：变量msg！ */}
                         { (msg)? <div className='error-msg'>{msg}</div> : null } {/* ← 此花括号内，表示JS代码嗷 */}
 
                         <WhiteSpace />   {/* 上下留白 */}
