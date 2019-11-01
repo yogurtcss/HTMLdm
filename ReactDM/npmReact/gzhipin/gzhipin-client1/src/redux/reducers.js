@@ -55,6 +55,6 @@ function user( state=initUser, action ){
 *   yyy:0  }
 *
 *  */
-export default combineReducers({ //将此新状态暴露出去，传给store
+export default combineReducers({ //将此新状态(对象)暴露出去，传给store
     user
 });
