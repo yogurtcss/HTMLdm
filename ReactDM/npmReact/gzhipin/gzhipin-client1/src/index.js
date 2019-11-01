@@ -33,7 +33,7 @@ ReactDOM.render(
     *  */
 
     /* 由Provider标签 管理包在里面的所有组件的状态
-    *  让其中的所有组件都可以得到store中的数据：state状态和dispatch分发事件
+    *  让其中的所有组件 默认都可以得到store中的数据：state状态和dispatch分发事件
     *
     *  */
     (<Provider store={store} >
