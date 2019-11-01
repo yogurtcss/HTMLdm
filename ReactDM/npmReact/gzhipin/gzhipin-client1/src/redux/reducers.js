@@ -19,9 +19,9 @@ const initUser = {
 *  */
 function user( state=initUser, action ){
     switch ( action.type ){
-        case AUTH_SUCCESS: //data是user
+        case AUTH_SUCCESS: //data是user，返回正确的数据user
             return { ...action.data, redirectTo:'/' };
-        case ERROR_MSG: //data是msg
+        case ERROR_MSG: //data是msg，返回错误提示信息msg
             return { ...state, msg: action.data };
         default:
             return state;
@@ -44,7 +44,7 @@ function user( state=initUser, action ){
 // } )
 /*
 * combineReducers返回值(即 向外暴露的状态的结构：)：
-* 返回一个state对象：
+* 向store 返回一个state对象：
 *   -属性名：传入给combineReducers时 对应的key( 即 各reducer的名字 )
 *   -属性值：combineReducers中，每个reducer返回的state
 *
@@ -55,6 +55,6 @@ function user( state=initUser, action ){
 *   yyy:0  }
 *
 *  */
-export default combineReducers({
+export default combineReducers({ //将此新状态暴露出去，传给store
     user
 });
