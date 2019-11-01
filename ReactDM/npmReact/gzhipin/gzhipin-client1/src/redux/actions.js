@@ -101,6 +101,7 @@ export const register =  (userInfo)=>{
             * 函数表达式创建的函数是在运行时进行赋值，且要等到表达式赋值完成后才能调用
             * 调用：变量名XXX(参数)
             *  */
+            console.log( rst );
             dispatch( authSuccess(rst.data) ); //分发从后端返回的数据
         }
         else{ //标记码code为1时，失败状态
@@ -110,6 +111,7 @@ export const register =  (userInfo)=>{
             *
             * 函数表达式创建的函数是在运行时进行赋值，且要等到表达式赋值完成后才能调用
             *  */
+            console.log( rst );
             dispatch( errorMsg(rst.msg) ); //分发从后端返回的数据
         }
 
