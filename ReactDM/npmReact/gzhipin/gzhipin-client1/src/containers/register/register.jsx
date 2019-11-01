@@ -41,8 +41,6 @@ class Register extends Component{
         // console.log( this.state );
         //使用action.js中传来的异步操作register，发送注册的异步请求
         this.props.register( this.state );
-        console.log('aa');
-        console.log( this.state );
     };
 
 
@@ -65,7 +63,11 @@ class Register extends Component{
 
     render(){
         const {type} = this.state; //在一开头就读取 单选框中的type值
+        /* 失败的响应: 对象为 { code:1, msg:'XXX错误提示' }
+        *
+        *  */
 
+        // console.log(msg);
         return(
             <div>
                 <NavBar>硅&nbsp;谷&nbsp;直&nbsp;聘</NavBar>
@@ -74,6 +76,7 @@ class Register extends Component{
                 {/* -----两翼留白开始----- */}
                 <WingBlank>
                     <List>
+                        {/* 将错误提示在前台中展示 */}
                         <WhiteSpace />   {/* 上下留白 */}
                         <InputItem placeholder='请输入用户名' onChange={
                             // 注意，箭头函数右端这里，不要写花括号！！不然没有返回值！！点击注册按钮没反应！
@@ -136,11 +139,38 @@ class Register extends Component{
 }
 /* ----------Register组件结束---------- */
 
+/* 2019-11-01 13:02:03
+* 关于react-redux与后台交互的新的理解！！
+* */
+
+/* connect方法 将 store上的 mapStateToProps 和 mapStateToProps 包装成组件的 props
+*
+* */
 export default connect(
-    state => ({}),
-    /* register(从action.js引入)，注册的异步操作，
-    * 给Register组件中的"注册按钮" 淡季响应函数使用的
-    *
+    /* 在actions中，接收到后端返回的响应数据，传给reducers；
+    * 经reducers处理后，产出的新状态newState 名为user，将之作为 一般数据：状态数据state的属性 存入store中
     *  */
-    {register}
+
+    /* 形参名state(可以任意命名)，这是store上的状态数据
+    * 因为当前这个 <Register /> 组件被 <Provider />标签包着，
+    * 所以 <Register />能拿到得到store中的数据：state状态
+    *
+    * 如何让组件也有 分发事件、从而操控store改变自身state 的能力？
+    *   - 答：在此组件中，引入外部的dispatch函数，如 import {register} from '../../redux/actions.js'，
+    *         并把此dispatch传给此组件，那么此组件就有了 分发事件、从而操控store改变自身state 的能力了
+    *  */
+
+    /* 注意，此state是store中的state (新状态newState的值)
+    * 而 dispatch则通过引入外部文件：import {register} from '../../redux/actions.js'  (以props形式)传给<Register/>组件
+    *  */
+    state => ( {user:state.user} ), //mapStateToProps函数。注意，此user是从reducers.js中产出、储存在store中，在这里以props形式传给<Register/>组件
+
+    /* register(从action.js中产出的)，注册的异步操作，
+    * 给Register组件中的"注册按钮" 单击响应函数使用的
+    *  */
+
+    /* 注意，此state是store中的state (新状态newState的值)
+    * 而 dispatch则通过引入外部文件：import {register} from '../../redux/actions.js'  (以props形式)传给<Register/>组件
+    *  */
+    {register} //mapDispatchToProps函数。注意，此register是从action.js中产出的，在这里以props形式传给<Register/>组件
 )(Register);
