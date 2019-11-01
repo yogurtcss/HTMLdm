@@ -91,7 +91,7 @@ export const register =  (userInfo)=>{
         /* 我已在此函数的外部，使用了async声明
         *  */
         const promise = reqRegister({username, password, type});
-        const response = await promise; //等待，至promise获得结果，并赋给变量response
+        const response = await promise; //向后端发送请求，等待后端处理完毕后，接收此响应结果，并dispatch响应事件
         const rst = response.data; //取出响应中的数据 rst
         if( rst.code===0 ){ //标记码code为0时，成功状态
             /* 分发一个同步的、成功状态的action
@@ -101,7 +101,7 @@ export const register =  (userInfo)=>{
             * 函数表达式创建的函数是在运行时进行赋值，且要等到表达式赋值完成后才能调用
             * 调用：变量名XXX(参数)
             *  */
-            dispatch( authSuccess(rst.data) );
+            dispatch( authSuccess(rst.data) ); //分发从后端返回的数据
         }
         else{ //标记码code为1时，失败状态
             /* 分发一个同步的、失败状态的action
@@ -110,7 +110,7 @@ export const register =  (userInfo)=>{
             *
             * 函数表达式创建的函数是在运行时进行赋值，且要等到表达式赋值完成后才能调用
             *  */
-            dispatch( errorMsg(rst.msg) );
+            dispatch( errorMsg(rst.msg) ); //分发从后端返回的数据
         }
 
     } )
