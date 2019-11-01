@@ -153,7 +153,7 @@ class Register extends Component{
 * 关于react-redux与后台交互的新的理解！！
 * */
 
-/* connect方法 将 store上的 mapStateToProps 和 mapStateToProps 包装成组件的 props
+/* connect方法 将 store上的 mapStateToProps 和 (外部文件的)mapStateToProps 包装成组件的 props
 *
 * */
 export default connect(
