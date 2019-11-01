@@ -31,6 +31,11 @@ ReactDOM.render(
     * 答：当需要加载 Main下的二级路由组件(如 老板界面、大神界面……)时，
     * 需要这样做：先请求(加载)Main组件，然后再加载 Main下的二级路由组件
     *  */
+
+    /* 由Provider标签 管理包在里面的所有组件的状态
+    *  让其中的所有组件都可以得到state数据
+    *
+    *  */
     (<Provider store={store} >
         <HashRouter>
             <Switch>
