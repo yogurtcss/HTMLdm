@@ -20,6 +20,7 @@ const initUser = {
 function user( state=initUser, action ){
     switch ( action.type ){
         case AUTH_SUCCESS: //data是user，返回正确的数据user
+            //授权成功后，跳转至主页面 /
             return { ...action.data, redirectTo:'/' };
         case ERROR_MSG: //data是msg，返回错误提示信息msg
             return { ...state, msg: action.data };
