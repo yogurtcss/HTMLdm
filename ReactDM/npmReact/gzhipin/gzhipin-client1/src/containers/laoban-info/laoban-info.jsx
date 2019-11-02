@@ -12,17 +12,66 @@ import HeaderSelector from '../../components/header-selector/header-selector.jsx
 
 
 class LaobanInfo extends Component{ //此组件为Main路由下的二级路由，需在Main中映射路由
+
+    state = { //受控组件收集表单数据
+        header: '',     //头像图片名称；此属性在另一个组件 <HeaderSelector /> 中
+        post: '',       //职位
+        info: '',       //个人或职位简介
+        company: '',    //公司名称
+        salary: ''      //月薪
+    };
+    /* 通过 antd-mobile中 <Button>中的 onChange监听来收集数据
+    *   - antd-mobile中 <Button>中的 onChange：能自动传值出来，能直接使用此值
+    *         - onChange={ value =>   ...回调函数 this.handleChange(value)... ) } // 使用箭头函数向回调函数传递(形参)参数，下面有注释
+    *   - 原生JS中的onchange：不能自动传值，要自己想办法拿到这个值
+    *
+    *
+    * 使用箭头函数向回调函数传递形参:
+    * 如 onChange = { val=>this.handleChange(val) } //箭头函数带形参val，箭头右端返回 某回调函数func，并向func传入形参val
+    *  */
+    handleChange=  (name,val)=>{
+        this.setState( {
+            //属性名是变量，需用 [ ]方括号
+            [name] : val
+        } );
+    };
+
+    /* 更新header状态的功能函数，交给子组件<HeaderSelector />调用
+    * 以更新 我父组件中状态的 header值：头像图片名称
+    *  */
+    setHeader=  (headerName)=>{
+        this.setState( {header:headerName} );
+    };
+
+    save=  ()=>{ //点击"保存"，将发送异步请求
+        console.log(this.state);
+    };
+
+
+
     render(){
         return(
             <div>
                 <NavBar>老板信息完善</NavBar>
-                <HeaderSelector />
-                <InputItem placeholder='请输入招聘职位' >招聘职位：</InputItem>
-                <InputItem placeholder='请输入公司职位' >公司职位：</InputItem>
-                <InputItem placeholder='请输入职位薪资' >职位薪资：</InputItem>
+
+                {/* 更新header状态的功能函数this.setHeader，
+                 * 交给子组件<HeaderSelector />调用，
+                 * 以更新 我父组件中状态的 header值
+                 */}
+                <HeaderSelector setHeader={this.setHeader} />
+
+                {/* 获取输入框InputItem中的值：(受控组件)
+                 * onChange= { val=>this.handleChange(该变量的名字标识name, val) }
+                 * 注意：该变量的名字标识name 要与该组件中 状态的属性名完全一致( 即name的值为：header、post、info、company、salary )
+                 * 这样我在 回调函数handleChange中 this.setState时：更新对象的属性名可以直接用 [name] 加方括号 索引之
+                 */}
+                <InputItem placeholder='请输入招聘职位' onChange={ val=>this.handleChange('post',val)} >招聘职位：</InputItem>
+                <InputItem placeholder='请输入公司职位' onChange={ val=>this.handleChange('company',val) } >公司职位：</InputItem>
+                <InputItem placeholder='请输入职位薪资' onChange={ val=>this.handleChange('salary',val) } >职位薪资：</InputItem>
                 {/* TextareaItem多行文本输入。title指定标签体内的文字，row指定初始占用的行数 */}
-                <TextareaItem title='职位要求' row={3} />
-                <Button type='primary' >保&nbsp;&nbsp;&nbsp;存</Button>
+                <TextareaItem title='职位要求' row={3}  onChange={ val=>this.handleChange('info',val) } />
+                {/* 单击响应函数 this.save */}
+                <Button type='primary' onClick={ this.save } >保&nbsp;&nbsp;&nbsp;存</Button>
 
             </div>
         )
