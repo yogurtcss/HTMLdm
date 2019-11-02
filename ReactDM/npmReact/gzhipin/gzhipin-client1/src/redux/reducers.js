@@ -3,7 +3,7 @@
 import {combineReducers} from 'redux';
 
 import {AUTH_SUCCESS,ERROR_MSG} from "./action-type";
-
+import {getRedirectTo} from '../utils/index.js'; //引入工具函数
 
 
 const initUser = {
@@ -20,15 +20,15 @@ const initUser = {
 function user( state=initUser, action ){
     switch ( action.type ){
         case AUTH_SUCCESS: //data是user，返回正确的数据user
-            //授权成功后，跳转至主页面 /
-            return { ...action.data, redirectTo:'/' };
+            const {type,header} = action.data;
+            //授权成功后，跳转至哪里？需动态计算跳转路由
+            return { ...action.data, redirectTo:getRedirectTo(type,header) };
         case ERROR_MSG: //data是msg，返回错误提示信息msg
             return { ...state, msg: action.data };
         default:
             return state;
     }
 };
-
 
 // function xxx( state=0, action ){
 //     return state;
@@ -59,3 +59,4 @@ function user( state=initUser, action ){
 export default combineReducers({ //将此新状态(对象)暴露出去，传给store
     user
 });
+
