@@ -27,9 +27,12 @@ class Register extends Component{
     state = { //弄一个状态state保存表单收集的数据
         /* 通过 antd-mobile中 <Button>中的 onChange监听来收集数据
         *   - antd-mobile中 <Button>中的 onChange：能自动传值出来，能直接使用此值
-        *         - onChange={ value => ...用到此value ) }
+        *         - onChange={ value =>   ...回调函数 this.handleChange(value)... ) } // 使用箭头函数向回调函数传递(形参)参数，下面有注释
         *   - 原生JS中的onchange：不能自动传值，要自己想办法拿到这个值
         *
+        *
+        * 使用箭头函数向回调函数传递形参:
+        * 如 onChange = { val=>this.handleChange(val) } //箭头函数带形参val，箭头右端返回 某回调函数func，并向func传入形参val
         *  */
         username: '', //用户名
         password: '', //密码
