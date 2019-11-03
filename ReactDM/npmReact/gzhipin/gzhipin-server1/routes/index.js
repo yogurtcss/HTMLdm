@@ -101,9 +101,42 @@ router.post( '/login', function(req,res){
     * 若有，则返回登陆成功的信息
     *  */
 
+    /* Cookie 是 浏览器访问服务器后，
+    * 服务器传给浏览器(HTTP头部)的一段识别用户身份、记录历史的数据；
+    * 浏览器会将cookie保存到本地，
+    * 后续访问服务器时，浏览器再通过HTTP头部把cookie传递给服务器。
+    *
+    * (1)给浏览器回写一个cookie：
+    * res.cookie(name, value [, options]) //回写：即在返回的响应中把cookie传给浏览器喽
+    *   - name：标识此cookie的名称
+    * 	- value：简单的值(如字符串) 或 对象 或JSON格式
+    *   - 可选的options是一个对象 {...}，其中：
+    *		- 可设置持久化cookie —— 如一天之内免登录
+    *		- maxAge 有效期/存活时间，一个从当前时间算起的毫秒
+    *			如 {maxAge: 1000*60*60*24} 就是一天，可实现一天内免登录
+    *
+    *
+    * (2)告诉浏览器(即返回响应res)，清除指定名称name的cookie
+    * res.clearCookie( 某cookie的名称name )
+    * */
+
     //查询中：投影 {password:0, __v:0}，取值为0表示 不查询此列(属性)
     UserModel.findOne( {username, password:md5(password)}, {password:0, __v:0} ,function(err,user){ //查询结果为user
-        if(user){ //若存在此user，则：保存cookie至本地，同时自动登录
+        if(user){
+            /* 若存在此userA，则：将此userA的_id属性保存到cookie的属性中，同时自动登录
+            * cookie的特性：当已登录的userA需要再次发送请求时：会把userA的cookie加入此请求req中，然后发送此请求req
+            *
+            * 注意，存cookie时，res.cookie是单数形式！！
+            * 取请求中的cookies时，req.cookies：这是复数形式！！cookies！！(后面会出现)
+            *
+            *
+            * 当要更新userA的用户信息时，只需在发送userA的update请求时，取出此cookie中_id属性即可
+            *   - 发送userA的update请求时，已标识此用户是userA了
+            *  */
+
+            /* 注意，回写cookie时，res.cookie是单数形式！！
+            * 此cookie名称name为 userid；值value为 user,_id
+            *  */
             res.cookie( 'userid', user._id, {maxAge:1000*60*60*24} );
             res.send( {code:0, data:user} );
         }
@@ -112,6 +145,79 @@ router.post( '/login', function(req,res){
         }
     } )
     //返回响应数据
+} );
+
+//更新用户信息的路由，根据后端API文档来写 2019-11-02 16:29:36
+router.post( '/update', (req,res)=>{ //这次的回调函数，我写成箭头函数形式
+    /* 以变量userSthUpdate，存着请求的参数：header、info、post、salary、company
+    * 注，此userSthUpdate (即user something update)中的请求参数，没有 _id属性；
+    *
+    * 已知事实：_id相当于某用户的标识，我们需要根据 某用户的 _id 属性，检查数据库，来更新该用户的信息；
+    *
+    * 注意到，已注册用户userA的 _id 已被我们放在了浏览器的cookie中
+    *   - res.cookie( 'userid', user._id, {maxAge:...} );
+    *
+    * 对某个已经注册的userA：userA第一次登录时，将此userA的_id属性保存到cookie的属性中，同时自动登录
+    * cookie的特性：当已登录的userA需要再次发送请求时：会把userA的cookie加入此请求req中，然后发送此请求req
+    *
+    * 当要更新userA的用户信息时，只需在发送userA的update请求时，取出此cookie中_id属性即可
+    *   - 发送userA的update请求时，已标识此用户是userA了
+    *
+    * req的cookies是一个对象：它包含 此请求中所有cookie键值对 的容器
+    * 如 { 'userid': user._id,
+    *      XXX:  aaa, ....
+    *    }
+    *  */
+
+    /* 注意，存cookie时，res.cookie是单数形式！！
+    * 取请求中的cookies时，req.cookies：这是复数形式！！cookies！！
+    *  */
+    const userid = req.cookies.userid; //从请求中的cookies 得到userid，以从数据库中检索，从而更新数据
+    if( !userid ){ //如果user不存在(即未注册)，则返回错误提示
+        res.send( {code:1, msg:'请您先登陆！'} )
+    }
+    else{ //如果user存在，说明此用户已经注册了，
+        // 根据userid，在数据库中检索，从而更新数据
+        const userSthUpdate = req.body; //从请求中得到 请求的参数，没有userid属性
+        UserModel.findByIdAndUpdate(
+            { _id: userid }, //参数1：根据此id，找到待修改的文档
+
+            /* update 为更新后的数据
+            * 注：只更新 模式schema中已定义属性 下的数据( 如 username, type, post, salary, company )，
+            * 而不更新 模式schema中未定义属性 下的数据( new1，new2 等 )，
+            * new1、new2将不出现在数据库中
+            * 详情见 db_test2_findByIdAndUpdate.js 中的代码示例
+            *
+            * 显然，这里的userSthUpdate包含的数据为：username, type, post, salary, company
+            * 初始时，数据库中的post, salary, company为空值，
+            * 现通过此update，更新这3个空值为：userSthUpdate中post请求过来的值
+            *
+            * 即 用userSthUpdate中的值 填上 原post, salary, company 3处的空值！！
+            *  */
+            {userSthUpdate},  //参数2：将原数据old 更新为此数据 userSthUpdate，
+            (err,oldValue)=>{
+                if( !oldValue ){ //若在数据库中不存在旧数据
+                    /* 说明此userid是错误的，进而可知此cookie是没用的了
+                    * 告诉浏览器(返回响应res以告诉浏览器)，清除此名为userid的cookie
+                    * res.clearCookie( 某cookie的名称name )
+                    *
+                    * 注意，回写cookie时，res.cookie是单数形式！！
+                    * 上文中：此cookie名称name为 userid；值value为 user,_id
+                    * res.cookie( 'userid', user._id, {...} );
+                    *  */
+                    res.clearCookie( 'userid' );
+
+                }
+                else{
+
+                }
+            }
+
+
+        )
+
+    }
+
 } );
 
 
