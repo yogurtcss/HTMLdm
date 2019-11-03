@@ -171,6 +171,9 @@ router.post( '/update', (req,res)=>{ //这次的回调函数，我写成箭头�
 
     /* 注意，存cookie时，res.cookie是单数形式！！
     * 取请求中的cookies时，req.cookies：这是复数形式！！cookies！！
+    *
+    * postman测试流程：某用户dashen_update，先执行注册reister或登陆login (把此post请求携带的cookie中的userid先传给服务器)
+    * 然后此用户dashen_update 再执行更新update操作
     *  */
     const userid = req.cookies.userid; //从请求中的cookies 得到userid，以从数据库中检索，从而更新数据
     if( !userid ){ //如果user不存在(即未注册)，则返回错误提示
@@ -206,18 +209,41 @@ router.post( '/update', (req,res)=>{ //这次的回调函数，我写成箭头�
                     * res.cookie( 'userid', user._id, {...} );
                     *  */
                     res.clearCookie( 'userid' );
-
+                    //向浏览器返回一个错误提示信息
+                    res.send( {code:1, msg:'请您先登陆！'} );
                 }
-                else{
-
+                else{ //数据库中存在此旧数据
+                    /* post过来的userSthUpdate数据(类型为对象-JSON)：没有_id，但装着其余增量更新的数据(如 职位post、salary、company等)；
+                    * 数据库中存着的oldValue(类型为对象-JSON)：装着 _id、username、password等初始数据，
+                    * 现在我们想更新数据，就是 增量式地更新(合并、填上差异化的数据)
+                    * 实际上，我们要做的就是 合并userSthUpdate与oldValue 这两个对象
+                    *
+                    * Object.assing( obj1, obj2, obj3, ... ), assign即分配
+                    * 官方解释：将所有可枚举属性的值从一个或多个源对象复制到目标对象。它将返回目标对象
+                    *
+                    * 人话：将多个指定的对象(obj1、obj2、obj3、...等，注意书写顺序) 按 这些指定对象的书写之先后顺序，进行合并，
+                    * 返回一个最终合并后的对象。
+                    *
+                    * 注意，因为此合并操作是 按obj书写 先后顺序的：
+                    * 若obj1、obj2、obj3、...等，这些指定对象各自的属性有重合(具有相同属性)，后面的某个obj_(i+1) 可能会把前面某个obj 覆盖掉
+                    * 若obj1、obj2、obj3、...等，这些指定对象各自的属性不重合(没有相同属性)，则书写顺序是任意的。
+                    *  */
+                    const {_id, username, type} = oldValue; //解构赋值，从旧数据中取出部分差异数据
+                    /* 合并操作，进行OTA更新：增量式、填上差异化的数据
+                    * 从后端接口文档，易知 userSthUpdate与{_id, username, type} 没有相同属性，故书写顺序是任意的 。
+                    *  */
+                    const combineData = Object.assign( userSthUpdate, {_id, username, type} ); //combine 混合、合并
+                    res.send( {code:0, data:combineData} ); //返回响应数据
+                    /* postman中测试接口
+                    * register注册，用户名为 dashen_update，密码123，类型dashen
+                    *
+                    * postman测试流程：某用户dashen_update，先执行注册reister或登陆login (把此post请求携带的cookie中的userid先传给服务器)
+                    * 然后此用户dashen_update 再执行更新update操作
+                    *  */
                 }
             }
-
-
         )
-
     }
-
 } );
 
 
