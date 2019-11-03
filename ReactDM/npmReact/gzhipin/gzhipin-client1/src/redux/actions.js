@@ -3,8 +3,8 @@
 * 异步的action，都返回一个（回调）函数：在回调函数中就可以执行异步的代码
 */
 
-import {reqRegister,reqLogin} from "../api/index.js";
-import {AUTH_SUCCESS, ERROR_MSG} from "./action-type";
+import {reqRegister,reqLogin,reqUpdateUser} from "../api/index.js";
+import {AUTH_SUCCESS, ERROR_MSG} from "./action-types";
 
 /* 为什么ERROR_MSG 不写成：AUTH_Failure或AUTH_ERROR (授权失败)呢？
 * 理由：前台验证(后面补充)
@@ -143,3 +143,31 @@ export const login = ( (userInfo)=>{
         }
     } );
 } );
+
+/* 更新的异步action，与注册的异步action是同理写法
+*  */
+export const updateUser =  (userInfo)=>{
+
+    return( async dispatch=>{
+        //reqUpdateUser发送post的Ajax异步请求，在这里我用await取得响应
+        const res = await reqUpdateUser( userInfo );
+        /* 取出响应中的内容rst内容数据
+        * res.data中的内容数据：共3项
+        *  (1)标识码code、
+        *  (2)真正可用的响应数据 combineData——即经过OTA差异更新，合并后的数据
+        *  (3)错误提示信息msg
+        *  */
+        const rst = res.data;
+        //首先，判断标识码状态：成功/失败
+        if( rst.code===0 ){ //更新成功
+            //分发 更新成功的同步action
+        }
+        else{ //更新失败
+            //分发 更新失败的同步action
+        }
+
+
+
+
+    } );
+};
