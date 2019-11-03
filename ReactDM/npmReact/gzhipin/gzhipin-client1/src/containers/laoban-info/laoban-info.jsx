@@ -5,11 +5,11 @@
 *  */
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {Redirect} from 'react-router-dom';
+import {Redirect} from 'react-router-dom'; //完善信息后，执行路由重定向
 import {NavBar, InputItem, TextareaItem, Button} from 'antd-mobile';
 
 import HeaderSelector from '../../components/header-selector/header-selector.jsx';
-
+import {updateUser} from "../../redux/actions"; //点击保存，发送异步请求以更新用户信息
 
 class LaobanInfo extends Component{ //此组件为Main路由下的二级路由，需在Main中映射路由
 
@@ -44,12 +44,19 @@ class LaobanInfo extends Component{ //此组件为Main路由下的二级路由�
     };
 
     save=  ()=>{ //点击"保存"，将发送异步请求
-        console.log(this.state);
+        this.props.updateUser( this.state ); //将state状态保存的表单数据 发送post请求
     };
 
 
 
     render(){
+        const {header,type} = this.props.user;
+        if( header ){ //说明信息已完善，判断重定向之路由，三目运算符
+            const path=  (   (type==='dashen') ? ('/dashen'):('/laoban')   );
+            return (  <Redirect to={path} />  ) //return此路由，并渲染之
+        }
+
+        //如果没有header头像，则return以下这堆东西(信息完善界面)，并渲染这堆东西
         return(
             <div>
                 <NavBar>老板信息完善</NavBar>
@@ -79,6 +86,6 @@ class LaobanInfo extends Component{ //此组件为Main路由下的二级路由�
 }
 
 export default connect( //将store中的state、从外部引入的actions，传给LaobanInfo
-   state => ( {} ), //store中的state
-    {  } //从外部引入的actions
+   state => ( {user:state.user} ), //store中的state
+    { updateUser } //从外部引入的actions
 )(LaobanInfo)
