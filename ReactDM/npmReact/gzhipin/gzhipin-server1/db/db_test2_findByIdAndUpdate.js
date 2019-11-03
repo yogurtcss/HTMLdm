@@ -18,6 +18,7 @@ UserModel.findByIdAndUpdate(
     /* update 为更新后的数据
     * 注：只更新 模式schema中已定义属性 下的数据( 如 username, type, post, salary, company )，
     * 而不更新 模式schema中未定义属性 下的数据( new1，new2 等 )，
+    * new1、new2将不出现在数据库中
     *  */
     {
         post:'前端工程师，我在原模式schema中已定义',  //模式schema中已定义的属性，初始时此属性下的值为空，现更新为此值：前端工程师
