@@ -2,7 +2,7 @@
 
 import {combineReducers} from 'redux';
 
-import {AUTH_SUCCESS,ERROR_MSG} from "./action-type";
+import {AUTH_SUCCESS,ERROR_MSG} from "./action-types";
 import {getRedirectTo} from '../utils/index.js'; //引入工具函数
 
 
