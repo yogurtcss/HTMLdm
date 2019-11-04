@@ -4,7 +4,7 @@
 */
 
 import {reqRegister,reqLogin,reqUpdateUser} from "../api/index.js";
-import {AUTH_SUCCESS, ERROR_MSG} from "./action-types";
+import {AUTH_SUCCESS, ERROR_MSG, RECEIVE_USER, RESET_USER} from "./action-types";
 
 /* 为什么ERROR_MSG 不写成：AUTH_Failure或AUTH_ERROR (授权失败)呢？
 * 理由：前台验证(后面补充)
@@ -26,6 +26,10 @@ import {AUTH_SUCCESS, ERROR_MSG} from "./action-types";
 const authSuccess =    (userInfo)=>( {type:AUTH_SUCCESS, data:userInfo} );
 //错误提示信息的同步action
 const errorMsg    =    (msg)=>( {type:ERROR_MSG, data:msg} );
+//接收 返回响应中的、更新完毕的用户信息 的同步action
+const receiveUser =    (userInfo)=>( {type:RECEIVE_USER, data:userInfo} );
+//重置用户信息的同步action，后面再说
+const resetUser  =     (msg)=>( {type:RESET_USER, data:msg} );
 
 
 //注册的异步action
@@ -154,16 +158,18 @@ export const updateUser =  (userInfo)=>{
         /* 取出响应中的内容rst内容数据
         * res.data中的内容数据：共3项
         *  (1)标识码code、
-        *  (2)真正可用的响应数据 combineData——即经过OTA差异更新，合并后的数据
+        *  (2)rst.data真正可用的响应数据，属性名为data——即经过OTA差异更新，合并后的数据combineData
         *  (3)错误提示信息msg
         *  */
         const rst = res.data;
         //首先，判断标识码状态：成功/失败
         if( rst.code===0 ){ //更新成功
             //分发 更新成功的同步action
+            dispatch( receiveUser(rst.data) );
         }
         else{ //更新失败
             //分发 更新失败的同步action
+            dispatch( resetUser(rst.msg) );
         }
 
 
