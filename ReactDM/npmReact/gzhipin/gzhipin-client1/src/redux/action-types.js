@@ -9,3 +9,4 @@ export const ERROR_MSG = 'error_msg'; //请求前或请求后 的错误提示信
 *  */
 
 export const RECEIVE_USER = 'receive_user'; //接收 返回响应中的、更新完毕的用户信息
+export const RESET_USER = 'reset_user'; //重置用户信息：将之恢复为初始值
