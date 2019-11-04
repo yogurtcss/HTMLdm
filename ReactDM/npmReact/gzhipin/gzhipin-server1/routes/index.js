@@ -246,6 +246,16 @@ router.post( '/update', (req,res)=>{ //这次的回调函数，我写成箭头�
     }
 } );
 
+//根据cookie中，userid 获取用户信息的路由
+router.get( '/user', (req,res)=>{
+    const userid = req.cookies.userid;
+    if( !userid ){
+        return(  res.send( {code:1, msg:'请先登陆！'} )  );
+    }
+    UserModel.findOne( {_id:userid}, {_id:1,password:0, __v:0} ,(err,userInfo)=>{
+        res.send( {code:0, data:userInfo} );
+    } );
+} );
 
 
 
