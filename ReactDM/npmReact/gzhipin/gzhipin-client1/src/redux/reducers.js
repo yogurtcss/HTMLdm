@@ -2,7 +2,7 @@
 
 import {combineReducers} from 'redux';
 
-import {AUTH_SUCCESS,ERROR_MSG} from "./action-types";
+import {AUTH_SUCCESS, ERROR_MSG, RECEIVE_USER, RESET_USER} from "./action-types";
 import {getRedirectTo} from '../utils/index.js'; //引入工具函数
 
 
@@ -25,6 +25,10 @@ function user( state=initUser, action ){
             return { ...action.data, redirectTo:getRedirectTo(type,header) };
         case ERROR_MSG: //data是msg，返回错误提示信息msg
             return { ...state, msg: action.data };
+        case RECEIVE_USER: //data是 更新的用户信息
+            return action.data; //向store返回已更新的数据
+        case RESET_USER: //data是 msg
+            return { ...initUser, msg: action.data }; //更新失败，返回初始数据(initUser中全为空字段)
         default:
             return state;
     }
