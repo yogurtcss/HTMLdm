@@ -1,7 +1,14 @@
 //index.less要在渲染组件的index.js中引入才生效
 
-.error-msg{
+.error-msg{ //错误提示信息
   color: red;
   text-align: center;
   font-size: 18px;
+}
+//样式名 am-tab-bar是浏览器自动为 NavFooter组件添加的
+//我们可以修改、覆盖之
+.am-tab-bar{ //使导航条始终在底部
+  position: fixed;
+  bottom: 0;
+  width: 100%;
 }
