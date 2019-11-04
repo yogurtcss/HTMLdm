@@ -3,7 +3,7 @@
 * 异步的action，都返回一个（回调）函数：在回调函数中就可以执行异步的代码
 */
 
-import {reqRegister,reqLogin,reqUpdateUser} from "../api/index.js";
+import {reqRegister,reqLogin,reqUpdateUser,reqUser} from "../api/index.js";
 import {AUTH_SUCCESS, ERROR_MSG, RECEIVE_USER, RESET_USER} from "./action-types";
 
 /* 为什么ERROR_MSG 不写成：AUTH_Failure或AUTH_ERROR (授权失败)呢？
@@ -176,4 +176,18 @@ export const updateUser =  (userInfo)=>{
 
 
     } );
+};
+
+//获取用户信息的异步action
+export const getUser=  ()=>{
+    return( async dispatch=>{
+        const res = await reqUser();
+        const rst = res.data;
+        if( rst.code===0 ){ //成功
+            dispatch( receiveUser(rst.data) )
+        }
+        else{ //失败
+            dispatch( resetUser(rst.msg) );
+        }
+    } )
 };
