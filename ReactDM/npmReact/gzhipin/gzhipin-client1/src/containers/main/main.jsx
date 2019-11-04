@@ -4,6 +4,8 @@ import React, {Component} from 'react';
 import {Switch, Route, Redirect} from 'react-router-dom';
 import {connect} from 'react-redux';
 import Cookies from 'js-cookie'; //操作前端cookie的对象：set设置、get获得、remove删除
+import {NavBar} from "antd-mobile"; //Main的头部
+
 
 import {getRedirectTo} from "../../utils"; //计算跳转之路由
 import {getUser} from "../../redux/actions";
@@ -12,7 +14,26 @@ import {getUser} from "../../redux/actions";
 import LaobanInfo from '../laoban-info/laoban-info.jsx';
 import DashenInfo from '../dashen-info/dashen-info.jsx';
 
+import Dashen from '../dashen/dashen.jsx';
+import Laoban from '../laoban/laoban.jsx';
+import Message from '../message/message.jsx';
+import Personal from '../personnal/personal.jsx';
+import NotFound from '../../components/not-found/not-found.jsx';
+import NavFooter from "../../components/nav-footer/nav-footer"; //底部标签栏
+
 class Main extends Component{
+    /* 无static前缀，为Main组件对象定义(即 添加)一个 属性navList
+    * 此navList，无前缀 static，表示为当前组件对象添加属性
+    * 若有前缀static，则为 组件类 添加属性
+    * 如 state = { ... }
+    *  */
+    navList = [ //最底下的导航图标。path为路由路径，icon为图片文件名
+        { path:'/laoban',   component:Laoban,   title:'大神列表', icon:'dashen',   text:'大神' },
+        { path:'/dashen',   component:Dashen,   title:'老板列表', icon:'laoban',   text:'老板' },
+        { path:'/message',  component:Message,  title:'消息列表', icon:'message',  text:'消息' },
+        { path:'/personal', component:Personal, title:'个人中心', icon:'personal', text:'个人' },
+    ];
+
     componentDidMount(){
         /* 之前登陆过(cookie中有userid)，但现在没有登陆(redux管理的user中没有_id)，
         * 则发请求获取对应的user
@@ -28,13 +49,10 @@ class Main extends Component{
 
     render(){
         const userid = Cookies.get( 'userid' ); //读取cookie中的userid
-
         if( !userid ){
             return( <Redirect to='/login' /> )
         }
-
         const {user} = this.props; //读取redux中的user信息
-
         if( !user._id ){ //如果redux中的user没有_id
             return null;
         }
@@ -51,8 +69,6 @@ class Main extends Component{
                 getRedirectTo( user.type, user.header ); //动态计算路由
                 return( <Redirect to={path} /> ); //跳转过去
             }
-
-
         }
 
         /* 某种特殊情况：正当用户登陆后，此用户的cookie信息不慎丢失了；
@@ -66,13 +82,31 @@ class Main extends Component{
         //     return( <Redirect to={'/login'} /> )
         // }
 
-        return(
-            //laoban-info和dashen-info，都是Main路由下的二级路由
+        const navList = this.navList; //或者解构赋值：const {navList} = this;
+        const currPath = this.props.location.pathname; //当前请求的path
+        const currNav = navList.find( (oneNav)=> oneNav.path===currPath ); //得到当前的nav，可能是不存在的
+
+
+        return( //laoban-info和dashen-info，都是Main路由下的二级路由
             <div>
+                { currNav ? (<NavBar>{currNav.title}</NavBar>) : null }  {/* currNav存在吗？如果有，则显示；否则就null */}
                 <Switch>
+                    {/* 中间: 映射navList中的4个导肮路由组件，数组的map方法 */}
+                    { navList.map(
+                        (oneNav,index) => ( <Route path={oneNav.path} component={oneNav.component} key={index}/> )
+                    ) }
+
                     {/* 映射 这两个组件 为Main路由下的二级路由 */}
                     <Route path='/laobaninfo' component={LaobanInfo} />
                     <Route path='/dasheninfo' component={DashenInfo} />
+
+                    {/* 当以上的路由都没被匹配时，not found */}
+                    <Route component={NotFound} />
+
+                    {/* 底部的导航条——单独抽离出来的一个UI组件：信息完善界面不需要此底部的导航条
+                    传入标签栏信息 navList
+                     */}
+                    { currNav ? (<NavFooter navList={navList} />) : null }
                 </Switch>
             </div>
         )
