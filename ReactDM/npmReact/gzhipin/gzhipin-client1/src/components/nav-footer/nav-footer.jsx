@@ -21,7 +21,14 @@ class NavFooter extends Component{
     };
 
     render(){
-        const {navList} = this.props;
+        let {navList} = this.props;
+        /* 过滤掉：hide属性为true的数组元素(nav)
+        * 留下 oneNav.hide!==true 的元素
+        * 可以写成：navList.filter( oneNav=>(!oneNav.hide)  )
+        * 因为添加hide属性时，是以 hide=true 添加的
+        *  */
+        navList = navList.filter( oneNav=>(oneNav.hide!==true) );
+
         /* 某次请求时要访问的路由路径path
         * 当请求成功时，此路由A就渲染成功了；
         * 这时关于路由A的：location、history、params此三者将注入至路由A的props中
