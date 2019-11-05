@@ -252,11 +252,37 @@ router.get( '/user', (req,res)=>{
     if( !userid ){
         return(  res.send( {code:1, msg:'请先登陆！'} )  );
     }
-    UserModel.findOne( {_id:userid}, {_id:1,password:0, __v:0} ,(err,userInfo)=>{
+    UserModel.findOne( {_id:userid}, {password:0, __v:0}, (err,userInfo)=>{
         res.send( {code:0, data:userInfo} );
     } );
 } );
 
+/* 接口文档：根据get请求中传来的type，获取用户列表
+*
+* req取参数的3种方法：
+* (1)req.params
+*   一般是get请求。取 请求url中带冒号的参数，如
+*	router.get( '/user/:id', (req,res)=>{
+*	  res.send( 'user'+ req.params.id )
+*   } )
+*
+* (2)req.body
+*   使用req.body的一定是post请求
+*
+* (3)req.query 获取get请求路径(url)中的对象参数值
+*   get请求的url中必定附带请求的对象参数值
+*
+*   如get请求(附带请求的对象参数值q)，
+*   取q字段的值：请求url为 /search?q=tobi+ferret
+*   则代码为 const q = req.query.q
+*   也可以解构赋值：const {q} = req.query
+* */
+router.get( '/userlist', (req,res)=>{
+    const typeFromReq = req.query.type; //取出请求参数中的type，也可以解构赋值 const {type} = req.query;
+    UserModel.find( {type:typeFromReq}, {password:0, __v:0}, (err,users)=>{
+        res.send( {code:0, data:users} );
+    } )
+} );
 
 
 
