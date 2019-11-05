@@ -74,6 +74,7 @@ function userList( state=initUserList, action ){
 *
 *  */
 export default combineReducers({ //将此新状态(对象)暴露出去，传给store
-    user
+    user,           //关于用户个人信息的状态数据
+    userList        //关于用户信息列表展示的数据：dashen、laoban
 });
 
