@@ -11,7 +11,7 @@ export default class UserList extends Component{
     *
     * 问：当前UI组件的数据this.props.UserList从哪来？
     * 答：在 被高阶组件connect()强化后的父亲组件<Laoban />或<Dashen />组件中：
-    * 通过引入actions.js中的 getUserList，异步获取UserList数据，存入store中；
+    * 通过引入actions.js中的 getUserList，此父组件一上来被渲染就异步获取UserList数据——在componentDidMount中写！！，存入store中；
     * 被强化后的<Laoban />或<Dashen />从store中取出UserList数据，
     * 这才传递给子组件(此UI组件)UseList
     *
