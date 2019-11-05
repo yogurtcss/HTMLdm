@@ -197,7 +197,12 @@ router.post( '/update', (req,res)=>{ //这次的回调函数，我写成箭头�
             *
             * 即 用userSthUpdate中的值 填上 原post, salary, company 3处的空值！！
             *  */
-            {userSthUpdate},  //参数2：将原数据old 更新为此数据 userSthUpdate，
+            // //update，方法一：按照原本的语法，是用 花括号里面一个个地写 要更新的属性名+属性值的 格式！！
+            // //根据后端接口文档，找到这些待更新的属性，然后挨个写进花括号里，显然这很麻烦！！
+            {  post:userSthUpdate.post,  salary:userSthUpdate.salary,  company:userSthUpdate.company,
+                       header:userSthUpdate.header, info:userSthUpdate.info  }, //参数2：将原数据old 更新为此数据 userSthUpdate，
+            // userSthUpdate,  //update，方法二：将整个userSthUpdate(不加花括号！)直接传进来，也能实现更新。它能把空缺的属性值填上！
+
             (err,oldValue)=>{
                 if( !oldValue ){ //若在数据库中不存在旧数据
                     /* 说明此userid是错误的，进而可知此cookie是没用的了
