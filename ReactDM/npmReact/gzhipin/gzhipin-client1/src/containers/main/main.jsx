@@ -28,8 +28,8 @@ class Main extends Component{
     * 如 state = { ... }
     *  */
     navList = [ //最底下的导航图标。path为路由路径，icon为图片文件名
-        { path:'/laoban',   component:Laoban,   title:'大神列表', icon:'dashen',   text:'大神' },
-        { path:'/dashen',   component:Dashen,   title:'老板列表', icon:'laoban',   text:'老板' },
+        { path:'/laoban',   component:Laoban,   title:'大神列表', icon:'dashen',   text:'大神' }, //老板主界面，显示大神列表
+        { path:'/dashen',   component:Dashen,   title:'老板列表', icon:'laoban',   text:'老板' }, //大神主界面，显示老板列表
         { path:'/message',  component:Message,  title:'消息列表', icon:'message',  text:'消息' },
         { path:'/personal', component:Personal, title:'个人中心', icon:'personal', text:'个人' },
     ];
@@ -86,6 +86,15 @@ class Main extends Component{
         const currPath = this.props.location.pathname; //当前请求的path
         const currNav = navList.find( (oneNav)=> oneNav.path===currPath ); //得到当前的nav，可能是不存在的
 
+        if( currNav ){ //如果currNav存在时，才考虑是否向其加入 hide属性(决定它显示与否)
+            //决定哪个路由需要隐藏
+            if( user.type==='laoban' ){ //老板主界面，则隐藏 老板列表：navList数组第2个元素
+                navList[1].hide = true; //下标为1，第2个；添加hide属性
+            }
+            else{ //大神主界面。则隐藏 大神列表：navList第1个元素
+                navList[0].hide = true; //下标为0，第1个；添加hide属性
+            }
+        }
 
         return( //laoban-info和dashen-info，都是Main路由下的二级路由
             <div>
@@ -102,12 +111,11 @@ class Main extends Component{
 
                     {/* 当以上的路由都没被匹配时，not found */}
                     <Route component={NotFound} />
-
-                    {/* 底部的导航条——单独抽离出来的一个UI组件：信息完善界面不需要此底部的导航条
-                    传入标签栏信息 navList
-                     */}
-                    { currNav ? (<NavFooter navList={navList} />) : null }
                 </Switch>
+                {/* 底部的导航条——单独抽离出来的一个UI组件：信息完善界面不需要此底部的导航条
+                    传入标签栏信息 navList
+                */}
+                { currNav ? (<NavFooter navList={navList} />) : null }
             </div>
         )
     }
