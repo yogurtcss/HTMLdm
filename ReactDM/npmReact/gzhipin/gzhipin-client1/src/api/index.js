@@ -29,3 +29,12 @@ export const reqLogin = (  (userInfo)=>
 export const reqUpdateUser = ( (userInfo)=>
     ajax( '/update', userInfo, 'POST' )
 );
+
+//获取用户信息
+export const reqUser=  ( ()=>ajax('/user') ); //get请求
+
+/* 获取用户列表
+* 传入形参type；
+* 第2个参数是 在自定义ajax函数中的data是以对象形式传入的，第3个参数默认是get请求
+* */
+export const reqUserList=  (type)=>ajax('/userlist', {type} );
