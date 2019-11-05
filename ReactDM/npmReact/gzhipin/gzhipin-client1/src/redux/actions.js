@@ -3,8 +3,8 @@
 * 异步的action，都返回一个（回调）函数：在回调函数中就可以执行异步的代码
 */
 
-import {reqRegister,reqLogin,reqUpdateUser,reqUser} from "../api/index.js";
-import {AUTH_SUCCESS, ERROR_MSG, RECEIVE_USER, RESET_USER} from "./action-types";
+import {reqRegister,reqLogin,reqUpdateUser,reqUser,reqUserList} from "../api/index.js";
+import {AUTH_SUCCESS, ERROR_MSG, RECEIVE_USER, RESET_USER,RECEIVE_USER_LIST} from "./action-types";
 
 /* 为什么ERROR_MSG 不写成：AUTH_Failure或AUTH_ERROR (授权失败)呢？
 * 理由：前台验证(后面补充)
@@ -31,7 +31,8 @@ const receiveUser =    (userInfo)=>( {type:RECEIVE_USER, data:userInfo} );
 //重置用户信息的同步action，后面再说
 //暴露为 logout 单击响应函数用
 export const resetUser  =     (msg)=>( {type:RESET_USER, data:msg} );
-
+//接收用户列表的同步action
+export const receiveUserList=  (userList)=>( {type:RECEIVE_USER_LIST, data:userList} );
 
 //注册的异步action
 /* 之前我写的是 export const register ！！！
@@ -63,8 +64,6 @@ export const register =  (userInfo)=>{
         *  */
 
 
-
-
         /* 法一：promise写法
         * promise对象.then( 成功的回调函数response=>{...里面取response.data} )
         * 太长了，不想写，直接用 async-await写法
@@ -73,7 +72,6 @@ export const register =  (userInfo)=>{
         // promise.then( response=>{
         //     const rst = response.data; //{ code:0/1, data:user }
         // } )
-
 
         /* 法二：async-await写法
         *  (1)async必须声明的是一个function
@@ -135,7 +133,6 @@ export const login = ( (userInfo)=>{
         return errorMsg( '请输入密码！' );
     };
 
-
     return( async dispatch=>{
         const promise = reqLogin( userInfo ); //从某处得到的promise对象
         const response = await promise; //等待，至promise获得结果，并赋给变量response
@@ -152,7 +149,6 @@ export const login = ( (userInfo)=>{
 /* 更新的异步action，与注册的异步action是同理写法
 *  */
 export const updateUser =  (userInfo)=>{
-
     return( async dispatch=>{
         //reqUpdateUser发送post的Ajax异步请求，在这里我用await取得响应
         const res = await reqUpdateUser( userInfo );
@@ -172,10 +168,6 @@ export const updateUser =  (userInfo)=>{
             //分发 更新失败的同步action
             dispatch( resetUser(rst.msg) );
         }
-
-
-
-
     } );
 };
 
@@ -190,5 +182,16 @@ export const getUser=  ()=>{
         else{ //失败
             dispatch( resetUser(rst.msg) );
         }
+    } )
+};
+
+export const getUserList=  (type)=>{ //获取用户列表的异步action
+    return( async dispatch=>{
+        const res = await reqUserList(type); //执行ajax异步请求，并等待返回结果
+        const rst = res.data; //取出返回的响应数据
+        if( rst.code===0 ){ //得到结果后，分发一个同步action
+            dispatch( receiveUserList(rst.data) );
+        }
+        //没有else了
     } )
 };
