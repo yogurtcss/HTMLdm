@@ -2,7 +2,7 @@
 
 import {combineReducers} from 'redux';
 
-import {AUTH_SUCCESS, ERROR_MSG, RECEIVE_USER, RESET_USER} from "./action-types";
+import {AUTH_SUCCESS, ERROR_MSG, RECEIVE_USER, RESET_USER,RECEIVE_USER_LIST} from "./action-types";
 import {getRedirectTo} from '../utils/index.js'; //引入工具函数
 
 
@@ -33,6 +33,19 @@ function user( state=initUser, action ){
             return state;
     }
 };
+
+//产生userlist状态的reducer
+const initUserList = [];
+function userList( state=initUserList, action ){
+    switch ( action.type ){
+        case RECEIVE_USER_LIST:
+            return action.data; //data为userlist
+        default:
+            return state;
+    }
+}
+
+
 
 // function xxx( state=0, action ){
 //     return state;
