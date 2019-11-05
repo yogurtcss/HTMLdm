@@ -29,7 +29,8 @@ const errorMsg    =    (msg)=>( {type:ERROR_MSG, data:msg} );
 //接收 返回响应中的、更新完毕的用户信息 的同步action
 const receiveUser =    (userInfo)=>( {type:RECEIVE_USER, data:userInfo} );
 //重置用户信息的同步action，后面再说
-const resetUser  =     (msg)=>( {type:RESET_USER, data:msg} );
+//暴露为 logout 单击响应函数用
+export const resetUser  =     (msg)=>( {type:RESET_USER, data:msg} );
 
 
 //注册的异步action
