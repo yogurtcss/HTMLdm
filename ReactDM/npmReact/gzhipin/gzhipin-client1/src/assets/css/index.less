@@ -5,10 +5,41 @@
   text-align: center;
   font-size: 18px;
 }
-//样式名 am-tab-bar是浏览器自动为 NavFooter组件添加的
-//我们可以修改、覆盖之
+/* 样式名 am-tab-bar是浏览器自动为 NavFooter组件添加的
+* 我们可以修改、覆盖之
+*
+* position: fixed 生成绝对定位的元素，相对于浏览器窗口进行定位。
+* 元素的位置通过 "left", "top", "right" 以及 "bottom" 属性进行规定。
+*
+* height属性的值：
+* (1) 使用 px、cm 等单位定义高度。
+* (2) %, 基于包含它的块级对象的百分比高度。
+* (3) inherit, 从父元素继承 height 属性的值。
+*
+* inherit 继承。简记 in her it 在她的那个里面
+* */
 .am-tab-bar{ //使导航条始终在底部
   position: fixed;
   bottom: 0;
   width: 100%;
+
+  /* 初始时：导航条的高度把所有的兄弟元素都遮挡住了，
+     以至于点击 退出登陆 按钮——没有响应。
+
+  * 当子元素A设为 固定或绝对定位元素，且 父容器的 position 值为 static 时
+    height:inherit 使此子元素A高度自适应没有定位特性的父级元素
+    当(未开启定位的)父元素之高度变化时，里面的绝对定位子元素A依然高度自适应(不会挡住、覆盖兄弟元素)
+   */
+  height: inherit;
+}
+
+.sticky-header{ //固定粘住(sticky)的头部，使标题始终在顶部
+  /* z-index 属性指定了一个具有定位属性的元素及其子代元素的 z-order。
+  当元素之间重叠的时候，z-order 决定哪一个元素覆盖在其余元素的上方显示。
+  通常来说 z-index 较大的元素会覆盖较小的一个。
+   */
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 10;
 }
