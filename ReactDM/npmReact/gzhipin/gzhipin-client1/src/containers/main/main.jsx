@@ -98,7 +98,7 @@ class Main extends Component{
 
         return( //laoban-info和dashen-info，都是Main路由下的二级路由
             <div>
-                { currNav ? (<NavBar>{currNav.title}</NavBar>) : null }  {/* currNav存在吗？如果有，则显示；否则就null */}
+                { currNav ? (<NavBar className='sticky-header'>{currNav.title}</NavBar>) : null }  {/* currNav存在吗？如果有，则显示；否则就null */}
                 <Switch>
                     {/* 中间: 映射navList中的4个导肮路由组件，数组的map方法 */}
                     { navList.map(
