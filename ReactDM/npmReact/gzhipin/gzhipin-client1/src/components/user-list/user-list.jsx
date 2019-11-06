@@ -28,7 +28,11 @@ export default class UserList extends Component{
         *  */
         const {userList} = this.props;
         return(
-            <WingBlank>
+            /* P50解决两个问题：
+            * 1.UserList下拉时显示不全——解决：为UserList添加Margin-bottom，值等于 底部导航条navList的高度 style={{marginBottom:50}}
+            * 2.最顶部的“老板/大神列表”标题栏随列表滚动——解决：为老板列表设置 position: fixed
+            *  */
+            <WingBlank style={{marginBottom:50, marginTop:50}} >
                 { userList.map(  oneUser=>(
                     /* --------------------这个div开始-------------------- */
                     <div key={oneUser._id} >
@@ -37,7 +41,7 @@ export default class UserList extends Component{
                             {/* thumb 图片 URL
                             extra 卡片右上角的操作区域
                             */}
-                            <Header thumb={require(`../../assets/images/${oneUser.header}.png`)} extra='aa' />
+                            <Header thumb={require(`../../assets/images/${oneUser.header}.png`)} extra={oneUser.username} />
                             <Body>
                                 <div>职位: {oneUser.post}</div>
                                 {/* oneUser.company和oneUser.salary存在吗？有值吗？有则显示，否则不显示。三目运算符奥利给！ */}
