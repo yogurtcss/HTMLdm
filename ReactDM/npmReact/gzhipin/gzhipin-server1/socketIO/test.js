@@ -1,4 +1,4 @@
-model.exports=  (server)=>{ //箭头函数写法
+module.exports=  (server)=>{ //箭头函数写法
     const io = require('socket.io')(server); //得到io对象
     io.on('connection', (socket)=>{
         console.log( 'socketio connected' );
