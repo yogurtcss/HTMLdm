@@ -42,8 +42,8 @@ var router = express.Router();
 
 
 /* ----------2019-10-30 10:16:20---------- */
-
-const {UserModel} = require( '../db/models.js' ); //取出UserModel
+/* ----------2019-11-07 15:12:40---------- */
+const {UserModel,ChatModel} = require( '../db/models.js' ); //取出UserModel和ChatModel
 const md5 = require('blueimp-md5'); //使用md5先加密 password，然后存入数据库中
 
 //注册路由
@@ -288,6 +288,67 @@ router.get( '/userlist', (req,res)=>{
         res.send( {code:0, data:users} );
     } )
 } );
+
+/* -----2019-11-07 15:24:31----- */
+//获取当前用户所有相关聊天信息的列表
+router.get( '/msglist', (req,res)=>{
+    const userid = req.cookies.userid; //获取请求中携带的cookie中的userid
+    /* 获得所有的用户信息，并遍历之
+    * 注意，所得查询结果allUsers是数组
+    *
+    * 数组.forEach( 回调函数callback必须  [, thisArg可选] )
+    * 对数组中的每个元素执行一次 所提供的回调函数
+    * 回调函数callback接收3个参数：
+    * (1)currrentValue必须，数组中正在处理的当前元素
+    * (2)index可选，数组中正在处理的当前元素的索引
+    * (3)array可选，forEach()方法正在操作的数组
+    *
+    *  */
+    UserModel.find( (err,allUsers)=>{ //find()方法不指定任何参数，将返回所有文档的所有字段。
+        /* users_getNameHeaderByUserId是一个对象，
+        * 属性名为userId；因为属性名是变量，需要用方括号
+        * 属性值为：用户名name和用户头像header
+        *  */
+        const users_getNameHeaderByUserId = {};
+
+        allUsers.forEach( oneUser=>{ //遍历所有用户，取出每个用户的用户名和头像
+            users_getNameHeaderByUserId[oneUser._id] = { username:oneUser.username, header:oneUser.header };
+        } );
+
+        /* 请求中携带的cookie中的userid 简记为 请求中的userid。
+        * 注意，请求中的userid是存在于 请求中携带的cookie嗷
+        *
+        * 查询 与请求中的userid相关的 所有聊天信息
+        * 问：与请求中的userid “相关” 是什么意思？
+        * 答：此用户发送的消息、此用户接收的消息，即为 “与请求中的userid 相关”
+        * 既不是我发的，也不是发给我的，就与我无关喽
+        *
+        * 查询 与请求中的userid相关的 所有聊天信息
+        *   参数1：查询条件，逻辑操作符$or，from或者to
+        *      $or是一个逻辑 or 操作符操作在一个数据或者多个表达式并且需要选择至少一个满足条件的表达式，格式如下
+        *      {  $or: [ { <expression1> }, { <expression2> }, ... , { <expressionN> } ] }
+        *   参数2：过滤条件(投影projection)
+        *   参数3：回调函数
+        *
+        *  */
+        ChatModel.find(
+            { '$or': [ {from:userid}, {to:userid} ] }, //查询条件：消息发送方from或消息接收方to 是我请求的userid，就是与我请求的userid相关喽
+            { password:0, __v:0 }, //投影，这两列不投出来
+            ( err,chatMsgs ) => { //回调函数
+                res.send( { //返回请求
+                    code:0,
+                    data: { users_getNameHeaderByUserId, chatMsgs }
+                } )
+            }
+        )
+
+
+
+    } );
+} );
+
+
+
 
 
 
