@@ -54,3 +54,19 @@ module.exports.UserModel = UserModel; //向外暴露Model
 *
 *
 *  */
+
+/* 2019-11-07 14:37:19
+* 添加新的数据库集合模型 chat
+*  */
+const chatSchema = mongoose.Schema({ //创建chats集合的文档结构
+   from: { type:String, required:true },        //发出消息(即 消息源头)的用户之id
+   to: { type:String, required:true },          //接收消息(即 消息去向)的用户之id
+   chat_id: { type:String, required:true },     //from和to组成的字符串。何用之有？
+   content: { type:String, required:true },     //消息内容
+   read: { type:Boolean, required:true },        //标识消息是否已读
+   create_time: { type:Number }                 //创建时间
+});
+
+const ChatModel = mongoose.model( 'chat', chatSchema ); //定义能操作chats集合数据的Model
+
+module.exports.ChatModel = ChatModel; //向外暴露此ChatModel
