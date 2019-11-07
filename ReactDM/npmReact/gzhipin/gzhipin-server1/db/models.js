@@ -59,8 +59,8 @@ module.exports.UserModel = UserModel; //向外暴露Model
 * 添加新的数据库集合模型 chat
 *  */
 const chatSchema = mongoose.Schema({ //创建chats集合的文档结构
-   from: { type:String, required:true },        //发出消息(即 消息源头)的用户之id
-   to: { type:String, required:true },          //接收消息(即 消息去向)的用户之id
+   from: { type:String, required:true },        //发出消息(即 消息发送方)的用户之id
+   to: { type:String, required:true },          //接收消息(即 消息接收方)的用户之id
    chat_id: { type:String, required:true },     //标识某个对话聊天的id——由from和to组成的字符串，以区分标识 一对聊天的人
     /* chat_id的定义：由from和to组成的字符串
     * 如id分别为 A、B的两人，他们在聊天。
