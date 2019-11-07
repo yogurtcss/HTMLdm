@@ -290,7 +290,7 @@ router.get( '/userlist', (req,res)=>{
 } );
 
 /* -----2019-11-07 15:24:31----- */
-//获取当前用户所有相关聊天信息的列表
+//获取当前用户所有相关聊天信息的列表，根据后端接口文档编写的
 router.get( '/msglist', (req,res)=>{
     const userid = req.cookies.userid; //获取请求中携带的cookie中的userid
     /* 获得所有的用户信息，并遍历之
