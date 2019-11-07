@@ -61,10 +61,16 @@ module.exports.UserModel = UserModel; //向外暴露Model
 const chatSchema = mongoose.Schema({ //创建chats集合的文档结构
    from: { type:String, required:true },        //发出消息(即 消息源头)的用户之id
    to: { type:String, required:true },          //接收消息(即 消息去向)的用户之id
-   chat_id: { type:String, required:true },     //from和to组成的字符串。何用之有？
+   chat_id: { type:String, required:true },     //标识某个对话聊天的id——由from和to组成的字符串，以区分标识 一对聊天的人
+    /* chat_id的定义：由from和to组成的字符串
+    * 如id分别为 A、B的两人，他们在聊天。
+    * A向B发了一条消息XXX，此消息XXX的chat_id为 A-B；
+    * 接着，B向A发了一条消息YYY，此消息YYY的chat_id为 B-A；
+    * 实际上这两条消息、两个chat_id都是标识同一个对话、同一对人在聊天。到时需要判断嗷
+    *  */
    content: { type:String, required:true },     //消息内容
-   read: { type:Boolean, required:true },        //标识消息是否已读
-   create_time: { type:Number }                 //创建时间
+   read: { type:Boolean, default:false },       //标识消息是否已读，默认消息一上来就是false，未读
+   create_time: { type:Number }                 //消息创建时间。若某消息XXX的创建时间越新(越晚)，则此消息XXX在消息列表中显示越靠前
 });
 
 const ChatModel = mongoose.model( 'chat', chatSchema ); //定义能操作chats集合数据的Model
