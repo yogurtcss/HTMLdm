@@ -344,10 +344,35 @@ router.get( '/msglist', (req,res)=>{
                 } )
             }
         )
-
-
-
     } );
+} );
+
+
+/* 己方 将他人发给自己的消息 设为已读
+* 理解这句话：他人发给自己的消息
+* 消息发出方from：他人
+* 消息接收方to：自己
+* 这样就能理解 const from = req.body.from //消息发出方：他人
+* 和 const to = req.cookies.userid //消息接收方：自己，
+*
+* 为什么自己id可以从请求中携带的userid取出来？
+* 因为：我本来就是根据我自己的userid，发送post请求，来将 他人发给自己的消息 设为已读呀，
+* 所以 自己id可以从请求中携带的userid取出来
+*
+* 而自己发给对方的消息，我不能设为已读，要对面的接收方设为已读
+*  */
+router.post( '/readmsg', (req,res)=>{
+    const other_send = req.body.from; //消息发出方：他人
+    const myself_receive = req.cookies.to; //消息接收方：自己
+    ChatModel.update(
+        { from:other_send, to:myself_receive, read:false }, //查询条件：消息发出方为他人，消息接收方为自己，且原消息是未读状态嗷
+        { read:true }, //update，将read属性值修改为true
+        { multi:true }, //是否允许一次修改可更新多条？默认只更新一条，multi:true可使一次修改更新多条
+        ( err, user_beforeUpdate ) => { //更新完成的回调函数
+            console.log( `/readmsg, 修改前的对象为：${user_beforeUpdate}` );
+            res.send( {code:0, data:user_beforeUpdate.nModified} ); //nModified 执行更新数据的条数(我更新了几条数据呀？)
+        }
+    )
 } );
 
 
