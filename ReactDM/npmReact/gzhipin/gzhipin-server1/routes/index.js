@@ -337,6 +337,9 @@ router.get( '/msglist', (req,res)=>{
             ( err,chatMsgs ) => { //回调函数
                 res.send( { //返回请求
                     code:0,
+                    /* users_getNameHeaderByUserId是对象
+                    * find中查询结果chatMsgs是数组
+                    *  */
                     data: { users_getNameHeaderByUserId, chatMsgs }
                 } )
             }
