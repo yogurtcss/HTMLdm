@@ -2,11 +2,12 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {WingBlank, WhiteSpace, Card} from "antd-mobile";
+import {withRouter} from 'react-router-dom'; //强化user-list组件，使之具有路由的props
 
 const Header = Card.Header; //卡片的头部(标题)
 const Body = Card.Body; //卡片的主体(内容)
 
-export default class UserList extends Component{
+class UserList extends Component{
     /* UserList是 显示指定用户列表的UI组件
     *
     * 问：当前UI组件的数据this.props.UserList从哪来？
@@ -35,9 +36,17 @@ export default class UserList extends Component{
             <WingBlank style={{marginBottom:50, marginTop:50}} >
                 { userList.map(  oneUser=>(
                     /* --------------------这个div开始-------------------- */
-                    <div key={oneUser._id} >
+                    <div key={oneUser._id} > {/* 此oneUser._id正好是 会话中对面方 的id，可用于跳转至chat路由的参数 */}
                         <WhiteSpace/>
-                        <Card>
+                        {/* 点击卡片，跳转至chat路由——与某个dashen/laoban聊天
+                         路由参数为：会话中对面方 的id
+
+                         注意，UI组件要实施跳转路由功能时，务必要用withRouter强化此UI组件，使之具有路由的props
+                         (1)当前的user-list是 非路由组件！！得强化之才能使用路由的history对象！！
+                         (2)跳转时不能用replace，只能用插入push，因为我有回退、返回操作
+
+                         */}
+                        <Card onClick={ ()=>this.props.history.push(`/chat/${oneUser._id}`) } >
                             {/* thumb 图片 URL
                             extra 卡片右上角的操作区域
                             */}
@@ -57,5 +66,6 @@ export default class UserList extends Component{
             </WingBlank>
         )
     }
-
 }
+
+export default withRouter(UserList); //强化此UserList组件，使得此组件的props获得路由的location、history和params对象
