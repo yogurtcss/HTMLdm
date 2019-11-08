@@ -20,6 +20,8 @@ import Message from '../message/message.jsx';
 import Personal from '../personnal/personal.jsx';
 import NotFound from '../../components/not-found/not-found.jsx';
 import NavFooter from "../../components/nav-footer/nav-footer"; //底部标签栏
+import Chat from '../chat/chat.jsx';
+
 
 class Main extends Component{
     /* 无static前缀，为Main组件对象定义(即 添加)一个 属性navList
@@ -108,6 +110,8 @@ class Main extends Component{
                     {/* 映射 这两个组件 为Main路由下的二级路由 */}
                     <Route path='/laobaninfo' component={LaobanInfo} />
                     <Route path='/dasheninfo' component={DashenInfo} />
+                    {/* chat的路由路径有点特殊：加入标识某个会话的userid_otherSide(在某个聊天中，对方的userid) */}
+                    <Route path='/chat/:userid_otherSide' component={Chat} />
 
                     {/* 当以上的路由都没被匹配时，not found */}
                     <Route component={NotFound} />
