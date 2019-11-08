@@ -43,3 +43,17 @@
   width: 100%;
   z-index: 10;
 }
+
+#chat-page .chat-me .am-list-extra{
+  /* flex-basis设置宽度
+  width 属性只是一个当 flex-basis 没有被设置时的回退选项
+
+  如果没有设置 flex-basis 属性，那么 flex-basis 的大小就是项目的 width 属性的大小
+  如果没有设置 width 属性，那么 flex-basis 的大小就是项目内容 (content) 的大小
+   */
+  flex-basis: auto; //宽度包裹内容
+}
+#chat-page .chat-me .am-list-content{
+  padding-right: 15px;
+  text-align: right;
+}
