@@ -110,7 +110,10 @@ class Main extends Component{
                     {/* 映射 这两个组件 为Main路由下的二级路由 */}
                     <Route path='/laobaninfo' component={LaobanInfo} />
                     <Route path='/dasheninfo' component={DashenInfo} />
-                    {/* chat的路由路径有点特殊：加入标识某个会话的userid_otherSide(在某个聊天中，对方的userid) */}
+                    {/* chat的路由路径有点特殊：使用params传参的路由， 冒号+参数名AAA，
+                    此参数AAA可在 匹配成功(match)至chat路由时 this.props.match.params.参数AAA 获取
+
+                    加入标识某个会话的userid_otherSide(在某个聊天中，对方的userid) */}
                     <Route path='/chat/:userid_otherSide' component={Chat} />
 
                     {/* 当以上的路由都没被匹配时，not found */}
