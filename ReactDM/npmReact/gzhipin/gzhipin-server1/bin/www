@@ -13,14 +13,21 @@ var http = require('http');
  */
 
 // 将原端口3000修改为4000
-var port = normalizePort(process.env.PORT || '4000');
+var port = normalizePort(process.env.PORT || '5000');
 app.set('port', port);
 
 /**
  * Create HTTP server.
  */
 
-var server = http.createServer(app);
+var server = http.createServer(app); //创建服务器
+
+/* 加载自定义socketIO模块 test.js
+* 为什么是 require(...)(server)？
+* 因为：自定义socketIO模块 test.js是(我暴露在外的)函数，传入形参是server
+*  */
+// require( '../socketIO/test' )(server);
+require('../socketIO/socketIO_server')(server); //真正地增强server服务器，得到新的强化后的io服务器
 
 /**
  * Listen on provided port, on all network interfaces.
