@@ -25,6 +25,9 @@ import Main from "./containers/main/main.jsx";
 
 import './assets/css/index.less';
 
+// import './test/socketio_test'; //单独引入此测试文件，尝试运行之
+
+
 ReactDOM.render(
     /* P11：新增 Provider标签
     * 注意：路由Main没有指定路径 path
