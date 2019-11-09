@@ -3,8 +3,16 @@
 * 异步的action，都返回一个（回调）函数：在回调函数中就可以执行异步的代码
 */
 
-import {reqRegister,reqLogin,reqUpdateUser,reqUser,reqUserList} from "../api/index.js";
-import {AUTH_SUCCESS, ERROR_MSG, RECEIVE_USER, RESET_USER,RECEIVE_USER_LIST} from "./action-types";
+import {
+    reqRegister,reqLogin,reqUpdateUser,
+    reqUser,reqUserList,
+    reqChatMsgList,reqReadMsg
+} from "../api/index.js";
+
+import {
+    AUTH_SUCCESS, ERROR_MSG, RECEIVE_USER,
+    RESET_USER, RECEIVE_USER_LIST, RECEIVE_MSG_LIST
+} from "./action-types";
 import io from 'socket.io-client'; //注意，从外部引入的io函数(函数也是对象)是一个 外部的、全局对象。在创建单例对象时可选择保存到io中
 
 /* 为什么ERROR_MSG 不写成：AUTH_Failure或AUTH_ERROR (授权失败)呢？
@@ -44,6 +52,31 @@ function initIO(){
 
 }
 
+/* 用户一登陆上来，就该获取当前用户的消息列表
+ * 用户什么时候登陆成功?
+ * 1.通过register注册成功后，紧接着登陆，就登陆成功；——接着调用getMsgList()
+ * 2.通过login登陆成功；——接着调用getMsgList()
+ * 3.getUser获取用户信息成功时，此用户也是登陆成功了；——接着调用getMsgList()
+ *
+ * 将获取消息列表这一操作，封装成一个函数
+ *  */
+async function getMsgList(dispatch){ //异步获取消息列表数据，传入形参dispatch，用于分发同步action
+    /* 之前的 return async dispatch=>{...}  这也是传入形参dispatch的写法！！想起来了。
+    *  */
+    initIO(); //登陆成功后：准备获取消息列表getMsgList，这时立马初始化io
+    const res = await reqChatMsgList();
+    const rst = res.data; //若不知道rst的数据结构，可以到后端接口文档中查看返回数据的格式
+    if( rst.code===0 ){
+        const {users_getNameHeaderByUserId,chatMsgs} = rst.data;
+        dispatch( receiveMsgList({users_getNameHeaderByUserId,chatMsgs}) ); //分发同步action
+
+    }
+}
+
+
+
+
+
 export const sendMsg=  ({from,to,content})=>{ //发送消息的异步请求
     return( dispatch=>{
         console.log('客户端向服务器发送消息嗷', {from,to,content});
@@ -51,12 +84,13 @@ export const sendMsg=  ({from,to,content})=>{ //发送消息的异步请求
         * 注意：在函数内部的if(!io.socket) 已经限制了 此连接对象只能创建一次
         * 多次执行此sendMsg，也不会重复创建socket连接对象
         *  */
-        initIO();
+        // initIO(); //改为 放在函数getMsgList()中
         io.socket.emit( 'sendMsg',{from,to,content} ); //发送消息至服务器
     } )
 };
 
-
+//接收消息列表的同步action
+export const receiveMsgList=  ({users_getNameHeaderByUserId,chatMsgs})=>( {type:RECEIVE_MSG_LIST, data:{users_getNameHeaderByUserId,chatMsgs}} );
 
 
 
@@ -148,6 +182,8 @@ export const register =  (userInfo)=>{
         const rst = response.data; //取出响应中的数据 rst
 
         if( rst.code===0 ){ //标记码code为0时，成功状态
+            //1.通过register注册成功后，紧接着登陆，就登陆成功；——接着调用getMsgList()
+            getMsgList(dispatch);
             /* 分发一个同步的、成功状态的action
             *   - 向成功态中的同步action传入rst.data，
             *   - 并分发 此成功态的同步action
@@ -188,6 +224,8 @@ export const login = ( (userInfo)=>{
         const response = await promise; //等待，至promise获得结果，并赋给变量response
         const rst = response.data; //取出响应中的数据
         if( rst.code===0 ){ //成功状态
+            //2.通过login登陆成功；——接着调用getMsgList()
+            getMsgList(dispatch);
             dispatch( authSuccess(rst.data) ); //分发一个成功的同步action
         }
         else{ //失败状态
@@ -227,6 +265,8 @@ export const getUser=  ()=>{
         const res = await reqUser();
         const rst = res.data;
         if( rst.code===0 ){ //成功
+            //3.getUser获取用户信息成功时，此用户也是登陆成功了；——接着调用getMsgList()
+            getMsgList(dispatch);
             dispatch( receiveUser(rst.data) )
         }
         else{ //失败
