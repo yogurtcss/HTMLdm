@@ -5,10 +5,60 @@
 
 import {reqRegister,reqLogin,reqUpdateUser,reqUser,reqUserList} from "../api/index.js";
 import {AUTH_SUCCESS, ERROR_MSG, RECEIVE_USER, RESET_USER,RECEIVE_USER_LIST} from "./action-types";
+import io from 'socket.io-client'; //注意，从外部引入的io函数(函数也是对象)是一个 外部的、全局对象。在创建单例对象时可选择保存到io中
 
 /* 为什么ERROR_MSG 不写成：AUTH_Failure或AUTH_ERROR (授权失败)呢？
 * 理由：前台验证(后面补充)
 *  */
+
+/* -----2019-11-08 16:58:11----- */
+/* 将建立socket连接对象的操作，封装成一个函数
+* 单例模式：一个类只能构建一个对象的设计模式
+*
+* 在这里利用单例模式，规定：执行一次sendMsg(即 发送一个消息)，只能创建一个socket对象(不会重复创建多个相同的socket对象)
+*
+* 可以调用多次函数initIO()，但是同一个socket对象只创建一次，则此socket对象称为 单例对象
+*
+* 单例对象的创建方式
+* 1.创建对象XXX之前：判断对象XXX是否已经存在——只有不存在时，才创建此对象XXX ——这就是单例对象的关键、精髓！
+* 2.创建对象XXX之后：保存对象XXX
+*    保存对象XXX到哪？
+*    1.保存此对象至外部的、已有的全局对象AAA中——令XXX成为此全局对象AAA的一个属性，通过AAA.XXX调用此单例对象XXX
+*    2.保存此对象至另一个非全局对象BBB中——令XXX成为BBB的一个属性，通过BBB.XXX调用此单例对象XXX
+*
+*  */
+function initIO(){
+    // 判断 欲创建的对象是否已经存在——只有不存在时，才创建此对象
+    if( !io.socket ){ //欲创建一旦存在了，就不再创建了——这就是单例对象的关键、精髓！
+        /* 注意，欲创建对象 要提前指定好保存到哪，
+        * 在这里我选择保存在 外部的、全局对象io中(令其成为此全局对象io的一个属性)
+        * 故将 欲创建的对象命名为 io.socket
+        *  */
+        //连接 强化后的io服务器，得到连接对象socket
+        io.socket = io('ws://localhost:5000'); //创建对象之后：在这里，保存socket对象到外部的、全局对象io中，使socket对象成为全局对象io的一个属性
+
+        io.socket.on( 'receiveMsg', (chatMsg)=>{
+            console.log('客户端接收服务器发送的消息', chatMsg);
+        } );
+    }
+
+}
+
+export const sendMsg=  ({from,to,content})=>{ //发送消息的异步请求
+    return( dispatch=>{
+        console.log('客户端向服务器发送消息嗷', {from,to,content});
+        /* 调用已封装的函数，连接至io服务器，
+        * 注意：在函数内部的if(!io.socket) 已经限制了 此连接对象只能创建一次
+        * 多次执行此sendMsg，也不会重复创建socket连接对象
+        *  */
+        initIO();
+        io.socket.emit( 'sendMsg',{from,to,content} ); //发送消息至服务器
+    } )
+};
+
+
+
+
 
 
 /* 授权成功的同步action；
