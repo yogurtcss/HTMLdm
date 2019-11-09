@@ -73,7 +73,7 @@ class Chat extends Component{
                             * 没有必要在map循环中多次加载，我在外面一次加载好(targetIcon)，放进来即可
                             *  */
                             // return(<Item key={msg._id} thumb={require(`../../assets/images/${users[oneMsg.from].header}.png`)} >{msgs.content}</Item>)
-                            return(<Item thumb={targetIcon} >{oneMsg.content}</Item>)
+                            return(<Item key={oneMsg._id} thumb={targetIcon} >{oneMsg.content}</Item>)
                         }
                         else{ //否则！！这是我发给对方的消息，
                             //返回 我自己的<Item/> 消息正文content也是我发的内容，是对立面
