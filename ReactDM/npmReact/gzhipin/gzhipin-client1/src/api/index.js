@@ -38,3 +38,6 @@ export const reqUser=  ( ()=>ajax('/user') ); //get请求
 * 第2个参数是 在自定义ajax函数中的data是以对象形式传入的，第3个参数默认是get请求
 * */
 export const reqUserList=  (type)=>ajax('/userlist', {type} );
+
+//获取当前用户的聊天消息列表
+export const reqChatMsgList=  ()=>ajax('/msglist');
