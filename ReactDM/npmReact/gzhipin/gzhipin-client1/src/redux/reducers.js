@@ -50,8 +50,8 @@ function userList( state=initUserList, action ){
 }
 
 const initChat = { //根据后端接口文档返回的chat数据所得
-    users: {},      //正在聊天的用户的信息，属性名userid，属性值{ username,header }
-    chatMsgs: [],   //聊天中用户的所有相关msg的数组
+    users_getNameHeaderByUserId: {},      //所有用户的用户名、头像信息，属性名userid，属性值{ username,header }。注意，是所有用户！！
+    chatMsgs: [],   //聊天中当前用户的所有相关msg的数组
     unReadCount: 0 //总的未读数量
 };
 
@@ -67,8 +67,11 @@ function chat( state=initChat, action ){
             * 3.getUser获取用户信息成功时，此用户也是登陆成功了
             *
             *  */
-            const {users,chatMsgs} = action.data;
-            return { users:users, chatMsgs:chatMsgs, unReadCount:0 }; //属性名与属性值同名，原本可以使用对象的解构赋值法，这里不用了
+            /* 解构赋值时，名字一定要一一对应好了！！不然报undefined的错误
+            * 我在后台传值给前台时，定义的变量名就是users_getNameHeaderByUserId，解构赋值时一定要注意！！
+            *  */
+            const {users_getNameHeaderByUserId,chatMsgs} = action.data;
+            return { users_getNameHeaderByUserId:users_getNameHeaderByUserId, chatMsgs:chatMsgs, unReadCount:0 }; //属性名与属性值同名，原本可以使用对象的解构赋值法，这里不用了
         case RECEIVE_MSG:
             return 'a';
         default:
