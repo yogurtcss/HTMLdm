@@ -2,7 +2,11 @@
 
 import {combineReducers} from 'redux';
 
-import {AUTH_SUCCESS, ERROR_MSG, RECEIVE_USER, RESET_USER,RECEIVE_USER_LIST} from "./action-types";
+import {
+    AUTH_SUCCESS, ERROR_MSG, RECEIVE_USER,
+    RESET_USER,RECEIVE_USER_LIST,
+    RECEIVE_MSG,RECEIVE_MSG_LIST
+} from "./action-types";
 import {getRedirectTo} from '../utils/index.js'; //引入工具函数
 
 
@@ -45,6 +49,34 @@ function userList( state=initUserList, action ){
     }
 }
 
+const initChat = { //根据后端接口文档返回的chat数据所得
+    users: {},      //正在聊天的用户的信息，属性名userid，属性值{ username,header }
+    chatMsgs: [],   //聊天中用户的所有相关msg的数组
+    unReadCount: 0 //总的未读数量
+};
+
+
+//产生聊天状态的reducer
+function chat( state=initChat, action ){
+    switch( action.type ){
+        case RECEIVE_MSG_LIST: //传来的data是一个对象： { users:{}, chatMsgs:[] }
+            /* 用户一登陆上来，就该获取当前用户的消息列表
+            * 用户什么时候登陆成功?
+            * 1.通过register注册成功后，就自动登陆成功；
+            * 2.通过login登陆成功
+            * 3.getUser获取用户信息成功时，此用户也是登陆成功了
+            *
+            *  */
+            const {users,chatMsgs} = action.data;
+            return { users:users, chatMsgs:chatMsgs, unReadCount:0 }; //属性名与属性值同名，原本可以使用对象的解构赋值法，这里不用了
+        case RECEIVE_MSG:
+            return 'a';
+        default:
+            return state;
+    }
+
+};
+
 
 
 // function xxx( state=0, action ){
@@ -75,6 +107,7 @@ function userList( state=initUserList, action ){
 *  */
 export default combineReducers({ //将此新状态(对象)暴露出去，传给store
     user,           //关于用户个人信息的状态数据
-    userList        //关于用户信息列表展示的数据：dashen、laoban
+    userList,        //关于用户信息列表展示的数据：dashen、laoban
+    chat
 });
 
