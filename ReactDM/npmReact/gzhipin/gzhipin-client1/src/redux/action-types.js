@@ -13,4 +13,7 @@ export const RESET_USER = 'reset_user'; //重置用户信息：将之恢复为�
 /* ----------以上action的类型，均是关于user状态的---------- */
 
 /* ----------以下action的类型，是一个新的状态，需由一个新的reducer处理---------- */
-export const RECEIVE_USER_LIST = 'receice_user_list'; //接收用户列表数据
+export const RECEIVE_USER_LIST = 'receive_user_list'; //接收用户列表数据
+
+export const RECEIVE_MSG_LIST = 'receive_msg_list'; //接收所有相关消息的列表
+export const RECEIVE_MSG = 'receive_msg';  //接收一条消息
