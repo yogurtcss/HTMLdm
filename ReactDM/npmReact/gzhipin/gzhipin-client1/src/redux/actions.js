@@ -11,7 +11,7 @@ import {
 
 import {
     AUTH_SUCCESS, ERROR_MSG, RECEIVE_USER,
-    RESET_USER, RECEIVE_USER_LIST, RECEIVE_MSG_LIST
+    RESET_USER, RECEIVE_USER_LIST, RECEIVE_MSG_LIST, RECEIVE_MSG
 } from "./action-types";
 import io from 'socket.io-client'; //注意，从外部引入的io函数(函数也是对象)是一个 外部的、全局对象。在创建单例对象时可选择保存到io中
 
@@ -35,7 +35,7 @@ import io from 'socket.io-client'; //注意，从外部引入的io函数(函数�
 *    2.保存此对象至另一个非全局对象BBB中——令XXX成为BBB的一个属性，通过BBB.XXX调用此单例对象XXX
 *
 *  */
-function initIO(){
+function initIO(dispatch,userid){
     // 判断 欲创建的对象是否已经存在——只有不存在时，才创建此对象
     if( !io.socket ){ //欲创建一旦存在了，就不再创建了——这就是单例对象的关键、精髓！
         /* 注意，欲创建对象 要提前指定好保存到哪，
@@ -47,6 +47,12 @@ function initIO(){
 
         io.socket.on( 'receiveMsg', (chatMsg)=>{
             console.log('客户端接收服务器发送的消息', chatMsg);
+            /* 在这里我是通过io全局发消息的，
+            * 当chatMsg是与当前用户相关的消息时，我才去分发同步action保存消息
+            *  */
+            if( userid===chatMsg.from || userid===chatMsg.to ){
+                dispatch(receiveMsg(chatMsg));
+            }
         } );
     }
 
@@ -60,10 +66,10 @@ function initIO(){
  *
  * 将获取消息列表这一操作，封装成一个函数
  *  */
-async function getMsgList(dispatch){ //异步获取消息列表数据，传入形参dispatch，用于分发同步action
+async function getMsgList(dispatch,userid){ //异步获取消息列表数据，传入形参dispatch，用于分发同步action
     /* 之前的 return async dispatch=>{...}  这也是传入形参dispatch的写法！！想起来了。
     *  */
-    initIO(); //登陆成功后：准备获取消息列表getMsgList，这时立马初始化io
+    initIO(dispatch,userid); //登陆成功后：准备获取消息列表getMsgList，这时立马初始化io
     const res = await reqChatMsgList();
     const rst = res.data; //若不知道rst的数据结构，可以到后端接口文档中查看返回数据的格式
     if( rst.code===0 ){
@@ -89,9 +95,10 @@ export const sendMsg=  ({from,to,content})=>{ //发送消息的异步请求
     } )
 };
 
-//接收消息列表的同步action
-export const receiveMsgList=  ({users_getNameHeaderByUserId,chatMsgs})=>( {type:RECEIVE_MSG_LIST, data:{users_getNameHeaderByUserId,chatMsgs}} );
-
+//接收消息列表的同步action，后来在排BUG时加上的userid，但没用上
+const receiveMsgList=  ({users_getNameHeaderByUserId,chatMsgs})=>( {type:RECEIVE_MSG_LIST, data:{users_getNameHeaderByUserId,chatMsgs}} );
+//接收一个消息的同步action，后来在排BUG时加上的userid，但没用上
+const receiveMsg=  (chatMsg)=>( {type:RECEIVE_MSG, data:{chatMsg}} );
 
 
 
@@ -183,7 +190,7 @@ export const register =  (userInfo)=>{
 
         if( rst.code===0 ){ //标记码code为0时，成功状态
             //1.通过register注册成功后，紧接着登陆，就登陆成功；——接着调用getMsgList()
-            getMsgList(dispatch);
+            getMsgList( dispatch,rst.data._id );
             /* 分发一个同步的、成功状态的action
             *   - 向成功态中的同步action传入rst.data，
             *   - 并分发 此成功态的同步action
@@ -225,7 +232,7 @@ export const login = ( (userInfo)=>{
         const rst = response.data; //取出响应中的数据
         if( rst.code===0 ){ //成功状态
             //2.通过login登陆成功；——接着调用getMsgList()
-            getMsgList(dispatch);
+            getMsgList( dispatch,rst.data._id );
             dispatch( authSuccess(rst.data) ); //分发一个成功的同步action
         }
         else{ //失败状态
@@ -266,7 +273,7 @@ export const getUser=  ()=>{
         const rst = res.data;
         if( rst.code===0 ){ //成功
             //3.getUser获取用户信息成功时，此用户也是登陆成功了；——接着调用getMsgList()
-            getMsgList(dispatch);
+            getMsgList( dispatch,rst.data._id );
             dispatch( receiveUser(rst.data) )
         }
         else{ //失败
