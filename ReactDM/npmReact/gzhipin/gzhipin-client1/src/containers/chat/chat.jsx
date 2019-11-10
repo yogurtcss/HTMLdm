@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {NavBar, List, InputItem} from "antd-mobile";
+import {NavBar, List, InputItem,Grid} from "antd-mobile";
 
 import {sendMsg} from '../../redux/actions.js'; //发送消息的异步action
 
@@ -9,7 +9,44 @@ const Item = List.Item;
 class Chat extends Component{
 
     state = { //受控组件，通过组件的状态收集表单数据
-        content: ''
+        content: '', //用户输入的聊天内容
+        isShow: false, //是否显示表情列表，默认不显示
+    };
+
+    /* 2019-11-10 15:34:02
+    * 我设置的potplayer全局自定义快捷键：ctrl 加 ~ 左上角波折号 ，功能为播放 暂停
+    * 可以在全局范围内使用此快捷键迅速播放暂停
+    *  */
+
+    //在第一次render()之前执行此函数
+    componentWillMount(){
+        const emojis = ['😀', '😁', '🤣','😀', '😁', '🤣','😀', '😁', '🤣','😀', '😁', '🤣','😀'
+            ,'😁', '🤣','😀', '😁', '🤣','😀', '😁', '🤣','😀', '😁', '🤣'
+            ,'😁', '🤣','😀', '😁', '🤣','😀', '😁', '🤣','😀', '😁', '🤣'
+            ,'😁', '🤣','😀', '😁', '🤣','😀', '😁', '🤣','😀', '😁', '🤣'];
+        /* 构造 this.emojis，要求：
+        * this.emojis是一个数组，数组元素是对象——其中每一个对象的属性名是 text，属性值是 emojis数组的元素(真正的表情图标)
+        *  */
+        this.emojis = emojis.map(  oneEmoji=>( {text:oneEmoji} )  );//注意，
+
+    }
+
+    /* changeShow，即toggleShow，切换isShow的true或false状态
+    * toggle 拨动(开关)，有切换之意；
+    * 我认为还是直接 change 更能突出“切换”之意
+    *  */
+    changeShow=  ()=>{
+        /* 当点击 表情图标 时，立马将this.state.isShow的布尔值 取反！！
+        * 得到取反后的isShow布尔值：isShow_opposite
+        * opposite相反的
+        *  */
+        const isShow_opposite = !(this.state.isShow);
+        this.setState( {isShow:isShow_opposite} ); //将取反后的isShow值提交更新至状态中
+        if(isShow_opposite){ //异步手动派发resize事件,解决表情列表显示的bug
+            setTimeout( ()=>{ //如何异步呀？使用延时执行定时器嗷，延时0s也是“延时、异步”！！
+                window.dispatchEvent( new Event('resize') ); //固定的写法嗷！！
+            }, 0 );
+        }
     };
 
     handleSend=  ()=>{
@@ -26,7 +63,7 @@ class Chat extends Component{
             this.props.sendMsg( {from,to,content} ) //发送异步请求
         }
 
-        this.setState( {content:''} )
+        this.setState( {content:'', isShow:false} ) //清空输入框内容，同时将表情栏收回(即 将isShow值改为false)
 
     };
 
@@ -87,10 +124,42 @@ class Chat extends Component{
                 <div className='am-tab-bar'>
                     <InputItem placeholder='请输入'
                                value={this.state.content}
-                               extra={<span onClick={this.handleSend}>发送</span>}
-                               onChange={ val=>this.setState({content:val}) }    />
-                               {/* 受控组件，通过onChange将数据保存(setState)至组件状态中
-                                value=this.state.content，将content的更新结果(有值、或清除后)实时显示到输入框中  */}
+                               extra={
+                                   <span>
+                                       {/* onClick= 写的是回调函数
+                                       changeShow，切换show的true或false状态
+
+                                       注意，当输入框获得焦点时，此表情栏自动隐藏
+                                       */}
+                                       <span onClick={this.changeShow} style={{marginRight:5}} >👴</span>
+                                       <span onClick={this.handleSend}>发送</span>
+                                   </span>
+                               }
+                               onChange={ val=>this.setState({content:val}) }
+                               //受控组件，通过onChange将数据保存(setState)至组件状态中value=this.state.content
+                              // 将content的更新结果(有值、或清除后)实时显示到输入框中
+                              onFocus={ ()=>this.setState({isShow:false}) } //onFocus输入框获取焦点的事件，传一个响应的回调函数
+                              //当此输入框获得焦点时，隐藏表情栏目(即 将表情栏中的isShow值改为false)
+                    />
+
+                    { this.state.isShow ? ( //表情的动态显示，三目运算符又来🌶
+                        /* 构造 this.emojis，要求：
+                        * this.emojis是一个数组，数组元素是对象——其中每一个对象的属性名是 text，属性值是 emojis数组的元素(真正的表情图标)
+                        *  */
+                        <Grid data={this.emojis} //传入整个网格的数据，类型为Array<{icon, text}>；在这里是表情图标的数据
+                              columnNum={8} //传入num数值型(不是字符串)，所以加花括号；网格的列数columnNum
+                              isCarousel={true} //Carousel轮播。是否开启轮播效果，默认为false不开启
+                              carouseMaxRow={4} //传入num数值型(不是字符串)，所以加花括号；如果开启轮播效果，一页轮播中显示的最大行数
+                            //onClick点击每个小网格的回调函数，传入形参为你点击的那个小网格
+                              onClick={ oneEmoji_obj=>{ //this.emojis是一个数组，数组元素是对象——其中每一个对象的属性名是 text，属性值是 emojis数组的元素(真正的表情图标)
+                                  this.setState( {content:this.state.content+oneEmoji_obj.text} )
+                                  /* this.state.content为用户(可能)原本输入的内容，而 oneEmoji_obj.text是真正显示的表情图标
+                                  * 用户输入的文字可能后面追加表情，所以整了一个拼串操作
+                                  *  */
+                              } }
+                        />
+                    )  :  null }
+
                 </div>
 
             </div>
