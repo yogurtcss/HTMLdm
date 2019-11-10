@@ -39,6 +39,7 @@ class Chat extends Component{
 
         //计算当前聊天的currChatId
         const myId = user._id; //我的id
+
         if( !users_getNameHeaderByUserId[myId] ){ //如果还妹有获取数据，直接不做任何显示
             return null; //程序遇到return就停了，在这里直接不做任何显示
         };
