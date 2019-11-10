@@ -70,7 +70,7 @@ function chat( state=initChat, action ){
             /* 解构赋值时，名字一定要一一对应好了！！不然报undefined的错误
             * 我在后台传值给前台时，定义的变量名就是users_getNameHeaderByUserId，解构赋值时一定要注意！！
             *  */
-            const {users_getNameHeaderByUserId,chatMsgs,userid} = action.data;
+            const {users_getNameHeaderByUserId,chatMsgs} = action.data;
             return { users_getNameHeaderByUserId:users_getNameHeaderByUserId, chatMsgs:chatMsgs, unReadCount:0 }; //属性名与属性值同名，原本可以使用对象的解构赋值法，这里不用了
         case RECEIVE_MSG: //返回的data为：一条消息chatMsg
             /* 此时的users_getNameHeaderByUserId：还是我原来的用户，state.users_getNameHeaderByUserId
