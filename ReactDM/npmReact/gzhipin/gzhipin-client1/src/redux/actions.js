@@ -51,7 +51,7 @@ function initIO(dispatch,userid){
             * 当chatMsg是与当前用户相关的消息时，我才去分发同步action保存消息
             *  */
             if( userid===chatMsg.from || userid===chatMsg.to ){
-                dispatch(receiveMsg(chatMsg));
+                dispatch(receiveMsg(chatMsg, userid));
             }
         } );
     }
@@ -98,7 +98,7 @@ export const sendMsg=  ({from,to,content})=>{ //发送消息的异步请求
 //接收消息列表的同步action，后来在排BUG时加上的userid，但没用上
 const receiveMsgList=  ({users_getNameHeaderByUserId,chatMsgs, userid})=>( {type:RECEIVE_MSG_LIST, data:{users_getNameHeaderByUserId,chatMsgs, userid}} );
 //接收一个消息的同步action，后来在排BUG时加上的userid，但没用上
-const receiveMsg=  (chatMsg)=>( {type:RECEIVE_MSG, data:{chatMsg}} );
+const receiveMsg=  (chatMsg,userid)=>( {type:RECEIVE_MSG, data:{chatMsg, userid}} );
 
 
 
