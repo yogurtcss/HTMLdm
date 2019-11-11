@@ -74,7 +74,7 @@ async function getMsgList(dispatch,userid){ //异步获取消息列表数据，�
     const rst = res.data; //若不知道rst的数据结构，可以到后端接口文档中查看返回数据的格式
     if( rst.code===0 ){
         const {users_getNameHeaderByUserId,chatMsgs} = rst.data;
-        dispatch( receiveMsgList({users_getNameHeaderByUserId,chatMsgs}) ); //分发同步action
+        dispatch( receiveMsgList({users_getNameHeaderByUserId,chatMsgs,userid}) ); //分发同步action
 
     }
 }
