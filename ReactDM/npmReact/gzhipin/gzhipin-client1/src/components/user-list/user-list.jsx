@@ -35,11 +35,15 @@ class UserList extends Component{
             * 2.最顶部的“老板/大神列表”标题栏随列表滚动——解决：为老板列表设置 position: fixed
             *  */
             <WingBlank style={{marginBottom:50, marginTop:50}} >
-                { userList.map(  oneUser=>(
-                    /* --------------------这个div开始-------------------- */
-                    <div key={oneUser._id} > {/* 此oneUser._id正好是 会话中对面方 的id，可用于跳转至chat路由的参数 */}
-                        <WhiteSpace/>
-                        {/* 点击卡片，跳转至chat路由——与某个dashen/laoban聊天
+
+                <QueueAnim type='alpha' delay={100} >
+
+                    {/* --------------------开始-------------------- */}
+                    { userList.map(  oneUser=>(
+                        /* --------------------这个div开始-------------------- */
+                        <div key={oneUser._id} > {/* 此oneUser._id正好是 会话中对面方 的id，可用于跳转至chat路由的参数 */}
+                            <WhiteSpace/>
+                            {/* 点击卡片，跳转至chat路由——与某个dashen/laoban聊天
                          路由参数为：会话中对面方 的id
 
                          注意，UI组件要实施跳转路由功能时，务必要用withRouter强化此UI组件，使之具有路由的props
@@ -47,22 +51,28 @@ class UserList extends Component{
                          (2)跳转时不能用replace，只能用插入push，因为我有回退、返回操作
 
                          */}
-                        <Card onClick={ ()=>this.props.history.push(`/chat/${oneUser._id}`) } >
-                            {/* thumb 图片 URL
+                            <Card onClick={ ()=>this.props.history.push(`/chat/${oneUser._id}`) } >
+                                {/* thumb 图片 URL
                             extra 卡片右上角的操作区域
                             */}
-                            <Header thumb={require(`../../assets/images/${oneUser.header}.png`)} extra={oneUser.username} />
-                            <Body>
-                                <div>职位: {oneUser.post}</div>
-                                {/* oneUser.company和oneUser.salary存在吗？有值吗？有则显示，否则不显示。三目运算符奥利给！ */}
-                                { oneUser.company ? (<div>公司: {oneUser.company}</div>) : null }
-                                { oneUser.salary  ? (<div>月薪: {oneUser.salary}</div>)  : null }
-                                <div>描述: {oneUser.info}</div>
-                            </Body>
-                        </Card>
-                    </div>
-                    /* --------------------这个div结束-------------------- */
-                )  )}
+                                <Header thumb={require(`../../assets/images/${oneUser.header}.png`)} extra={oneUser.username} />
+                                <Body>
+                                    <div>职位: {oneUser.post}</div>
+                                    {/* oneUser.company和oneUser.salary存在吗？有值吗？有则显示，否则不显示。三目运算符奥利给！ */}
+                                    { oneUser.company ? (<div>公司: {oneUser.company}</div>) : null }
+                                    { oneUser.salary  ? (<div>月薪: {oneUser.salary}</div>)  : null }
+                                    <div>描述: {oneUser.info}</div>
+                                </Body>
+                            </Card>
+                        </div>
+                        /* --------------------这个div结束-------------------- */
+                    )  )}
+                    {/* --------------------结束-------------------- */}
+
+                </QueueAnim>
+
+
+
 
             </WingBlank>
         )
