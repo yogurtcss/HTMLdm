@@ -5,7 +5,7 @@ import {combineReducers} from 'redux';
 import {
     AUTH_SUCCESS, ERROR_MSG, RECEIVE_USER,
     RESET_USER,RECEIVE_USER_LIST,
-    RECEIVE_MSG,RECEIVE_MSG_LIST
+    RECEIVE_MSG,RECEIVE_MSG_LIST,MSG_READ
 } from "./action-types";
 import {getRedirectTo} from '../utils/index.js'; //引入工具函数
 
@@ -118,6 +118,42 @@ function chat( state=initChat, action ){
             /* 接下来，在nav-footer中显示总的未读数量，
             * 跳转到nav-footer喽
             *  */
+
+        /* ----------这个属实不好写嗷---------- */
+        case MSG_READ:
+            const {markReadCount, markReadFrom, markReadTo} = action.data;
+
+            /* 注意，在reducer函数这里，是产出新状态，而不是修改原状态！
+            * 不能直接在原状态 state.chatMsgs 修改消息的read值！
+            *  */
+
+            // state.chatMsgs.forEach( oneMsg=>{ //不能直接在原状态 state.chatMsgs 修改消息的read值！
+            //     if( oneMsg.from===markReadFrom && oneMsg.to===markReadTo && oneMsg.read===false ){
+            //         oneMsg.read = true;  //不能直接在原状态 state.chatMsgs 修改消息的read值！
+            //     }
+            // } );
+
+            /* 数组的map方法：生成新数组，不修改调用它的原数组本身！！
+            *  */
+            const markChatMsgs = state.chatMsgs.map( oneMsg=>{
+                if( oneMsg.from===markReadFrom && oneMsg.to===markReadTo && oneMsg.read===false ){ //需要标为已读
+                    /* 拆包、(保留)原oneMsg的信息，并将read改为true，
+                    * 产生一个新的 “已读消息” oneMarkReadMsg_new
+                    * 并返回此 oneMarkReadMsg_new
+                    *  */
+                    const oneMarkReadMsg_new = { ...(oneMsg), read:true };
+                    return oneMarkReadMsg_new; //返回此新的 “已读消息” oneMarkReadMsg_new
+                }
+                else{ //不需要标为已读
+                    return oneMsg; //直接原路返回
+                }
+            });
+
+            return{
+                users_getNameHeaderByUserId:state.users_getNameHeaderByUserId, //还是原本的嗷
+                chatMsgs: markChatMsgs, //见上面所写嗷
+                unReadCount: state.unReadCount-markReadCount
+            };
         default:
             return state;
     }
