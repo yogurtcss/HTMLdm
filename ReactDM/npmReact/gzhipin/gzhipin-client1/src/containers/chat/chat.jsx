@@ -44,6 +44,17 @@ class Chat extends Component{
     * */
     componentDidMount(){ //初始化显示列表：当进入一个会话时，自动滚动至最底部；
         window.scrollTo( 0, document.body.scrollHeight );
+    }
+
+
+    componentDidUpdate(){ //更新显示列表：当成功发送一条消息时(即会执行 更新页面)，也自动滚动至最底部
+        window.scrollTo( 0, document.body.scrollHeight );
+    }
+
+    componentWillUnmount(){ //在即将退出此聊天会话之前，更新未读消息数量
+        /* 考虑一种情况：当我处在此聊天会话中，而人家给我发了消息，我一眼就能看到 ——此时消息应该标为“已读”
+        * 这时我再退出此会话，应该 是没有“未读角标”的！！
+        *  */
 
         /* 发请求更新消息的未读状态
         * 根据后端接口文档(关于这里的内容是空的…)
@@ -55,6 +66,7 @@ class Chat extends Component{
         *  */
 
         /* 注意main组件中：我定义的路由参数 是userid_otherSide！！
+        * 又在这里排BUG排了一个多小时！！
         * <Route path='/chat/:userid_otherSide' component={Chat} />
         *  */
         const markReadFrom = this.props.match.params.userid_otherSide;
@@ -62,18 +74,7 @@ class Chat extends Component{
         const markReadTo = this.props.user._id; //已标为“已读”的消息 之 发出者
         // debugger
         this.props.readMsg( markReadFrom,markReadTo ); //已标为“已读”的消息 之 接收者
-
-
     }
-
-
-    componentDidUpdate(){ //更新显示列表：当成功发送一条消息时(即会执行 更新页面)，也自动滚动至最底部
-        window.scrollTo( 0, document.body.scrollHeight );
-    }
-
-    // componentWillUnmount(){ //在退出之前
-    //
-    // }
 
 
 
