@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {NavBar, List, InputItem,Grid,Icon} from "antd-mobile";
 
-import {sendMsg} from '../../redux/actions.js'; //发送消息的异步action
+import {sendMsg,readMsg} from '../../redux/actions.js'; //发送消息、标消息为已读的异步action
 
 const Item = List.Item;
 
@@ -44,10 +44,37 @@ class Chat extends Component{
     * */
     componentDidMount(){ //初始化显示列表：当进入一个会话时，自动滚动至最底部；
         window.scrollTo( 0, document.body.scrollHeight );
+
+        /* 发请求更新消息的未读状态
+        * 根据后端接口文档(关于这里的内容是空的…)
+        *
+        * 将 对方发给我的消息 标为已读
+        * 传入参数为 对方id(即from)
+        *
+        * 返回：标为已读的数量
+        *  */
+
+        /* 注意main组件中：我定义的路由参数 是userid_otherSide！！
+        * <Route path='/chat/:userid_otherSide' component={Chat} />
+        *  */
+        const markReadFrom = this.props.match.params.userid_otherSide;
+
+        const markReadTo = this.props.user._id; //已标为“已读”的消息 之 发出者
+        // debugger
+        this.props.readMsg( markReadFrom,markReadTo ); //已标为“已读”的消息 之 接收者
+
+
     }
+
+
     componentDidUpdate(){ //更新显示列表：当成功发送一条消息时(即会执行 更新页面)，也自动滚动至最底部
         window.scrollTo( 0, document.body.scrollHeight );
     }
+
+    // componentWillUnmount(){ //在退出之前
+    //
+    // }
+
 
 
     /* changeShow，即toggleShow，切换isShow的true或false状态
@@ -201,5 +228,5 @@ class Chat extends Component{
 
 export default connect(
     state => ({user:state.user, chat:state.chat}),
-    {sendMsg}
+    {sendMsg, readMsg}
 )(Chat);
