@@ -71,9 +71,6 @@ class UserList extends Component{
 
                 </QueueAnim>
 
-
-
-
             </WingBlank>
         )
     }
