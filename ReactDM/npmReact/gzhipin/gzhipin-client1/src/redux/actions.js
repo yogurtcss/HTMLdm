@@ -11,7 +11,7 @@ import {
 
 import {
     AUTH_SUCCESS, ERROR_MSG, RECEIVE_USER,
-    RESET_USER, RECEIVE_USER_LIST, RECEIVE_MSG_LIST, RECEIVE_MSG
+    RESET_USER, RECEIVE_USER_LIST, RECEIVE_MSG_LIST, RECEIVE_MSG, MSG_READ
 } from "./action-types";
 import io from 'socket.io-client'; //注意，从外部引入的io函数(函数也是对象)是一个 外部的、全局对象。在创建单例对象时可选择保存到io中
 
@@ -51,7 +51,7 @@ function initIO(dispatch,userid){
             * 当chatMsg是与当前用户相关的消息时，我才去分发同步action保存消息
             *  */
             if( userid===chatMsg.from || userid===chatMsg.to ){
-                dispatch(receiveMsg(chatMsg, userid));
+                dispatch(receiveMsg( {chatMsg, userid} ));//这里我修改了：传入形参为一个对象嗷
             }
         } );
     }
@@ -80,9 +80,6 @@ async function getMsgList(dispatch,userid){ //异步获取消息列表数据，�
 }
 
 
-
-
-
 export const sendMsg=  ({from,to,content})=>{ //发送消息的异步请求
     return( dispatch=>{
         console.log('客户端向服务器发送消息嗷', {from,to,content});
@@ -95,11 +92,41 @@ export const sendMsg=  ({from,to,content})=>{ //发送消息的异步请求
     } )
 };
 
+export const readMsg=   (markReadFrom,markReadTo)=>{  //传值是两个形参，不是传入一个对象嗷！
+    return( async dispatch=>{
+        const res = await reqReadMsg(markReadFrom);
+        // debugger
+        const rst = res.data;
+
+        if( rst.code===0 ){
+            /* 注意，还要将 “标为已读”的消息msg的read属性 由false改为true(已读)
+            * 传入参数：已标为“已读”消息 的数量markReadCount；已读消息的发出者markReadFrom，已读消息的接收者markReadTo
+            *  */
+
+            /* 解构赋值，后台的变量名不要错了哦。后台返回的是这个！！
+            * res.send( {code:0, data:user_beforeUpdate.nModified} );
+            *  */
+            const markReadCount = rst.data;
+            // debugger
+            /* markReadFrom已标为“已读”的消息 之 发出者
+            * markReadTo已标为“已读”的消息 之 接收者
+            *  */
+            dispatch( msgRead({markReadCount, markReadFrom, markReadTo}) );
+        }
+    } )
+};
+
+
 //接收消息列表的同步action，后来在排BUG时加上的userid，但没用上
 const receiveMsgList=  ({users_getNameHeaderByUserId,chatMsgs, userid})=>( {type:RECEIVE_MSG_LIST, data:{users_getNameHeaderByUserId,chatMsgs, userid}} );
 //接收一个消息的同步action，后来在排BUG时加上的userid，但没用上
-const receiveMsg=  (chatMsg,userid)=>( {type:RECEIVE_MSG, data:{chatMsg, userid}} );
-
+const receiveMsg=  ({chatMsg,userid})=>( {type:RECEIVE_MSG, data:{chatMsg, userid}} );
+/* 标某条消息为已读的同步action
+* 注意，还要将 “标为已读”的消息msg的read属性 由false改为true(已读)
+*
+* 传入参数：已标为“已读”消息 的数量markReadCount；已读消息的发出者markReadFrom，已读消息的接收者markReadTo
+*  */
+const msgRead=   ({markReadCount, markReadFrom, markReadTo})=>( {type:MSG_READ, data:{markReadCount, markReadFrom, markReadTo}} );
 
 
 /* 授权成功的同步action；
