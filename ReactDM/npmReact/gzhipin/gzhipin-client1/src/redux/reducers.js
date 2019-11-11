@@ -70,17 +70,54 @@ function chat( state=initChat, action ){
             /* 解构赋值时，名字一定要一一对应好了！！不然报undefined的错误
             * 我在后台传值给前台时，定义的变量名就是users_getNameHeaderByUserId，解构赋值时一定要注意！！
             *  */
-            const {users_getNameHeaderByUserId,chatMsgs} = action.data;
-            return { users_getNameHeaderByUserId:users_getNameHeaderByUserId, chatMsgs:chatMsgs, unReadCount:0 }; //属性名与属性值同名，原本可以使用对象的解构赋值法，这里不用了
+            const {users_getNameHeaderByUserId,chatMsgs, userid} = action.data;
+
+            /* 数组reduce()方法 接收一个函数func作为累加器，数组中的每个值（从左到右）开始缩减，最终计算为一个值。
+            * 数组.reduce( func必须，  initialValue可选-传递给函数func的初始值 )
+            *   1. func中：传入4个形参：
+            *     (1)preTotal 必须。初始值，或者(上一次、某一次)计算结束后的返回值
+            *     (2)currValue 必须。当前元素
+            *     (3)currIndex 可选。当前元素的索引
+            *     (4)arr 可选。当前元素所属的数组对象。
+            *
+            *   2.initialValue可选-传递给函数func的初始值
+            *
+            *  */
+
+            return { //属性名与属性值同名，原本可以使用对象的解构赋值法，这里不用了
+                users_getNameHeaderByUserId:users_getNameHeaderByUserId,
+                chatMsgs:chatMsgs,
+                //unReadCount，统计chatMsgs中，消息的未读数量
+                unReadCount: chatMsgs.reduce(  (preTotal,currMsg)=>(
+                    /* 使用三目运算符
+                    * currMsg.to===userid && !currMsg.read 此消息是发给我的，且我是未读的(currMsg.read为false)
+                    * 注意，currMsg.read是在后文 MSG_READ中 才给某条消息msg追加的属性read
+                    *
+                    * 若上述判断的结果为 true，则 加1， 否则加0
+                    * */
+                    preTotal +   ( (currMsg.to===userid && !currMsg.read) ? 1:0 )
+                ), 0 ) //传递给函数func的初始值为0
+            };
         case RECEIVE_MSG: //返回的data为：一条消息chatMsg
             /* 此时的users_getNameHeaderByUserId：还是我原来的用户，state.users_getNameHeaderByUserId
             *  */
-            const {chatMsg} = action.data;
+            /* const {chatMsg, userid} = action.data;
+            * 这样写，userid会报错！因为在此case下的userid
+            * 与上一个case：RECEIVE_MSG_LIST中的userid 被判定重复了……
+            * 所以，在此case下取 userid时，不能用重复名字！
+            * 只好用userid_1 加以区分了
+            *  */
+            const chatMsg = action.data.chatMsg;
+            const userid_1 = action.data.userid;
+
             return {
                 users_getNameHeaderByUserId:state.users_getNameHeaderByUserId, //我佛了，排了一个小时的bug，就在这里！
                 chatMsgs: [ ...(state.chatMsgs), chatMsg ], //聊天中当前用户的所有相关msg的数组。将新消息合并进来； ...是拆包操作
-                unReadCount: 0
+                unReadCount: state.unReadCount +   ( (chatMsg.to===userid_1 && !chatMsg.read) ? 1:0) //与上面的preTotal是同款操作
             };
+            /* 接下来，在nav-footer中显示总的未读数量，
+            * 跳转到nav-footer喽
+            *  */
         default:
             return state;
     }
