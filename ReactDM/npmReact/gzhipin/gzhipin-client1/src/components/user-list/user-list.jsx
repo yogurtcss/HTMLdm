@@ -3,6 +3,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {WingBlank, WhiteSpace, Card} from "antd-mobile";
 import {withRouter} from 'react-router-dom'; //强化user-list组件，使之具有路由的props
+import QueueAnim from 'rc-queue-anim';
 
 const Header = Card.Header; //卡片的头部(标题)
 const Body = Card.Body; //卡片的主体(内容)
