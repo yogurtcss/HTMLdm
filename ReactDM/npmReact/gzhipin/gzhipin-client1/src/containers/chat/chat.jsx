@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {NavBar, List, InputItem,Grid} from "antd-mobile";
+import {NavBar, List, InputItem,Grid,Icon} from "antd-mobile";
 
 import {sendMsg} from '../../redux/actions.js'; //发送消息的异步action
 
@@ -28,8 +28,27 @@ class Chat extends Component{
         * this.emojis是一个数组，数组元素是对象——其中每一个对象的属性名是 text，属性值是 emojis数组的元素(真正的表情图标)
         *  */
         this.emojis = emojis.map(  oneEmoji=>( {text:oneEmoji} )  );//注意，
-
     }
+
+    /* 完善2个问题：
+    * 1.当进入一个会话时，自动滚动至最底部；
+    * 2.当成功发送一条消息时(即会执行 更新页面)，也自动滚动至最底部
+    *
+    * JS控制滚动条的位置：window.scrollTo(x,y);
+    * scroll 滚动；
+    * 竖向滚动条置顶 window.scrollTo(0,0);
+    * 竖向滚动条置底 window.scrollTo(0,document.body.scrollHeight)
+    *
+    * 网页正文全文宽： document.body.scrollWidth
+    * 网页正文全文高： document.body.scrollHeight
+    * */
+    componentDidMount(){ //初始化显示列表：当进入一个会话时，自动滚动至最底部；
+        window.scrollTo( 0, document.body.scrollHeight );
+    }
+    componentDidUpdate(){ //更新显示列表：当成功发送一条消息时(即会执行 更新页面)，也自动滚动至最底部
+        window.scrollTo( 0, document.body.scrollHeight );
+    }
+
 
     /* changeShow，即toggleShow，切换isShow的true或false状态
     * toggle 拨动(开关)，有切换之意；
@@ -89,14 +108,27 @@ class Chat extends Component{
         *  */
         const msgs = chatMsgs.filter( oneMsg=>(oneMsg.chat_id===currChatId) );
 
-        //得到聊天中对方的头像，在这里只需要加载一次即可，不应在map中多次加载
+        /* 得到聊天中对方的头像，在这里只需要加载一次即可，不应在map中多次加载
+         * users_getNameHeaderByUserId[targetId] 聊天中的 对方
+         * */
         const targetHeader = users_getNameHeaderByUserId[targetId].header; //targetHeader对方可能妹有头像呢？三目运算符
         const targetIcon = targetHeader ?  (require(`../../assets/images/${targetHeader}.png`)) : null;
 
+        /* 完善2个问题：
+        * 1.当进入一个会话时，自动滚动至最底部；
+        * 2.当成功发送一条消息时，也自动滚动至最底部
+        *  */
+
         return(
             <div id='chat-page'>
-                <NavBar>aa</NavBar>
-                <List>
+                {/* icon 出现在最左边的图标占位符
+                onLeftClick	导航左边点击回调，点击实现回退
+                */}
+                <NavBar className='sticky-header' icon={<Icon type='left'/>} onLeftClick={()=>this.props.history.goBack()} >
+                    {users_getNameHeaderByUserId[targetId].username}
+                </NavBar>
+                {/* {marginTop:50,marginRight:50}解决信息内容被上、下部遮盖的问题：为此项标签内容添加上下外边距即可 */}
+                <List style={ {marginTop:50,marginBottom:50} } >
                     {/* 上文中，我已根据当前聊天的chatId匹配出我想要的那个聊天会话msgs
                      而此msgs包含两个内容：我发给对方的、和 对方发给我的 ；
                      此msgs的数据结构可能会忘记了，可以回看后端接口文档的描述，
