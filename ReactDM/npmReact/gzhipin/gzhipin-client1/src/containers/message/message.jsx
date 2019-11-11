@@ -22,7 +22,7 @@ class Message extends Component{
     * 2.得到所有lastMsg的数组
     * 3.对数组进行排序(按create_time降序)
     *  */
-    getLastMsgs=  (chatMsgs)=>{
+    getLastMsgs=  (chatMsgs,myUserId)=>{
         //1.找出每个会话的lastMsg，并用一个对象容器来保存{属性名chat_id : 属性值lastMsg}
         const lastMsg_obj = {};
 
@@ -36,6 +36,17 @@ class Message extends Component{
             * 根据chat_id索引：当我发的某条msgA已在lastMsg_obj中时，则需比较 已有的上一条lastMsg 与 当前此消息msgA 的创建时间，
             * 谁创建时间最晚的(最新的)，谁就转正成为正式的lastMsg
             *  */
+
+            /* 对每条信息进行个体的统计
+            * 条件：别人发给我的、且我未读的——就是未读消息
+            * */
+            if( (oneMsg.to===myUserId) && (!oneMsg.read) ){
+                oneMsg.unReadCount = 1;
+            }
+            else{
+                oneMsg.unReadCount = 0;
+            };
+
             //得到其中某条消息oneMsg的chat_id
             const oneMsg_chatId = oneMsg.chat_id;
             //根据oneMsg_chatId，尝试在lastMsg_obj中索引查找
@@ -53,10 +64,17 @@ class Message extends Component{
                 * 但我这样 见名知意， 手动标识为 确实存在的really、且是 上一条的、旧的(old)，就更明白一些
                 *  */
                 let lastMsg_really_old = lastMsg_possible; //用lastMsg_really_old标识一哈
+
+                //累加unReadCount = 已经统计的old + 当前oneMsg
+                const unReadCount_new = lastMsg_really_old.unReadCount + oneMsg.unReadCount;
+
                 //比较 两条消息的创建时间。
                 if(  (oneMsg.create_time)>(lastMsg_really_old.create_time)  ){ // 如果当前这条消息创建得晚的
                     lastMsg_obj[oneMsg_chatId] = oneMsg; //你就转正喽
                 }
+
+                //将最新的unReadCount保存在最新的LastMsg上
+                lastMsg_obj[oneMsg_chatId].unReadCount = unReadCount_new;
             }
         } );
 
@@ -92,8 +110,10 @@ class Message extends Component{
         /* 分组显示消息内容：要点如下
         * 1.按不同的chat_id进行分组；
         * 2.显示在页面上的消息时：只显示本会话中最后一条消息
+        *
+        * getLastMsgs 传入消息内容chatMsgs，和我本人的user._id
         *  */
-        const lastMsgs_array = this.getLastMsgs( chatMsgs );
+        const lastMsgs_array = this.getLastMsgs( chatMsgs, user._id );
         // debugger;
         return(
             <List style={{marginTop:50,marginBottom:50}} >
@@ -130,7 +150,7 @@ class Message extends Component{
 
                     return(
                         <Item key={oneLastMsg_differentGroup._id}
-                              extra={<Badge text={0} />}
+                              extra={<Badge text={oneLastMsg_differentGroup.unReadCount} />}
                               thumb={ targetUser.header? require(`../../assets/images/${targetUser.header}.png`):null } //可能妹有头像，需判断嗷，三目运算符
                               arrow='horizontal'
                               onClick={ ()=>this.props.history.push(`/chat/${targetUserId}`) }  >
