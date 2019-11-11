@@ -54,7 +54,13 @@ class Main extends Component{
         if( !userid ){
             return( <Redirect to='/login' /> )
         }
-        const {user} = this.props; //读取redux中的user信息
+        /* 2019-11-11 2019-11-11 17:02:09
+        * 容器组件(使用了redux状态的组件)——main组件使用到了我 nav-footer，
+        * 则从main组件那里向我 nav-footer传此值unReadCount
+        *
+        * 从redux中取出未读数量 unReadCount，传给 NavFooter组件喽
+        *  */
+        const {user, unReadCount} = this.props; //读取redux中的user信息
         if( !user._id ){ //如果redux中的user没有_id
             return null;
         }
@@ -121,15 +127,30 @@ class Main extends Component{
                 </Switch>
                 {/* 底部的导航条——单独抽离出来的一个UI组件：信息完善界面不需要此底部的导航条
                     传入标签栏信息 navList
+
+                *  2019-11-11 17:03:14
+                * 容器组件(使用了redux状态的组件)——main组件使用到了我 nav-footer，
+                * 则从main组件那里向我 nav-footer传此值unReadCount
+                *
+                * 从redux中取出未读数量 unReadCount，传给 NavFooter组件喽
                 */}
-                { currNav ? (<NavFooter navList={navList} />) : null }
+                { currNav ? (<NavFooter navList={navList} unReadCount={unReadCount} />) : null }
             </div>
         )
     }
 }
 
+
+
 export default connect(
-    state => ( {user:state.user} ),
+    /* 2019-11-11 16:59:18
+    * 容器组件(使用了redux状态的组件)——main组件使用到了我 nav-footer，
+    * 则从main组件那里向我 nav-footer传此值unReadCount
+    *
+    * 在这里，没有必要整个传入chat状态！我只用到了chat状态中的unReadCount值！
+    * 只传入unReadCount值即可
+    *  */
+    state => ( {user:state.user,  unReadCount:state.chat.unReadCount} ),
     {getUser}
 )(Main);
 
