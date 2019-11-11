@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {NavBar, List, InputItem,Grid,Icon} from "antd-mobile";
+import QueueAnim from 'rc-queue-anim';
 
 import {sendMsg,readMsg} from '../../redux/actions.js'; //发送消息、标消息为已读的异步action
 
@@ -163,21 +164,34 @@ class Chat extends Component{
                      msgs中有关键的信息：from、to、content等
                      根据匹配成功的结构msgs，动态产生内容：
                     */}
-                    { msgs.map( oneMsg=>{
-                        if( myId===oneMsg.to ){ //这是对方发给我的消息，消息的去向to是我
-                            /* 返回左边对方的<Item/>
-                            * 原代码thumb中，太长了，而且：
-                            * 和我在同一个聊天中的对方，他的头像是不变的
-                            * 没有必要在map循环中多次加载，我在外面一次加载好(targetIcon)，放进来即可
-                            *  */
-                            // return(<Item key={msg._id} thumb={require(`../../assets/images/${users[oneMsg.from].header}.png`)} >{msgs.content}</Item>)
-                            return(<Item key={oneMsg._id} thumb={targetIcon} >{oneMsg.content}</Item>)
-                        }
-                        else{ //否则！！这是我发给对方的消息，
-                            //返回 我自己的<Item/> 消息正文content也是我发的内容，是对立面
-                            return(<Item key={oneMsg._id} className='chat-me' extra='我'>{oneMsg.content}</Item>)
-                        }
-                    }) }
+
+
+                    {/* 进入/退出的动画效果QueueAnim
+                     type 指定从哪进入
+                     delay 整个动画的延时，单位毫秒
+                     */}
+                    <QueueAnim type='left' delay={100} >
+
+                        {/* ----------------开始--------------------- */}
+                        { msgs.map( oneMsg=>{
+                            if( myId===oneMsg.to ){ //这是对方发给我的消息，消息的去向to是我
+                                /* 返回左边对方的<Item/>
+                                * 原代码thumb中，太长了，而且：
+                                * 和我在同一个聊天中的对方，他的头像是不变的
+                                * 没有必要在map循环中多次加载，我在外面一次加载好(targetIcon)，放进来即可
+                                *  */
+                                // return(<Item key={msg._id} thumb={require(`../../assets/images/${users[oneMsg.from].header}.png`)} >{msgs.content}</Item>)
+                                return(<Item key={oneMsg._id} thumb={targetIcon} >{oneMsg.content}</Item>)
+                            }
+                            else{ //否则！！这是我发给对方的消息，
+                                //返回 我自己的<Item/> 消息正文content也是我发的内容，是对立面
+                                return(<Item key={oneMsg._id} className='chat-me' extra='我'>{oneMsg.content}</Item>)
+                            }
+                        }) }
+                        {/* ----------------结束--------------------- */}
+
+                    </QueueAnim>
+
 
                 </List>
 
