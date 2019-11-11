@@ -128,14 +128,13 @@ class Message extends Component{
                     //获得目标用户的信息嗷
                     const targetUser = users_getNameHeaderByUserId[targetUserId];
 
-                    //
                     return(
                         <Item key={oneLastMsg_differentGroup._id}
                               extra={<Badge text={0} />}
                               thumb={ targetUser.header? require(`../../assets/images/${targetUser.header}.png`):null } //可能妹有头像，需判断嗷，三目运算符
                               arrow='horizontal'
                               onClick={ ()=>this.props.history.push(`/chat/${targetUserId}`) }  >
-                            {/* 点击具体某个item，进入消息详情：路由路径为/chat/targetUserid */}
+                            {/* 点击具体某个item，进入消息详情：路由路径为/chat/目标ID 即targetUserid */}
                             {oneLastMsg_differentGroup.content}
                             <Brief>{targetUser.username}</Brief>
                         </Item>
