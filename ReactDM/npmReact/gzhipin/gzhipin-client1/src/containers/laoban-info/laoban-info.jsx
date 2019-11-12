@@ -73,7 +73,7 @@ class LaobanInfo extends Component{ //此组件为Main路由下的二级路由�
                  * 这样我在 回调函数handleChange中 this.setState时：更新对象的属性名可以直接用 [name] 加方括号 索引之
                  */}
                 <InputItem placeholder='请输入招聘职位' onChange={ val=>this.handleChange('post',val)} >招聘职位：</InputItem>
-                <InputItem placeholder='请输入公司职位' onChange={ val=>this.handleChange('company',val) } >公司职位：</InputItem>
+                <InputItem placeholder='请输入公司名称' onChange={ val=>this.handleChange('company',val) } >公司名称：</InputItem>
                 <InputItem placeholder='请输入职位薪资' onChange={ val=>this.handleChange('salary',val) } >职位薪资：</InputItem>
                 {/* TextareaItem多行文本输入。title指定标签体内的文字，row指定初始占用的行数 */}
                 <TextareaItem title='职位要求' row={3}  onChange={ val=>this.handleChange('info',val) } />

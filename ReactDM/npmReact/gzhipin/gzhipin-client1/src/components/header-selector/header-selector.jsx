@@ -26,7 +26,7 @@ export default class HeaderSelector extends Component{
                 *
                 * 动态加载头像
                 *  */
-                icon: require( `./images/头像${i+1}.png` ) //在这里不能用import语法
+                icon: require( `../../assets/images/头像${i+1}.png` ) //在这里不能用import语法
             } )
         }
     };
