@@ -72,8 +72,7 @@ router.post( '/register', function(req,res){
           function(err,user){ //后端API文档要求返回的数据带上_id
             res.cookie( 'userid', user._id, {MaxAge:1000*60*60*24} ); //持久化cookie，一天内免登录
 
-            const myData = {username,type, _id:user._id};
-            res.send( {code:0, data:myData} ) //响应数据中，不要返回密码
+            res.send( {code:0, data:{username,type, _id:user._id}} ) //响应数据中，不要返回密码
           })
     }
   } )
@@ -363,7 +362,7 @@ router.get( '/msglist', (req,res)=>{
 *  */
 router.post( '/readmsg', (req,res)=>{
     const other_send = req.body.from; //消息发出方：他人
-    const myself_receive = req.cookies.to; //消息接收方：自己
+    const myself_receive = req.cookies.userid; //消息接收方：自己
     ChatModel.update(
         { from:other_send, to:myself_receive, read:false }, //查询条件：消息发出方为他人，消息接收方为自己，且原消息是未读状态嗷
         { read:true }, //update，将read属性值修改为true
@@ -376,6 +375,22 @@ router.post( '/readmsg', (req,res)=>{
 } );
 
 
+// router.post('/readmsg', function (req, res) {
+//     // 得到请求中的from和to
+//     const from = req.body.from
+//     const to = req.cookies.userid
+//     /*
+//     更新数据库中的chat数据
+//     参数1: 查询条件
+//     参数2: 更新为指定的数据对象
+//     参数3: 是否1次更新多条, 默认只更新一条
+//     参数4: 更新完成的回调函数
+//      */
+//     ChatModel.update({from, to, read: false}, {read: true}, {multi: true}, function (err, doc) {
+//         console.log('/readmsg', doc)
+//         res.send({code: 0, data: doc.nModified}) // 更新的数量
+//     })
+// })
 
 
 
