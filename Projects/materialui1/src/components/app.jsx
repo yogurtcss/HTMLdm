@@ -1,5 +1,5 @@
 import React,{Component} from 'react';
-import {Header,Footer,Content} from './Layouts/layout1.js';
+import {Header,Footer,Content} from './layouts/layout1.js';
 import {mainData,detailData} from "../props/store.js";
 
 /* 2020-01-26 11:03:23
@@ -68,17 +68,34 @@ export default class App extends Component{
             return final;
         },   base ); //初始值是 base={ "项目一":[], "项目二":[], "项目三":[] }
 
-        //---3.最终返回结果
-        return rst;
+        /* ---3.最终返回结果
+        * Object.entries()方法返回一个给定对象自身可枚举属性的键值对数组，
+        * 转换后才能使用 map()方法！
+        *  */
+        return Object.entries(rst);
     };
+
+    //传给 <Content />组件的单击响应函数
+
+    /* 2020-01-26 17:26:01
+    filter() 顾名思义 过滤。
+    遍历数组，在每一项元素后面触发一个回调函数，
+    通过判断，保留或移除当前项，最后返回一个新数组。
+    *  */
+    handleDetail=  (id)=>{ //箭头函数，不必绑定this
+        
+    };
+
 
 
     render(){
         console.log( this.createData() );
+
+        const newData = this.createData();
         return(
             <div>
                 <Header />
-                <Content  />
+                <Content newData={newData}  />
                 {/* 为Footer组件注入一个 mainData属性 */}
                 <Footer mainData={mainData}/>
             </div>
