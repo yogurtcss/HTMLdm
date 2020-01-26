@@ -1,6 +1,7 @@
 import React,{Component} from 'react';
 import {Grid,Paper} from '@material-ui/core';
-
+import LeftPane from "./pane/leftPane"; //左窗格
+import RightPane from "./pane/rightPane"; //右窗格
 
 const styles = {
     paper: {marginTop:10, marginBottom:10, padding:30}
@@ -26,22 +27,16 @@ export default class Content extends Component{
 
     // 我是jsx代码中的注释    {/*  */}
     render(){
+        //<Content newData={newData}  />
+        const {newData} = this.props;
         return(
             //<Grid container></Grid>  //表明此Grid组件是容器，里面要放有 <Grid 单项item />
             <Grid container spacing={2}>   {/* spacing={2} 会创建一个 16px 的宽间距 */}
                 <Grid item sm> {/* <Grid item></Grid> //明此Grid组件是item单项，此item要放在 <Grid 容器container />中 */}
-                    {/* <Paper />组件：在屏幕上展现了纸张的物理属性
-                    应用程序的的背景类似纸张一样平坦、不透明，
-                    而其行为也像纸张一样，能够改变大小、与其他纸张绑定或者调换顺序。
-                    */}
-                    <Paper style={styles.paper}>
-                        left
-                    </Paper>
+                    <LeftPane styles={styles} newData={newData} />  {/* 左窗格，传入props为样式style */}
                 </Grid>
                 <Grid item sm>
-                    <Paper style={styles.paper}>
-                        right
-                    </Paper>
+                    <RightPane styles={styles} newData={newData} />  {/* 右窗格，传入props为样式style */}
                 </Grid>
             </Grid>
         )
