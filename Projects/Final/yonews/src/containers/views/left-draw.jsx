@@ -21,6 +21,7 @@ import EcoIcon from '@material-ui/icons/Eco'; //关于 图标
 
 import SwipeableDrawer from "@material-ui/core/SwipeableDrawer"; //滑动抽屉
 
+import {withRouter} from 'react-router-dom';
 
 const drawerWidth = 240;
 
@@ -86,8 +87,11 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-export default function MyHeaderWithLeftDrawer() { //基于 Persistent drawer 改造的
+function MyHeaderWithLeftDrawer(props) { //基于 Persistent drawer 改造的
     const classes = useStyles();
+
+    const currListItemText = "";
+
     const [open, setOpen] = React.useState(false);
     const [state, setState] = React.useState({
         top: false,
@@ -95,6 +99,11 @@ export default function MyHeaderWithLeftDrawer() { //基于 Persistent drawer �
         bottom: false,
         right: false,
     });
+
+    const handleClick=  (oneTab)=>{
+        props.history.push(`/leftDrawContent/${oneTab}`);
+    };
+
 
     const toggleDrawer = (side, open) => event => {
         if (event && event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
@@ -112,29 +121,37 @@ export default function MyHeaderWithLeftDrawer() { //基于 Persistent drawer �
             onKeyDown={toggleDrawer(side, false)}
         >
             <List>
-                <ListItem button>
-                    <ListItemIcon><QueueIcon /></ListItemIcon>
-                    <ListItemText primary="频道" />
-                </ListItem>
-                <ListItem button>
-                    <ListItemIcon><RestoreIcon /></ListItemIcon>
-                    <ListItemText primary="历史" />
-                </ListItem>
-                <ListItem button>
-                    <ListItemIcon><BookmarksIcon /></ListItemIcon>
-                    <ListItemText primary="收藏" />
-                </ListItem>
-                <ListItem button>
-                    <ListItemIcon><SettingsIcon /></ListItemIcon>
-                    <ListItemText primary="设置" />
-                </ListItem>
+                { ['channel','history', 'collection', 'settings'].map( (oneTab,textIndex)=>(
+                    // 动态生成 <ListItem />标签，使得channel等文本能以 “变量”oneTab 形式存在，
+                    // 这样，onClick单击响应函数就能使用 文本的 “变量”了！进而可以用来标识路由路径！
+                    // props.history.push(`/leftDrawContent/${oneTab}`);
+                    <ListItem button key={oneTab} onClick={()=>(handleClick(oneTab))}>  {/* 太妙了！text变量装着文本，可以用来标识路由路径！ */}
+                        <ListItemIcon>
+                            {/* 文本数组与图标数组 下标是一一对应的关系：文本数组[0] 对应的图标为 图标数组[0] */}
+                            { [<QueueIcon/>,<RestoreIcon/>,<BookmarksIcon/>,<SettingsIcon/>].map( (oneIcon, iconIndex)=>{
+                                if( textIndex===iconIndex ){ //当文本下标==图标的下标时，就返回这个图标
+                                    return oneIcon;
+                                }
+                            } ) }
+                        </ListItemIcon>
+                        <ListItemText primary={oneTab} />
+                    </ListItem>
+                ) ) }
             </List>
             <Divider />
             <List>
-                <ListItem button>
-                    <ListItemIcon><EcoIcon /></ListItemIcon>
-                    <ListItemText primary="关于" />
-                </ListItem>
+                { ['about'].map( (oneTab,index)=>(
+                    <ListItem button key={oneTab} onClick={()=>(handleClick(oneTab))} >
+                        <ListItemIcon>
+                            { [<EcoIcon/>].map( (oneIcon, index1)=>{
+                                if( index===index1 ){
+                                    return oneIcon;
+                                }
+                            } ) }
+                        </ListItemIcon>
+                        <ListItemText primary={oneTab} />
+                    </ListItem>
+                ) ) }
             </List>
         </div>
     );
@@ -190,3 +207,5 @@ export default function MyHeaderWithLeftDrawer() { //基于 Persistent drawer �
         </div>
     );
 }
+
+export default withRouter(MyHeaderWithLeftDrawer);
